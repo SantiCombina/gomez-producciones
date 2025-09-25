@@ -1,14 +1,15 @@
-// storage-adapter-import-placeholder
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { postgresAdapter } from '@payloadcms/db-postgres';
-import { payloadCloudPlugin } from '@payloadcms/payload-cloud';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
+import { uploadthingStorage } from '@payloadcms/storage-uploadthing';
 import { es } from '@payloadcms/translations/languages/es';
 import { buildConfig } from 'payload';
 import sharp from 'sharp';
 
+import { Advertisements } from './collections/Advertisements';
+import { ArticleLabels } from './collections/ArticleLabels';
 import { Media } from './collections/Media';
 import { Posts } from './collections/Posts';
 import { Users } from './collections/Users';
@@ -23,7 +24,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Posts],
+  collections: [Users, Media, Posts, ArticleLabels, Advertisements],
   i18n: {
     fallbackLanguage: 'es',
     supportedLanguages: { es },
@@ -40,7 +41,16 @@ export default buildConfig({
   }),
   sharp,
   plugins: [
-    payloadCloudPlugin(),
-    // storage-adapter-placeholder
+    uploadthingStorage({
+      collections: {
+        media: {
+          prefix: 'article-images',
+        },
+      },
+      options: {
+        token: process.env.UPLOADTHING_TOKEN,
+        acl: 'public-read',
+      },
+    }),
   ],
 });

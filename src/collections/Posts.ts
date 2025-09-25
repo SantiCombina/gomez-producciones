@@ -6,5 +6,36 @@ export const Posts: CollectionConfig = {
     singular: 'Publicación',
     plural: 'Publicaciones',
   },
-  fields: [],
+  admin: {
+    useAsTitle: 'title',
+    defaultColumns: ['title', 'category', 'createdAt'],
+  },
+  fields: [
+    {
+      name: 'title',
+      label: 'Título',
+      type: 'text',
+      required: true,
+    },
+    {
+      name: 'description',
+      label: 'Descripción',
+      type: 'textarea',
+      required: true,
+    },
+    {
+      name: 'category',
+      label: 'Categoría',
+      type: 'relationship',
+      relationTo: 'article-labels',
+      required: true,
+    },
+    {
+      name: 'featuredImage',
+      label: 'Imagen Principal',
+      type: 'upload',
+      relationTo: 'media',
+      required: true,
+    },
+  ],
 };

@@ -70,6 +70,8 @@ export interface Config {
     users: User;
     media: Media;
     posts: Post;
+    'article-labels': ArticleLabel;
+    advertisements: Advertisement;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -79,6 +81,8 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    'article-labels': ArticleLabelsSelect<false> | ArticleLabelsSelect<true>;
+    advertisements: AdvertisementsSelect<false> | AdvertisementsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -121,6 +125,7 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  role: 'admin' | 'user';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -146,6 +151,8 @@ export interface User {
 export interface Media {
   id: number;
   alt: string;
+  _key?: string | null;
+  prefix?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -164,6 +171,42 @@ export interface Media {
  */
 export interface Post {
   id: number;
+  title: string;
+  description: string;
+  category: number | ArticleLabel;
+  featuredImage: number | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "article-labels".
+ */
+export interface ArticleLabel {
+  id: number;
+  name: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "advertisements".
+ */
+export interface Advertisement {
+  id: number;
+  /**
+   * Nombre descriptivo para identificar esta publicidad
+   */
+  title: string;
+  image: number | Media;
+  /**
+   * URL a la que redirigirá al hacer click en la publicidad
+   */
+  link?: string | null;
+  /**
+   * Solo las publicidades activas aparecerán en el sitio web
+   */
+  isActive?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -185,6 +228,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'posts';
         value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'article-labels';
+        value: number | ArticleLabel;
+      } | null)
+    | ({
+        relationTo: 'advertisements';
+        value: number | Advertisement;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -233,6 +284,7 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -256,6 +308,8 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  _key?: T;
+  prefix?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -273,6 +327,31 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  category?: T;
+  featuredImage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "article-labels_select".
+ */
+export interface ArticleLabelsSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "advertisements_select".
+ */
+export interface AdvertisementsSelect<T extends boolean = true> {
+  title?: T;
+  image?: T;
+  link?: T;
+  isActive?: T;
   updatedAt?: T;
   createdAt?: T;
 }
