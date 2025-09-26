@@ -172,9 +172,9 @@ export interface Media {
 export interface Post {
   id: number;
   title: string;
-  description: string;
-  category: number | ArticleLabel;
-  featuredImage: number | Media;
+  description?: string | null;
+  category?: (number | null) | ArticleLabel;
+  featuredImage?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
 }

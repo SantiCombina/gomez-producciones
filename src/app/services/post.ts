@@ -1,2 +1,209 @@
 import { getPayloadClient } from '@/lib/payload';
 import { Post } from '@/payload-types';
+
+export const createPost = async (data: {
+  title: string;
+  description?: string;
+  category?: number;
+  featuredImage?: number;
+}) => {
+  try {
+    const payload = await getPayloadClient();
+
+    const post = await payload.create({
+      collection: 'posts',
+      data,
+    });
+
+    return {
+      success: true,
+      post,
+    };
+  } catch (error) {
+    console.error('Error creating post:', error);
+    const message = error instanceof Error ? error.message : 'Error al crear el post';
+    return {
+      success: false,
+      message,
+    };
+  }
+};
+
+export const getPostById = async (id: string): Promise<Post | null> => {
+  try {
+    const payload = await getPayloadClient();
+
+    const post = await payload.findByID({
+      collection: 'posts',
+      id,
+    });
+
+    return post as Post;
+  } catch (error) {
+    console.error('Error obteniendo post por ID:', error);
+    return null;
+  }
+};
+
+export const getPosts = async (options?: { limit?: number; page?: number; category?: string }) => {
+  try {
+    const payload = await getPayloadClient();
+
+    const where: any = {};
+    if (options?.category) {
+      where.category = { equals: options.category };
+    }
+
+    const result = await payload.find({
+      collection: 'posts',
+      limit: options?.limit || 10,
+      page: options?.page || 1,
+      where,
+      sort: '-createdAt',
+    });
+
+    return {
+      success: true,
+      data: {
+        docs: result.docs,
+        totalDocs: result.totalDocs,
+        totalPages: result.totalPages,
+        page: result.page || 1,
+        hasNextPage: result.hasNextPage,
+        hasPrevPage: result.hasPrevPage,
+      },
+    };
+  } catch (error) {
+    console.error('Error obteniendo posts:', error);
+    return {
+      success: false,
+      message: 'Error al obtener los posts',
+    };
+  }
+};
+
+export const updatePost = async (
+  id: string,
+  data: {
+    title?: string;
+    description?: string;
+    category?: number;
+    featuredImage?: number;
+  },
+) => {
+  try {
+    const payload = await getPayloadClient();
+
+    const post = await payload.update({
+      collection: 'posts',
+      id,
+      data,
+    });
+
+    return {
+      success: true,
+      post,
+    };
+  } catch (error) {
+    console.error('Error updating post:', error);
+    const message = error instanceof Error ? error.message : 'Error al actualizar el post';
+    return {
+      success: false,
+      message,
+    };
+  }
+};
+
+export const deletePost = async (id: string) => {
+  try {
+    const payload = await getPayloadClient();
+
+    await payload.delete({
+      collection: 'posts',
+      id,
+    });
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error('Error deleting post:', error);
+    const message = error instanceof Error ? error.message : 'Error al eliminar el post';
+    return {
+      success: false,
+      message,
+    };
+  }
+};
+
+export const getPostsByCategory = async (categoryId: string, limit = 10): Promise<Post[]> => {
+  try {
+    const payload = await getPayloadClient();
+
+    const result = await payload.find({
+      collection: 'posts',
+      where: {
+        category: { equals: categoryId },
+      },
+      limit,
+      sort: '-createdAt',
+    });
+
+    return result.docs as Post[];
+  } catch (error) {
+    console.error('Error obteniendo posts por categoría:', error);
+    return [];
+  }
+};
+
+export const searchPosts = async (query: string, limit = 10): Promise<Post[]> => {
+  try {
+    const payload = await getPayloadClient();
+
+    const result = await payload.find({
+      collection: 'posts',
+      where: {
+        or: [{ title: { like: query } }, { description: { like: query, exists: true } }],
+      },
+      limit,
+      sort: '-createdAt',
+    });
+
+    return result.docs as Post[];
+  } catch (error) {
+    console.error('Error buscando posts:', error);
+    return [];
+  }
+};
+
+export const getPostsCount = async (): Promise<number> => {
+  try {
+    const payload = await getPayloadClient();
+
+    const result = await payload.count({
+      collection: 'posts',
+    });
+
+    return result.totalDocs;
+  } catch (error) {
+    console.error('Error obteniendo conteo de posts:', error);
+    return 0;
+  }
+};
+
+export const getRecentPosts = async (limit = 5): Promise<Post[]> => {
+  try {
+    const payload = await getPayloadClient();
+
+    const result = await payload.find({
+      collection: 'posts',
+      limit,
+      sort: '-createdAt',
+    });
+
+    return result.docs as Post[];
+  } catch (error) {
+    console.error('Error obteniendo posts recientes:', error);
+    return [];
+  }
+};
