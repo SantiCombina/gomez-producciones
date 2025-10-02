@@ -1,11 +1,11 @@
-interface NewsDetailPageProps {
-  params: {
+interface Props {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
-  const { id } = params;
+export default async function NewsDetailPage({ params }: Props) {
+  const { id } = await params;
 
   return (
     <div className="container py-8">

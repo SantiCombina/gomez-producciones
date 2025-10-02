@@ -6,11 +6,11 @@ import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/c
 import { formatDate } from '@/lib/date-utils';
 import type { Post } from '@/payload-types';
 
-interface NewsCardProps {
+interface Props {
   post: Post;
 }
 
-export function NewsCard({ post }: NewsCardProps) {
+export function NewsCard({ post }: Props) {
   // Extraer datos de la imagen
   const featuredImage = typeof post.featuredImage === 'object' && post.featuredImage ? post.featuredImage : null;
 

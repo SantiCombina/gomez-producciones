@@ -3,12 +3,12 @@ import { Card } from '@/components/ui/card';
 
 import type { Ad } from './types';
 
-interface AdBannerProps {
+interface Props {
   ad: Ad;
   className?: string;
 }
 
-export function AdBanner({ ad, className = '' }: AdBannerProps) {
+export function AdBanner({ ad, className = '' }: Props) {
   return (
     <Card className={`w-full overflow-hidden p-0 ${className}`}>
       <div className="relative h-32">

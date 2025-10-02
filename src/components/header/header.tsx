@@ -7,11 +7,11 @@ import { MobileMenu } from './mobile-menu';
 import { Navigation } from './navigation';
 import { TopBar } from './top-bar';
 
-interface HeaderProps {
+interface Props {
   menuItems: MenuItem[];
 }
 
-export function Header({ menuItems }: HeaderProps) {
+export function Header({ menuItems }: Props) {
   return (
     <header className="border-b bg-background">
       <TopBar />

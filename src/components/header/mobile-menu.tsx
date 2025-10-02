@@ -3,11 +3,11 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 
 import type { MenuItem } from '../home/types';
 
-interface MobileMenuProps {
+interface Props {
   items: MenuItem[];
 }
 
-export function MobileMenu({ items }: MobileMenuProps) {
+export function MobileMenu({ items }: Props) {
   return (
     <Sheet>
       <SheetTrigger asChild>

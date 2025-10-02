@@ -2,11 +2,11 @@ import type { Post } from '@/payload-types';
 
 import { NewsCard } from './news-card';
 
-interface LatestNewsProps {
+interface Props {
   posts: Post[];
 }
 
-export function LatestNews({ posts }: LatestNewsProps) {
+export function LatestNews({ posts }: Props) {
   return (
     <section>
       <h2 className="text-2xl font-bold mb-6">Últimas Noticias</h2>

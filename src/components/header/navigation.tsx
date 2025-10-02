@@ -2,11 +2,11 @@ import { Button } from '@/components/ui/button';
 
 import type { MenuItem } from '../home/types';
 
-interface NavigationProps {
+interface Props {
   items: MenuItem[];
 }
 
-export function Navigation({ items }: NavigationProps) {
+export function Navigation({ items }: Props) {
   return (
     <nav className="hidden md:flex items-center space-x-6">
       {items.map((item) => (
