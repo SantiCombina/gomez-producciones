@@ -1,11 +1,39 @@
+import { getPostsAction } from '@/components/home/actions';
 import { AdBanner } from '@/components/home/ad-banner';
-import { mockAds, mockPosts } from '@/components/home/data';
+import { mockAds } from '@/components/home/data';
 import { FeaturedNews } from '@/components/home/featured-news';
 import { LatestNews } from '@/components/home/latest-news';
 import { Separator } from '@/components/ui/separator';
 
 export default async function HomePage() {
-  const [featuredPost, ...latestPosts] = mockPosts;
+  // Obtener posts reales de la base de datos
+  const postsResult = await getPostsAction({ limit: 10 });
+
+  if (!postsResult.data) {
+    // Fallback en caso de error
+    return (
+      <div className="min-h-dvh bg-background">
+        <div className="container py-6">
+          <p className="text-center">Error al cargar las noticias</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Usar directamente los posts de Payload
+  const posts = postsResult.data.docs;
+  const [featuredPost, ...latestPosts] = posts;
+
+  // Si no hay posts, mostrar mensaje
+  if (posts.length === 0) {
+    return (
+      <div className="min-h-dvh bg-background">
+        <div className="container py-6">
+          <p className="text-center">No hay noticias disponibles</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-dvh bg-background">
@@ -16,7 +44,7 @@ export default async function HomePage() {
       <main className="container py-6">
         <div className="lg:grid lg:grid-cols-4 lg:gap-8">
           <div className="lg:col-span-3 space-y-8">
-            <FeaturedNews post={featuredPost} />
+            {featuredPost && <FeaturedNews post={featuredPost} />}
 
             <Separator className="my-8" />
 
@@ -26,7 +54,7 @@ export default async function HomePage() {
 
             <Separator className="my-8" />
 
-            <LatestNews posts={latestPosts} />
+            {latestPosts.length > 0 && <LatestNews posts={latestPosts} />}
           </div>
 
           <aside className="hidden lg:block">

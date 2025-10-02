@@ -59,13 +59,13 @@ export const getPosts = async (options?: { limit?: number; page?: number; catego
       limit: options?.limit || 10,
       page: options?.page || 1,
       where,
-      sort: '-createdAt',
+      sort: '-createdAt', // Siempre ordenamos por fecha, más recientes primero
     });
 
     return {
       success: true,
       data: {
-        docs: result.docs,
+        docs: result.docs as Post[],
         totalDocs: result.totalDocs,
         totalPages: result.totalPages,
         page: result.page || 1,
@@ -78,6 +78,14 @@ export const getPosts = async (options?: { limit?: number; page?: number; catego
     return {
       success: false,
       message: 'Error al obtener los posts',
+      data: {
+        docs: [],
+        totalDocs: 0,
+        totalPages: 0,
+        page: 1,
+        hasNextPage: false,
+        hasPrevPage: false,
+      },
     };
   }
 };
@@ -188,22 +196,5 @@ export const getPostsCount = async (): Promise<number> => {
   } catch (error) {
     console.error('Error obteniendo conteo de posts:', error);
     return 0;
-  }
-};
-
-export const getRecentPosts = async (limit = 5): Promise<Post[]> => {
-  try {
-    const payload = await getPayloadClient();
-
-    const result = await payload.find({
-      collection: 'posts',
-      limit,
-      sort: '-createdAt',
-    });
-
-    return result.docs as Post[];
-  } catch (error) {
-    console.error('Error obteniendo posts recientes:', error);
-    return [];
   }
 };
