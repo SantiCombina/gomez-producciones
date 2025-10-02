@@ -4,7 +4,8 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import '@/styles/globals.css';
 
 import { Footer } from '@/components/footer/footer';
-import { TopBar } from '@/components/top-bar/top-bar';
+import { Header } from '@/components/header/header';
+import { menuItems } from '@/components/home/data';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -27,7 +28,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
       <body className="font-sans">
-        <TopBar />
+        <Header menuItems={menuItems} />
         <main>{children}</main>
         <Footer />
         <Analytics />
