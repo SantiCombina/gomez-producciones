@@ -1,17 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { MenuItem } from '../home/types';
-
 import { MobileMenu } from './mobile-menu';
 import { Navigation } from './navigation';
 import { TopBar } from './top-bar';
 
-interface Props {
-  menuItems: MenuItem[];
-}
-
-export function Header({ menuItems }: Props) {
+export function Header() {
   return (
     <header className="border-b bg-background">
       <TopBar />
@@ -39,8 +33,8 @@ export function Header({ menuItems }: Props) {
             </Link>
           </div>
           <div className="flex items-center">
-            <Navigation items={menuItems} />
-            <MobileMenu items={menuItems} />
+            <Navigation />
+            <MobileMenu />
           </div>
         </div>
       </div>

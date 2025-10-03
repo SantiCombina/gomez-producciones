@@ -1,4 +1,4 @@
-import type { Ad, MenuItem } from './types';
+import type { Ad } from './types';
 
 export const mockAds: Ad[] = [
   {
@@ -31,10 +31,4 @@ export const mockAds: Ad[] = [
     link: '#',
     isActive: true,
   },
-];
-
-export const menuItems: MenuItem[] = [
-  { label: 'Noticias', href: '#' },
-  { label: 'Contacto', href: '#' },
-  { label: 'Nosotros', href: '#' },
 ];

@@ -1,5 +1,6 @@
 import { Facebook, Instagram, Mail, MapPin, Phone, Youtube } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -8,9 +9,9 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   const footerLinks = [
-    { label: 'Noticias', href: '#' },
-    { label: 'Contacto', href: '#' },
-    { label: 'Nosotros', href: '#' },
+    { label: 'Inicio', href: '/' },
+    { label: 'Nosotros', href: '/nosotros' },
+    { label: 'Contacto', href: '/contacto' },
   ];
 
   const socialLinks = [
@@ -78,9 +79,9 @@ export function Footer() {
             <ul className="space-y-2">
               {footerLinks.map((link) => (
                 <li key={link.label}>
-                  <a href={link.href} className="text-blue-100 hover:text-white transition-colors duration-200">
+                  <Link href={link.href} className="text-blue-100 hover:text-white transition-colors duration-200">
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

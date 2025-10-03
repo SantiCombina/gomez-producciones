@@ -8,8 +8,3 @@ export interface Ad {
   link: string;
   isActive: boolean;
 }
-
-export interface MenuItem {
-  label: string;
-  href: string;
-}
