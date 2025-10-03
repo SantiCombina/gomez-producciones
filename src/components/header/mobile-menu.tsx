@@ -1,3 +1,5 @@
+import { Menu } from 'lucide-react';
+
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
@@ -11,18 +13,7 @@ export function MobileMenu({ items }: Props) {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="md:hidden">
-          <svg
-            className="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-          <span className="sr-only">Abrir menú</span>
-        </Button>
+        <Menu size={28} className="md:hidden" />
       </SheetTrigger>
       <SheetContent side="right" className="w-64">
         <SheetHeader>
