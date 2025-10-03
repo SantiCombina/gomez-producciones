@@ -1,6 +1,5 @@
 import { DEFAULT_SERVER_ERROR_MESSAGE, createSafeActionClient } from 'next-safe-action';
 
-// Simple wait function if not exported from './utils'
 function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }

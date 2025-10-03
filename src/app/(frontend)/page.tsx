@@ -6,11 +6,9 @@ import { LatestNews } from '@/components/home/latest-news';
 import { Separator } from '@/components/ui/separator';
 
 export default async function HomePage() {
-  // Obtener posts reales de la base de datos
   const postsResult = await getPostsAction({ limit: 10 });
 
   if (!postsResult.data) {
-    // Fallback en caso de error
     return (
       <div className="min-h-dvh bg-background">
         <div className="container py-6">
@@ -20,11 +18,9 @@ export default async function HomePage() {
     );
   }
 
-  // Usar directamente los posts de Payload
   const posts = postsResult.data.docs;
   const [featuredPost, ...latestPosts] = posts;
 
-  // Si no hay posts, mostrar mensaje
   if (posts.length === 0) {
     return (
       <div className="min-h-dvh bg-background">
@@ -58,7 +54,14 @@ export default async function HomePage() {
           </div>
 
           <aside className="hidden lg:block">
-            <div className="sticky top-24 space-y-6">{/* Placeholder for future content */}</div>
+            <div className="sticky top-24 space-y-6">
+              <div className="p-6 border border-border rounded-lg min-h-[300px] bg-muted/60">
+                <h3 className="font-semibold mb-4">Espacio disponible</h3>
+                <p className="text-sm text-muted-foreground">
+                  Aquí se puede agregar contenido adicional como noticias relacionadas, widgets sociales, o publicidad.
+                </p>
+              </div>
+            </div>
           </aside>
         </div>
 

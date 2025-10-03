@@ -59,7 +59,7 @@ export const getPosts = async (options?: { limit?: number; page?: number; catego
       limit: options?.limit || 10,
       page: options?.page || 1,
       where,
-      sort: '-createdAt', // Siempre ordenamos por fecha, más recientes primero
+      sort: '-createdAt',
     });
 
     return {

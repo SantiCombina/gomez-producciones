@@ -11,13 +11,10 @@ interface Props {
 }
 
 export function FeaturedNews({ post }: Props) {
-  // Extraer datos de la imagen
   const featuredImage = typeof post.featuredImage === 'object' && post.featuredImage ? post.featuredImage : null;
 
-  // Extraer datos de la categoría
   const category = typeof post.category === 'object' && post.category ? post.category : null;
 
-  // Si no hay imagen, no renderizar
   if (!featuredImage?.url) {
     return null;
   }
@@ -47,22 +44,28 @@ export function FeaturedNews({ post }: Props) {
             </div>
 
             {/* Contenido */}
-            <CardContent className="md:w-1/2 p-6 flex flex-col justify-center">
-              <time className="text-sm text-muted-foreground mb-3 block">{formatDate(post.createdAt)}</time>
+            <CardContent className="md:w-1/2 p-6 md:p-8 flex flex-col justify-between min-h-[300px] md:min-h-[400px]">
+              <div>
+                <time className="text-sm text-muted-foreground mb-4 block">{formatDate(post.createdAt)}</time>
 
-              <CardTitle className="text-2xl lg:text-3xl mb-4 leading-tight">{post.title}</CardTitle>
+                <CardTitle className="text-xl md:text-2xl lg:text-3xl mb-4 leading-tight line-clamp-3">
+                  {post.title}
+                </CardTitle>
 
-              <CardDescription className="text-base lg:text-lg mb-6 leading-relaxed">
-                {post.description || 'Sin descripción disponible'}
-              </CardDescription>
+                <CardDescription className="text-base lg:text-lg leading-relaxed line-clamp-4 mb-6">
+                  {post.description || 'Sin descripción disponible'}
+                </CardDescription>
+              </div>
 
-              <Button
-                variant="ghost"
-                className="p-0 h-auto font-normal text-primary hover:text-primary/80 text-sm"
-                asChild
-              >
-                <span>Leer más →</span>
-              </Button>
+              <div className="mt-auto">
+                <Button
+                  variant="ghost"
+                  className="p-0 h-auto font-medium text-primary hover:text-primary/80 text-base"
+                  asChild
+                >
+                  <span>Leer más →</span>
+                </Button>
+              </div>
             </CardContent>
           </div>
         </Card>

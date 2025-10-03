@@ -11,13 +11,10 @@ interface Props {
 }
 
 export function NewsCard({ post }: Props) {
-  // Extraer datos de la imagen
   const featuredImage = typeof post.featuredImage === 'object' && post.featuredImage ? post.featuredImage : null;
 
-  // Extraer datos de la categoría
   const category = typeof post.category === 'object' && post.category ? post.category : null;
 
-  // Si no hay imagen, no renderizar la tarjeta
   if (!featuredImage?.url) {
     return null;
   }
