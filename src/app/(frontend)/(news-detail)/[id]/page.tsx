@@ -29,7 +29,7 @@ export default async function NewsDetailPage({ params }: Props) {
     const post = postResult.data;
 
     return (
-      <div className="min-h-dvh bg-background">
+      <div className="min-h-dvh">
         <div className="container pt-4">
           <AdBanner ad={mockAds[0]} />
         </div>

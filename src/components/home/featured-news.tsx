@@ -58,12 +58,8 @@ export function FeaturedNews({ post }: Props) {
               </div>
 
               <div className="mt-auto">
-                <Button
-                  variant="ghost"
-                  className="p-0 h-auto font-medium text-primary hover:text-primary/80 text-base"
-                  asChild
-                >
-                  <span>Leer más →</span>
+                <Button variant="link" className="p-0" asChild>
+                  <span>Leer más</span>
                 </Button>
               </div>
             </CardContent>

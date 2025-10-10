@@ -36,8 +36,8 @@ export function NewsCard({ post }: Props) {
           <CardDescription className="mb-4 text-base">
             {post.description || 'Sin descripción disponible'}
           </CardDescription>
-          <Button variant="ghost" className="p-0 h-auto font-normal text-primary hover:text-primary/80 text-sm" asChild>
-            <span>Leer más →</span>
+          <Button variant="link" className="p-0 text-sm" asChild>
+            <span>Leer más</span>
           </Button>
         </CardContent>
       </Card>

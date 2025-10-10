@@ -121,20 +121,7 @@ export function Footer() {
 
         <Separator className="bg-blue-500 my-6" />
 
-        <div className="flex flex-col md:flex-row justify-between items-center text-sm text-blue-100">
-          <p>© {currentYear} Gómez Producciones | Todos los derechos reservados</p>
-          <p>
-            Un desarrollo de{' '}
-            <a
-              href="https://santicombina.vercel.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="italic text-white font-semibold"
-            >
-              Santiago Combina
-            </a>
-          </p>
-        </div>
+        <p className="text-blue-100 text-sm">© {currentYear} Gómez Producciones | Todos los derechos reservados</p>
       </div>
     </footer>
   );

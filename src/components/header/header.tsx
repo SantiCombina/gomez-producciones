@@ -7,7 +7,7 @@ import { TopBar } from './top-bar';
 
 export function Header() {
   return (
-    <header className="border-b bg-background">
+    <header className="border-b bg-white">
       <TopBar />
       <div className="container">
         <div className="flex items-center justify-between h-48">
