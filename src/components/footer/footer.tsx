@@ -55,20 +55,14 @@ export function Footer() {
       <div className="container py-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-2">
-            <div className="flex items-center space-x-4 mb-6">
-              <div className="w-16 h-16 flex items-center justify-center">
-                <Image src="/icon.svg" alt="Oscar Gomez Logo Icon" width={64} height={64} className="object-contain" />
-              </div>
-              <div>
-                <Image
-                  src="/logo-text.svg"
-                  alt="Oscar Gomez Producciones Radiales y Televisivas"
-                  width={220}
-                  height={48}
-                  className="object-contain brightness-90 invert"
-                />
-              </div>
-            </div>
+            <Image
+              src="/og-logo-white.png"
+              alt="Oscar Gómez Producciones"
+              width={280}
+              height={80}
+              className="object-contain mb-1"
+              priority
+            />
             <p className="text-blue-100 mb-6 max-w-md">
               Minuto a minuto con información al instante de los hechos, desde un enfoque plenamente periodístico
             </p>
