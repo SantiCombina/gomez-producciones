@@ -1,5 +1,8 @@
+'use server';
+
 import { z } from 'zod';
 
+import { getActiveAdvertisements } from '@/app/services/advertisements';
 import { getPosts } from '@/app/services/post';
 import { actionClient } from '@/lib/safe-action-client';
 
@@ -20,3 +23,7 @@ export const getPostsAction = actionClient
 
     return result.data;
   });
+
+export const getAdvertisementsAction = actionClient.schema(z.object({})).action(async () => {
+  return await getActiveAdvertisements();
+});

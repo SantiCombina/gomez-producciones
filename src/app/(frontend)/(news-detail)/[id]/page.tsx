@@ -1,5 +1,5 @@
+import { getAdvertisementsAction } from '@/components/home/actions';
 import { AdBanner } from '@/components/home/ad-banner';
-import { mockAds } from '@/components/home/data';
 import { getPostByIdAction } from '@/components/news-detail/[id]/actions';
 import { ArticleContent } from '@/components/news-detail/[id]/article-content';
 import { RelatedNews } from '@/components/news-detail/[id]/related-news';
@@ -15,7 +15,10 @@ export default async function NewsDetailPage({ params }: Props) {
   const { id } = await params;
 
   try {
-    const postResult = await getPostByIdAction({ id });
+    const [postResult, adsResult] = await Promise.all([
+      getPostByIdAction({ id }),
+      getAdvertisementsAction({}),
+    ]);
 
     if (!postResult?.data) {
       return (
@@ -27,23 +30,29 @@ export default async function NewsDetailPage({ params }: Props) {
     }
 
     const post = postResult.data;
+    const ads = adsResult?.data ?? [];
 
     return (
       <div className="min-h-dvh">
-        <div className="container pt-4">
-          <AdBanner ad={mockAds[0]} />
-        </div>
+        {ads[0] && (
+          <div className="container pt-4">
+            <AdBanner ad={ads[0]} />
+          </div>
+        )}
 
         <main className="container py-6">
           <div className="lg:grid lg:grid-cols-4 lg:gap-8">
             <div className="lg:col-span-3 space-y-8">
               <ArticleContent post={post} />
 
-              <Separator className="my-8" />
-
-              <div className="w-full">
-                <AdBanner ad={mockAds[1]} />
-              </div>
+              {ads[1] && (
+                <>
+                  <Separator className="my-8" />
+                  <div className="w-full">
+                    <AdBanner ad={ads[1]} />
+                  </div>
+                </>
+              )}
 
               <Separator className="my-8" />
 
@@ -63,10 +72,11 @@ export default async function NewsDetailPage({ params }: Props) {
             </aside>
           </div>
 
-          {/* Mobile Bottom Ad */}
-          <div className="lg:hidden mt-8">
-            <AdBanner ad={mockAds[2]} />
-          </div>
+          {ads[2] && (
+            <div className="lg:hidden mt-8">
+              <AdBanner ad={ads[2]} />
+            </div>
+          )}
         </main>
       </div>
     );

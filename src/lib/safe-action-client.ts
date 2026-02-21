@@ -1,5 +1,7 @@
 import { DEFAULT_SERVER_ERROR_MESSAGE, createSafeActionClient } from 'next-safe-action';
 
+import { getCurrentUser } from '@/app/services/users';
+
 function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -36,4 +38,14 @@ export const actionClient = createSafeActionClient({
     console.error(`[${actionId}] Action failed:`, error);
     throw error;
   }
+});
+
+export const authActionClient = actionClient.use(async ({ next }) => {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    throw new Error('No autorizado');
+  }
+
+  return next({ ctx: { user } });
 });

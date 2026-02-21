@@ -122,6 +122,9 @@
   body {
     @apply bg-background text-foreground font-sans;
   }
+  button:not(:disabled) {
+    cursor: pointer;
+  }
 }
 
 @layer utilities {

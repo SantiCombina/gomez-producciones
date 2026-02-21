@@ -1,56 +1,55 @@
-import { getPostsAction } from '@/components/home/actions';
+import { getCurrentUser } from '@/app/services/users';
+import { getAdvertisementsAction, getPostsAction } from '@/components/home/actions';
 import { AdBanner } from '@/components/home/ad-banner';
-import { mockAds } from '@/components/home/data';
+import { CreatePostTrigger } from '@/components/home/create-post/create-post-trigger';
 import { FeaturedNews } from '@/components/home/featured-news';
 import { LatestNews } from '@/components/home/latest-news';
 import { Separator } from '@/components/ui/separator';
 
 export default async function HomePage() {
-  const postsResult = await getPostsAction({ limit: 10 });
+  const [postsResult, adsResult, user] = await Promise.all([
+    getPostsAction({ limit: 10 }),
+    getAdvertisementsAction({}),
+    getCurrentUser(),
+  ]);
 
-  if (!postsResult.data) {
-    return (
-      <div className="min-h-dvh bg-background">
-        <div className="container py-6">
-          <p className="text-center">Error al cargar las noticias</p>
-        </div>
-      </div>
-    );
-  }
-
-  const posts = postsResult.data.docs;
+  const posts = postsResult?.data?.docs ?? [];
+  const ads = adsResult?.data ?? [];
   const [featuredPost, ...latestPosts] = posts;
-
-  if (posts.length === 0) {
-    return (
-      <div className="min-h-dvh bg-background">
-        <div className="container py-6">
-          <p className="text-center">No hay noticias disponibles</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-dvh bg-background">
-      <div className="container pt-4">
-        <AdBanner ad={mockAds[0]} />
-      </div>
+      {ads[0] && (
+        <div className="container pt-4">
+          <AdBanner ad={ads[0]} />
+        </div>
+      )}
 
       <main className="container py-6">
         <div className="lg:grid lg:grid-cols-4 lg:gap-8">
           <div className="lg:col-span-3 space-y-8">
-            {featuredPost && <FeaturedNews post={featuredPost} />}
+            {user && <CreatePostTrigger user={user} />}
 
-            <Separator className="my-8" />
+            {posts.length === 0 ? (
+              <p className="text-center text-muted-foreground py-12">No hay noticias disponibles</p>
+            ) : (
+              <>
+                {featuredPost && <FeaturedNews post={featuredPost} />}
 
-            <div className="w-full">
-              <AdBanner ad={mockAds[1]} />
-            </div>
+                {ads[1] && (
+                  <>
+                    <Separator className="my-8" />
+                    <div className="w-full">
+                      <AdBanner ad={ads[1]} />
+                    </div>
+                  </>
+                )}
 
-            <Separator className="my-8" />
+                <Separator className="my-8" />
 
-            {latestPosts.length > 0 && <LatestNews posts={latestPosts} />}
+                {latestPosts.length > 0 && <LatestNews posts={latestPosts} />}
+              </>
+            )}
           </div>
 
           <aside className="hidden lg:block">
@@ -65,10 +64,11 @@ export default async function HomePage() {
           </aside>
         </div>
 
-        {/* Mobile Bottom Ad */}
-        <div className="lg:hidden mt-8">
-          <AdBanner ad={mockAds[2]} />
-        </div>
+        {ads[2] && (
+          <div className="lg:hidden mt-8">
+            <AdBanner ad={ads[2]} />
+          </div>
+        )}
       </main>
     </div>
   );

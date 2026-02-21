@@ -10,6 +10,21 @@ export const Posts: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'createdAt'],
   },
+  hooks: {
+    afterDelete: [
+      async ({ doc, req }) => {
+        const featuredImageId = typeof doc.featuredImage === 'object' ? doc.featuredImage?.id : doc.featuredImage;
+
+        if (featuredImageId) {
+          try {
+            await req.payload.delete({ collection: 'media', id: featuredImageId });
+          } catch (error) {
+            console.error('Error eliminando media asociada al post:', error);
+          }
+        }
+      },
+    ],
+  },
   fields: [
     {
       name: 'title',
