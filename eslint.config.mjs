@@ -183,6 +183,17 @@ const eslintConfig = [
       },
     },
   },
+
+  // Ignorar warnings en la carpeta generada por Payload (debe ir al final para sobreescribir)
+  {
+    files: ["src/app/\\(payload\\)/**"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "import/order": "off",
+      "prettier/prettier": "off",
+    },
+  },
 ];
 
 export default eslintConfig;

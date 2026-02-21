@@ -15,10 +15,7 @@ export default async function NewsDetailPage({ params }: Props) {
   const { id } = await params;
 
   try {
-    const [postResult, adsResult] = await Promise.all([
-      getPostByIdAction({ id }),
-      getAdvertisementsAction({}),
-    ]);
+    const [postResult, adsResult] = await Promise.all([getPostByIdAction({ id }), getAdvertisementsAction({})]);
 
     if (!postResult?.data) {
       return (

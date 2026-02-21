@@ -2,8 +2,8 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2Icon } from 'lucide-react';
-import { useAction } from 'next-safe-action/hooks';
 import { useRouter } from 'next/navigation';
+import { useAction } from 'next-safe-action/hooks';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -12,6 +12,7 @@ import { DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+
 import { createPostAction } from './actions';
 import { createPostSchema, type CreatePostValues } from './create-post-schema';
 import { ImageUploader } from './image-uploader';
@@ -82,7 +83,12 @@ export function PostDialog({ onSuccess }: Props) {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Textarea placeholder="Descripción (opcional)..." rows={4} className="resize-none bg-white" {...field} />
+                  <Textarea
+                    placeholder="Descripción (opcional)..."
+                    rows={4}
+                    className="resize-none bg-white"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
