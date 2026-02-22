@@ -3,6 +3,8 @@
 import { Download } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
+import { Button } from '@/components/ui/button';
+
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
@@ -40,11 +42,12 @@ export function PwaInstallButton() {
   };
 
   return (
-    <button
+    <Button
       onClick={handleInstall}
-      className="w-full text-left rounded-xl border border-sky-200 bg-sky-50 p-4 transition-colors hover:bg-sky-100 hover:border-sky-300 active:bg-sky-200 cursor-pointer"
+      variant="ghost"
+      className="w-full h-auto flex-col items-start gap-0 rounded-xl border border-sky-200 bg-sky-50 p-4 hover:bg-sky-100 hover:border-sky-300 active:bg-sky-200"
     >
-      <div className="flex items-center gap-3 mb-2">
+      <div className="flex items-center gap-3 mb-2 w-full">
         <div className="p-2 rounded-lg bg-sky-500 shrink-0">
           <Download className="h-4 w-4 text-white" />
         </div>
@@ -53,9 +56,9 @@ export function PwaInstallButton() {
           <p className="text-xs text-sky-600">Gratis · Acceso rápido</p>
         </div>
       </div>
-      <p className="text-xs text-sky-700 leading-relaxed">
+      <p className="text-xs text-sky-700 leading-relaxed text-left">
         Tocá aquí para instalar Gomez Producciones en tu dispositivo y acceder a las noticias al instante.
       </p>
-    </button>
+    </Button>
   );
 }

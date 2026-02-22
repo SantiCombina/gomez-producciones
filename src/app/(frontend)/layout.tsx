@@ -67,6 +67,19 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
       <body className="font-sans">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'Gomez Producciones',
+              url: 'https://gomezproducciones.vercel.app',
+              logo: 'https://gomezproducciones.vercel.app/og-logo-black.png',
+              sameAs: [],
+            }),
+          }}
+        />
         <PwaSetup />
         <Header />
         <main>{children}</main>

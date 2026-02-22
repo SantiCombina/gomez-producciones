@@ -1,14 +1,56 @@
+import type { Metadata } from 'next';
+
 import { getAdvertisementsAction } from '@/components/home/actions';
 import { AdBanner } from '@/components/home/ad-banner';
 import { getPostByIdAction } from '@/components/news-detail/[id]/actions';
 import { ArticleContent } from '@/components/news-detail/[id]/article-content';
 import { RelatedNews } from '@/components/news-detail/[id]/related-news';
 import { Separator } from '@/components/ui/separator';
+import { Media } from '@/payload-types';
+
+const BASE_URL = 'https://gomezproducciones.vercel.app';
 
 interface Props {
   params: Promise<{
     id: string;
   }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const postResult = await getPostByIdAction({ id });
+
+  if (!postResult?.data) {
+    return { title: 'Noticia no encontrada | Gomez Producciones' };
+  }
+
+  const post = postResult.data;
+  const imageUrl =
+    typeof post.featuredImage === 'object' && (post.featuredImage as Media)?.url
+      ? (post.featuredImage as Media).url!
+      : `${BASE_URL}/og-image.webp`;
+
+  const description = post.description ?? 'Leé la última noticia en Gomez Producciones.';
+
+  return {
+    title: `${post.title} | Gomez Producciones`,
+    description,
+    openGraph: {
+      title: post.title,
+      description,
+      type: 'article',
+      publishedTime: post.createdAt,
+      modifiedTime: post.updatedAt,
+      siteName: 'Gomez Producciones',
+      images: [{ url: imageUrl, alt: post.title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description,
+      images: [imageUrl],
+    },
+  };
 }
 
 export default async function NewsDetailPage({ params }: Props) {
@@ -29,8 +71,33 @@ export default async function NewsDetailPage({ params }: Props) {
     const post = postResult.data;
     const ads = adsResult?.data ?? [];
 
+    const imageUrl =
+      typeof post.featuredImage === 'object' && (post.featuredImage as Media)?.url
+        ? (post.featuredImage as Media).url!
+        : `${BASE_URL}/og-image.webp`;
+
+    const jsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'NewsArticle',
+      headline: post.title,
+      description: post.description ?? '',
+      image: imageUrl,
+      datePublished: post.createdAt,
+      dateModified: post.updatedAt,
+      url: `${BASE_URL}/${post.id}`,
+      publisher: {
+        '@type': 'Organization',
+        name: 'Gomez Producciones',
+        logo: {
+          '@type': 'ImageObject',
+          url: `${BASE_URL}/og-logo-black.png`,
+        },
+      },
+    };
+
     return (
       <div className="min-h-dvh">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         {ads[0] && (
           <div className="container pt-4">
             <AdBanner ad={ads[0]} />

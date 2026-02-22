@@ -2,8 +2,8 @@
 
 import { Download, Menu } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -72,7 +72,9 @@ export function MobileMenu() {
             }`}
             asChild
           >
-            <Link href="/" onClick={() => setOpen(false)}>Inicio</Link>
+            <Link href="/" onClick={() => setOpen(false)}>
+              Inicio
+            </Link>
           </Button>
           <Button
             variant="ghost"
@@ -83,7 +85,9 @@ export function MobileMenu() {
             }`}
             asChild
           >
-            <Link href="/nosotros" onClick={() => setOpen(false)}>Nosotros</Link>
+            <Link href="/nosotros" onClick={() => setOpen(false)}>
+              Nosotros
+            </Link>
           </Button>
           <Button
             variant="ghost"
@@ -94,16 +98,19 @@ export function MobileMenu() {
             }`}
             asChild
           >
-            <Link href="/contacto" onClick={() => setOpen(false)}>Contacto</Link>
+            <Link href="/contacto" onClick={() => setOpen(false)}>
+              Contacto
+            </Link>
           </Button>
         </div>
 
         {!isStandalone && installEvent && (
           <div className="pb-2">
             <Separator className="mb-4" />
-            <button
+            <Button
               onClick={handleInstall}
-              className="w-full rounded-xl border border-sky-200 bg-sky-50 p-3 text-left transition-colors hover:bg-sky-100 active:bg-sky-200"
+              variant="ghost"
+              className="w-full h-auto rounded-xl border border-sky-200 bg-sky-50 p-3 hover:bg-sky-100 hover:border-sky-300 active:bg-sky-200 justify-start"
             >
               <div className="flex items-center gap-3">
                 <div className="p-1.5 rounded-lg bg-sky-500 shrink-0">
@@ -114,7 +121,7 @@ export function MobileMenu() {
                   <p className="text-xs text-sky-600">Acceso rápido a las noticias</p>
                 </div>
               </div>
-            </button>
+            </Button>
           </div>
         )}
       </SheetContent>
