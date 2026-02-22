@@ -19,6 +19,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://gomezproducciones.vercel.app'),
   title: 'Gomez Producciones - Portal de Noticias',
+  manifest: '/manifest.webmanifest',
   appleWebApp: {
     title: 'OG',
   },
