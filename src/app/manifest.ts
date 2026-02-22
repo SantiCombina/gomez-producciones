@@ -4,6 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'Gomez Producciones',
     short_name: 'Noticias',
+    start_url: '/',
     icons: [
       {
         src: '/web-app-manifest-192x192.png',

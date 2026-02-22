@@ -4,6 +4,7 @@ import { AdBanner } from '@/components/home/ad-banner';
 import { CreatePostTrigger } from '@/components/home/create-post/create-post-trigger';
 import { FeaturedNews } from '@/components/home/featured-news';
 import { LatestNews } from '@/components/home/latest-news';
+import { PwaInstallButton } from '@/components/pwa/pwa-install-button';
 import { Separator } from '@/components/ui/separator';
 
 export default async function HomePage() {
@@ -54,6 +55,7 @@ export default async function HomePage() {
 
           <aside className="hidden lg:block">
             <div className="sticky top-24 space-y-6">
+              <PwaInstallButton />
               <div className="p-6 border border-border rounded-lg min-h-[300px] bg-muted/60">
                 <h3 className="font-semibold mb-4">Espacio disponible</h3>
                 <p className="text-sm text-muted-foreground">
