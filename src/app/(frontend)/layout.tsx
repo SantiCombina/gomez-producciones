@@ -19,6 +19,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://gomezproducciones.vercel.app'),
   title: 'Gomez Producciones - Portal de Noticias',
+  appleWebApp: {
+    title: 'OG',
+  },
   description: 'Minuto a minuto con información al instante de los hechos, desde un enfoque plenamente periodístico.',
   keywords: ['noticias', 'periodismo', 'gomez producciones', 'radio', 'televisión', 'medios'],
   openGraph: {
