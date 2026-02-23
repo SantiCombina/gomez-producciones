@@ -127,14 +127,30 @@
   }
 }
 
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
 @layer utilities {
+  .skeleton-shimmer {
+    background: linear-gradient(
+      90deg,
+      oklch(0.90 0.01 75) 25%,
+      oklch(0.97 0.005 75) 50%,
+      oklch(0.90 0.01 75) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+  }
+
   .line-clamp-2 {
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
   }
-  
+
   .line-clamp-3 {
     overflow: hidden;
     display: -webkit-box;

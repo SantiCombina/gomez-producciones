@@ -110,7 +110,7 @@ export function MobileMenu() {
             <Button
               onClick={handleInstall}
               variant="ghost"
-              className="w-full h-auto rounded-xl border border-sky-200 bg-sky-50 p-3 hover:bg-sky-100 hover:border-sky-300 active:bg-sky-200 justify-start"
+              className="w-full h-auto whitespace-normal text-left !items-start !justify-start rounded-xl border border-sky-200 bg-sky-50 p-3 hover:bg-sky-100 hover:border-sky-300 active:bg-sky-200"
             >
               <div className="flex items-center gap-3">
                 <div className="p-1.5 rounded-lg bg-sky-500 shrink-0">

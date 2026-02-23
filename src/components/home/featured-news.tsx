@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card';
+import { ImageWithSkeleton } from '@/components/ui/image-with-skeleton';
 import { formatDate } from '@/lib/date-utils';
 import type { Post } from '@/payload-types';
 
@@ -28,10 +29,13 @@ export function FeaturedNews({ post }: Props) {
           <div className="md:flex">
             {/* Imagen */}
             <div className="relative md:w-1/2 aspect-[16/9] md:aspect-[3/2] flex-shrink-0">
-              <img
+              <ImageWithSkeleton
                 src={featuredImage.url}
                 alt={featuredImage.alt || post.title}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
+                priority
               />
               <div className="absolute top-4 left-0">
                 <Badge

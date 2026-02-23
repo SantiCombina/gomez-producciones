@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card';
+import { ImageWithSkeleton } from '@/components/ui/image-with-skeleton';
 import { formatDate } from '@/lib/date-utils';
 import type { Post } from '@/payload-types';
 
@@ -23,7 +24,13 @@ export function NewsCard({ post }: Props) {
     <Link href={`/${post.id}`} className="block">
       <Card className="overflow-hidden p-0 flex flex-col gap-0 cursor-pointer hover:shadow-md transition-shadow duration-300">
         <div className="relative aspect-[5/4] flex-shrink-0">
-          <img src={featuredImage.url} alt={featuredImage.alt || post.title} className="w-full h-full object-cover" />
+          <ImageWithSkeleton
+            src={featuredImage.url}
+            alt={featuredImage.alt || post.title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
           <div className="absolute top-3 left-0">
             <Badge variant="secondary" className="bg-primary/90 text-primary-foreground rounded-l-none rounded-r-md">
               {category?.name || 'General'}

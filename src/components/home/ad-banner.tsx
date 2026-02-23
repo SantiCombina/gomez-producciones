@@ -1,5 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
+import { ImageWithSkeleton } from '@/components/ui/image-with-skeleton';
 import type { Advertisement, Media } from '@/payload-types';
 
 interface Props {
@@ -15,7 +16,13 @@ export function AdBanner({ ad, className = '' }: Props) {
   const content = (
     <Card className={`w-full overflow-hidden p-0 ${className}`}>
       <div className="relative h-32">
-        <img src={image.url} alt={image.alt || ad.title} className="w-full h-full object-cover" />
+        <ImageWithSkeleton
+          src={image.url}
+          alt={image.alt || ad.title}
+          fill
+          className="object-cover"
+          sizes="(max-width: 1024px) 100vw, 320px"
+        />
         <div className="absolute top-2 right-2">
           <Badge variant="secondary" className="text-xs bg-black/70 text-white hover:bg-black/70">
             Publicidad

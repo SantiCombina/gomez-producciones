@@ -1,3 +1,4 @@
+import { ImageWithSkeleton } from '@/components/ui/image-with-skeleton';
 import type { Post } from '@/payload-types';
 
 interface ArticleHeaderProps {
@@ -15,7 +16,14 @@ export function ArticleHeader({ post }: ArticleHeaderProps) {
 
       {featuredImage?.url && (
         <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg">
-          <img src={featuredImage.url} alt={featuredImage.alt || post.title} className="w-full h-full object-cover" />
+          <ImageWithSkeleton
+            src={featuredImage.url}
+            alt={featuredImage.alt || post.title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 900px"
+            priority
+          />
         </div>
       )}
     </div>

@@ -1,5 +1,5 @@
-const MAX_WIDTH = 960;
-const QUALITY = 0.85;
+const MAX_WIDTH = 1280;
+const QUALITY = 0.95;
 
 export async function compressImage(file: File): Promise<File> {
   return new Promise((resolve, reject) => {
