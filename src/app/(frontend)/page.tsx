@@ -1,3 +1,4 @@
+import { getArticleLabels } from '@/app/services/article-labels';
 import { getCurrentUser } from '@/app/services/users';
 import { getAdvertisementsAction, getPostsAction } from '@/components/home/actions';
 import { AdBanner } from '@/components/home/ad-banner';
@@ -8,10 +9,11 @@ import { PwaInstallButton } from '@/components/pwa/pwa-install-button';
 import { Separator } from '@/components/ui/separator';
 
 export default async function HomePage() {
-  const [postsResult, adsResult, user] = await Promise.all([
+  const [postsResult, adsResult, user, categories] = await Promise.all([
     getPostsAction({ limit: 10 }),
     getAdvertisementsAction({}),
     getCurrentUser(),
+    getArticleLabels(),
   ]);
 
   const posts = postsResult?.data?.docs ?? [];
@@ -29,7 +31,7 @@ export default async function HomePage() {
       <main className="container py-6">
         <div className="lg:grid lg:grid-cols-4 lg:gap-8">
           <div className="lg:col-span-3 space-y-8">
-            {user && <CreatePostTrigger user={user} />}
+            {user && <CreatePostTrigger user={user} initialCategories={categories} />}
 
             {posts.length === 0 ? (
               <p className="text-center text-muted-foreground py-12">No hay noticias disponibles</p>

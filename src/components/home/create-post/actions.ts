@@ -1,5 +1,8 @@
 'use server';
 
+import { z } from 'zod';
+
+import { createArticleLabel, getArticleLabels } from '@/app/services/article-labels';
 import { createMedia } from '@/app/services/media';
 import { createPost } from '@/app/services/post';
 import { authActionClient } from '@/lib/safe-action-client';
@@ -17,6 +20,7 @@ export const createPostAction = authActionClient.schema(createPostSchema).action
   const result = await createPost({
     title: parsedInput.title,
     description: parsedInput.description,
+    category: parsedInput.categoryId,
     featuredImage: mediaId,
   });
 
@@ -26,3 +30,13 @@ export const createPostAction = authActionClient.schema(createPostSchema).action
 
   return result.post;
 });
+
+export const getArticleLabelsAction = authActionClient.action(async () => {
+  return await getArticleLabels();
+});
+
+export const createArticleLabelAction = authActionClient
+  .schema(z.object({ name: z.string().min(1) }))
+  .action(async ({ parsedInput }) => {
+    return await createArticleLabel(parsedInput.name);
+  });

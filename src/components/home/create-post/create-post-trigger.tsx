@@ -3,16 +3,17 @@
 import { useState } from 'react';
 
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
-import type { User } from '@/payload-types';
+import type { ArticleLabel, User } from '@/payload-types';
 
 import { PostDialog } from './post-dialog';
 import { TriggerBar } from './trigger-bar';
 
 interface Props {
   user: User;
+  initialCategories: ArticleLabel[];
 }
 
-export function CreatePostTrigger({ user }: Props) {
+export function CreatePostTrigger({ user, initialCategories }: Props) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -20,7 +21,7 @@ export function CreatePostTrigger({ user }: Props) {
       <DialogTrigger asChild>
         <TriggerBar user={user} />
       </DialogTrigger>
-      <PostDialog onSuccess={() => setOpen(false)} />
+      <PostDialog onSuccess={() => setOpen(false)} initialCategories={initialCategories} />
     </Dialog>
   );
 }

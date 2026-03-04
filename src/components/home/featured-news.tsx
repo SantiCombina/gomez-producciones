@@ -1,7 +1,6 @@
 import Link from 'next/link';
 
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card';
 import { ImageWithSkeleton } from '@/components/ui/image-with-skeleton';
 import { formatDate } from '@/lib/date-utils';
@@ -37,14 +36,16 @@ export function FeaturedNews({ post }: Props) {
                 sizes="(max-width: 768px) 100vw, 50vw"
                 priority
               />
-              <div className="absolute top-4 left-0">
-                <Badge
-                  variant="secondary"
-                  className="bg-primary/90 text-primary-foreground rounded-l-none rounded-r-md text-sm"
-                >
-                  {category?.name || 'General'}
-                </Badge>
-              </div>
+              {category && (
+                <div className="absolute top-4 left-0">
+                  <Badge
+                    variant="secondary"
+                    className="bg-primary/90 text-primary-foreground rounded-l-none rounded-r-md text-sm"
+                  >
+                    {category.name}
+                  </Badge>
+                </div>
+              )}
             </div>
 
             {/* Contenido */}
@@ -62,9 +63,7 @@ export function FeaturedNews({ post }: Props) {
               </div>
 
               <div className="mt-auto">
-                <Button variant="link" className="p-0" asChild>
-                  <span>Leer más</span>
-                </Button>
+                <span className="text-xs text-muted-foreground/70">Leer más</span>
               </div>
             </CardContent>
           </div>

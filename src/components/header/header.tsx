@@ -10,7 +10,7 @@ export function Header() {
     <header className="border-b bg-white">
       <TopBar />
       <div className="container">
-        <div className="flex items-center justify-between h-48">
+        <div className="flex items-center justify-between h-36">
           <div className="flex items-center">
             <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
               <Image
@@ -18,12 +18,12 @@ export function Header() {
                 alt="Oscar Gómez Producciones"
                 width={320}
                 height={90}
-                className="w-auto h-20 sm:h-24 md:h-28 lg:h-32"
+                className="w-auto h-16 sm:h-20 md:h-24 lg:h-28"
                 priority
               />
             </Link>
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center pr-2">
             <Navigation />
             <MobileMenu />
           </div>

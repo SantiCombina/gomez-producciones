@@ -1,18 +1,23 @@
 'use client';
 
-import { Download, Menu } from 'lucide-react';
+import { Download, Home, Info, Menu, Phone } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
+
+const navItems = [
+  { href: '/', label: 'Inicio', icon: Home },
+  { href: '/nosotros', label: 'Nosotros', icon: Info },
+  { href: '/contacto', label: 'Contacto', icon: Phone },
+];
 
 export function MobileMenu() {
   const pathname = usePathname();
@@ -47,78 +52,66 @@ export function MobileMenu() {
   };
 
   const isActive = (path: string) => {
-    if (path === '/') {
-      return pathname === '/';
-    }
+    if (path === '/') return pathname === '/';
     return pathname.startsWith(path);
   };
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Menu size={28} className="md:hidden" />
+        <Menu size={28} className="md:hidden cursor-pointer" />
       </SheetTrigger>
-      <SheetContent side="right" className="w-64 flex flex-col">
-        <SheetHeader>
-          <SheetTitle>Navegación</SheetTitle>
-        </SheetHeader>
-        <div className="mt-6 flex flex-col space-y-1 flex-1">
-          <Button
-            variant="ghost"
-            className={`justify-start relative px-3 py-3 transition-all duration-300 ${
-              isActive('/')
-                ? 'text-primary font-medium bg-primary/5 border-l-2 border-primary'
-                : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
-            }`}
-            asChild
-          >
-            <Link href="/" onClick={() => setOpen(false)}>
-              Inicio
-            </Link>
-          </Button>
-          <Button
-            variant="ghost"
-            className={`justify-start relative px-3 py-3 transition-all duration-300 ${
-              isActive('/nosotros')
-                ? 'text-primary font-medium bg-primary/5 border-l-2 border-primary'
-                : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
-            }`}
-            asChild
-          >
-            <Link href="/nosotros" onClick={() => setOpen(false)}>
-              Nosotros
-            </Link>
-          </Button>
-          <Button
-            variant="ghost"
-            className={`justify-start relative px-3 py-3 transition-all duration-300 ${
-              isActive('/contacto')
-                ? 'text-primary font-medium bg-primary/5 border-l-2 border-primary'
-                : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
-            }`}
-            asChild
-          >
-            <Link href="/contacto" onClick={() => setOpen(false)}>
-              Contacto
-            </Link>
-          </Button>
+      <SheetContent side="right" className="w-[82vw] max-w-[300px] flex flex-col p-0 gap-0">
+        <SheetTitle className="sr-only">Menú de navegación</SheetTitle>
+
+        <div className="px-5 pt-8 pb-3">
+          <p className="text-[11px] font-semibold tracking-widest uppercase text-muted-foreground/60">
+            Secciones
+          </p>
         </div>
 
+        <nav className="flex-1 px-4 flex flex-col gap-1">
+          {navItems.map(({ href, label, icon: Icon }) => {
+            const active = isActive(href);
+            return (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setOpen(false)}
+                className={`flex items-center gap-4 px-4 py-5 rounded-2xl transition-all duration-200 ${
+                  active
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-foreground hover:bg-muted active:bg-muted/80'
+                }`}
+              >
+                <div
+                  className={`p-2.5 rounded-xl shrink-0 ${
+                    active ? 'bg-white/20' : 'bg-muted'
+                  }`}
+                >
+                  <Icon className="h-5 w-5" />
+                </div>
+                <span className="text-[17px] font-medium">{label}</span>
+              </Link>
+            );
+          })}
+        </nav>
+
         {!isStandalone && installEvent && (
-          <div className="pb-2">
-            <Separator className="mb-4" />
+          <div className="px-4 pb-8 pt-4 shrink-0">
+            <div className="h-px bg-border mb-4" />
             <Button
               onClick={handleInstall}
               variant="ghost"
-              className="w-full h-auto whitespace-normal text-left !items-start !justify-start rounded-xl border border-sky-200 bg-sky-50 p-3 hover:bg-sky-100 hover:border-sky-300 active:bg-sky-200"
+              className="w-full h-auto whitespace-normal !items-center !justify-start rounded-2xl border border-sky-200 bg-sky-50 px-4 py-4 hover:bg-sky-100 hover:border-sky-300 active:bg-sky-200"
             >
-              <div className="flex items-center gap-3">
-                <div className="p-1.5 rounded-lg bg-sky-500 shrink-0">
-                  <Download className="h-4 w-4 text-white" />
+              <div className="flex items-center gap-3.5">
+                <div className="p-2 rounded-xl bg-sky-500 shrink-0">
+                  <Download className="h-5 w-5 text-white" />
                 </div>
-                <div>
-                  <p className="font-semibold text-sm text-sky-900">Instalá la app</p>
-                  <p className="text-xs text-sky-600">Acceso rápido a las noticias</p>
+                <div className="text-left">
+                  <p className="font-semibold text-sm text-sky-900 leading-tight">Instalá la app</p>
+                  <p className="text-xs text-sky-600 mt-0.5">Acceso rápido a las noticias</p>
                 </div>
               </div>
             </Button>

@@ -13,16 +13,19 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { compressImage } from '@/lib/image-utils';
+import type { ArticleLabel } from '@/payload-types';
 
 import { createPostAction } from './actions';
+import { CategorySelect } from './category-select';
 import { createPostSchema, type CreatePostValues } from './create-post-schema';
 import { ImageUploader } from './image-uploader';
 
 interface Props {
   onSuccess: () => void;
+  initialCategories: ArticleLabel[];
 }
 
-export function PostDialog({ onSuccess }: Props) {
+export function PostDialog({ onSuccess, initialCategories }: Props) {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isCompressing, setIsCompressing] = useState(false);
@@ -31,7 +34,7 @@ export function PostDialog({ onSuccess }: Props) {
 
   const form = useForm<CreatePostValues>({
     resolver: zodResolver(createPostSchema),
-    defaultValues: { title: '', description: '' },
+    defaultValues: { title: '', description: '', categoryId: undefined },
   });
 
   const { executeAsync, isPending } = useAction(createPostAction);
@@ -130,6 +133,23 @@ export function PostDialog({ onSuccess }: Props) {
                       className="resize-none bg-white min-h-[80px] max-h-[200px] overflow-y-auto"
                       style={{ fieldSizing: 'content' } as React.CSSProperties}
                       {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="categoryId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <CategorySelect
+                      initialCategories={initialCategories.map((c) => ({ id: c.id, name: c.name }))}
+                      value={field.value}
+                      onChange={field.onChange}
                     />
                   </FormControl>
                   <FormMessage />

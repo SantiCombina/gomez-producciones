@@ -1,7 +1,6 @@
 import Link from 'next/link';
 
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card';
 import { ImageWithSkeleton } from '@/components/ui/image-with-skeleton';
 import { formatDate } from '@/lib/date-utils';
@@ -21,8 +20,8 @@ export function NewsCard({ post }: Props) {
   }
 
   return (
-    <Link href={`/${post.id}`} className="block">
-      <Card className="overflow-hidden p-0 flex flex-col gap-0 cursor-pointer hover:shadow-md transition-shadow duration-300">
+    <Link href={`/${post.id}`} className="block h-full">
+      <Card className="overflow-hidden p-0 flex flex-col gap-0 cursor-pointer hover:shadow-md transition-shadow duration-300 h-full">
         <div className="relative aspect-[5/4] flex-shrink-0">
           <ImageWithSkeleton
             src={featuredImage.url}
@@ -31,21 +30,21 @@ export function NewsCard({ post }: Props) {
             className="object-cover"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
-          <div className="absolute top-3 left-0">
-            <Badge variant="secondary" className="bg-primary/90 text-primary-foreground rounded-l-none rounded-r-md">
-              {category?.name || 'General'}
-            </Badge>
-          </div>
+          {category && (
+            <div className="absolute top-3 left-0">
+              <Badge variant="secondary" className="bg-primary/90 text-primary-foreground rounded-l-none rounded-r-md">
+                {category.name}
+              </Badge>
+            </div>
+          )}
         </div>
         <CardContent className="p-4">
           <time className="text-xs text-muted-foreground mb-3 block">{formatDate(post.createdAt)}</time>
-          <CardTitle className="text-lg mb-3">{post.title}</CardTitle>
-          <CardDescription className="mb-4 text-base">
+          <CardTitle className="text-lg mb-3 line-clamp-2">{post.title}</CardTitle>
+          <CardDescription className="text-base line-clamp-3 mb-2">
             {post.description || 'Sin descripción disponible'}
           </CardDescription>
-          <Button variant="link" className="p-0 text-sm" asChild>
-            <span>Leer más</span>
-          </Button>
+          <span className="text-xs text-muted-foreground/70">Leer más</span>
         </CardContent>
       </Card>
     </Link>
