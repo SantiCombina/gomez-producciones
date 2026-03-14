@@ -57,7 +57,13 @@ export function CategorySelect({ initialCategories, value, onChange }: Props) {
 
   return (
     <div className="flex gap-2">
-      <Popover open={open} onOpenChange={(v) => { setOpen(v); if (!v) cancelCreating(); }}>
+      <Popover
+        open={open}
+        onOpenChange={(v) => {
+          setOpen(v);
+          if (!v) cancelCreating();
+        }}
+      >
         <PopoverTrigger asChild>
           <Button
             type="button"
@@ -93,7 +99,10 @@ export function CategorySelect({ initialCategories, value, onChange }: Props) {
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') { e.preventDefault(); handleCreate(); }
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleCreate();
+                  }
                   if (e.key === 'Escape') cancelCreating();
                 }}
                 className="h-8 text-sm min-w-0"
@@ -106,7 +115,11 @@ export function CategorySelect({ initialCategories, value, onChange }: Props) {
                 onClick={handleCreate}
                 disabled={!newName.trim() || isPending}
               >
-                {isPending ? <Loader2Icon className="h-3.5 w-3.5 animate-spin" /> : <CheckIcon className="h-3.5 w-3.5" />}
+                {isPending ? (
+                  <Loader2Icon className="h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <CheckIcon className="h-3.5 w-3.5" />
+                )}
               </Button>
             </div>
           )}
@@ -117,7 +130,10 @@ export function CategorySelect({ initialCategories, value, onChange }: Props) {
             <button
               key={cat.id}
               type="button"
-              onClick={() => { onChange(cat.id); setOpen(false); }}
+              onClick={() => {
+                onChange(cat.id);
+                setOpen(false);
+              }}
               className="w-full flex items-center justify-between gap-2 px-3 py-2 text-sm rounded-md hover:bg-muted transition-colors text-left"
             >
               {cat.name}

@@ -1,11 +1,17 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { getCurrentUser } from '@/app/services/users';
+
+import { LogoutButton } from './logout-button';
 import { MobileMenu } from './mobile-menu';
 import { Navigation } from './navigation';
 import { TopBar } from './top-bar';
 
-export function Header() {
+export async function Header() {
+  const user = await getCurrentUser();
+  const isAdmin = user?.role === 'admin';
+
   return (
     <header className="border-b bg-white">
       <TopBar />
@@ -23,9 +29,10 @@ export function Header() {
               />
             </Link>
           </div>
-          <div className="flex items-center pr-2">
-            <Navigation />
-            <MobileMenu />
+          <div className="flex items-center gap-2 pr-2">
+            <Navigation isAdmin={isAdmin} />
+            {user && <LogoutButton />}
+            <MobileMenu isLoggedIn={!!user} isAdmin={isAdmin} />
           </div>
         </div>
       </div>

@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload';
 
+import { anyone, isAuthenticated } from './access';
+
 export const Media: CollectionConfig = {
   slug: 'media',
   labels: {
@@ -7,7 +9,10 @@ export const Media: CollectionConfig = {
     plural: 'Multimedia',
   },
   access: {
-    read: () => true,
+    read: anyone,
+    create: isAuthenticated,
+    update: isAuthenticated,
+    delete: isAuthenticated,
   },
   fields: [
     {

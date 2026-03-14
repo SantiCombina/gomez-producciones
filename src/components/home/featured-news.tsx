@@ -1,74 +1,129 @@
+import { ArrowRightIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { ImageWithSkeleton } from '@/components/ui/image-with-skeleton';
 import { formatDate } from '@/lib/date-utils';
 import type { Post } from '@/payload-types';
 
 interface Props {
-  post: Post;
+  posts: Post[];
 }
 
-export function FeaturedNews({ post }: Props) {
-  const featuredImage = typeof post.featuredImage === 'object' && post.featuredImage ? post.featuredImage : null;
+export function FeaturedNews({ posts }: Props) {
+  const [main, ...secondary] = posts;
 
-  const category = typeof post.category === 'object' && post.category ? post.category : null;
-
-  if (!featuredImage?.url) {
-    return null;
-  }
+  if (!main) return null;
 
   return (
     <section>
-      <h2 className="text-2xl font-bold mb-6">Destacada</h2>
+      <h2 className="text-2xl font-bold mb-6">Destacadas</h2>
 
-      <Link href={`/${post.id}`} className="block">
-        <Card className="overflow-hidden p-0 cursor-pointer hover:shadow-md transition-shadow duration-300">
-          <div className="md:flex">
-            {/* Imagen */}
-            <div className="relative md:w-1/2 aspect-[16/9] md:aspect-[3/2] flex-shrink-0">
-              <ImageWithSkeleton
-                src={featuredImage.url}
-                alt={featuredImage.alt || post.title}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw"
-                priority
-              />
-              {category && (
-                <div className="absolute top-4 left-0">
-                  <Badge
-                    variant="secondary"
-                    className="bg-primary/90 text-primary-foreground rounded-l-none rounded-r-md text-sm"
-                  >
-                    {category.name}
-                  </Badge>
-                </div>
-              )}
-            </div>
+      <div className="grid gap-5 lg:grid-cols-2">
+        <MainCard post={main} />
 
-            {/* Contenido */}
-            <CardContent className="md:w-1/2 p-6 md:p-8 flex flex-col justify-between min-h-[300px] md:min-h-[400px]">
-              <div>
-                <time className="text-sm text-muted-foreground mb-4 block">{formatDate(post.createdAt)}</time>
-
-                <CardTitle className="text-xl md:text-2xl lg:text-3xl mb-4 leading-tight line-clamp-3">
-                  {post.title}
-                </CardTitle>
-
-                <CardDescription className="text-base lg:text-lg leading-relaxed line-clamp-4 mb-6">
-                  {post.description || 'Sin descripción disponible'}
-                </CardDescription>
-              </div>
-
-              <div className="mt-auto">
-                <span className="text-xs text-muted-foreground/70">Leer más</span>
-              </div>
-            </CardContent>
+        {secondary.length > 0 && (
+          <div className="flex flex-col gap-5">
+            {secondary.map((post) => (
+              <SecondaryCard key={post.id} post={post} />
+            ))}
           </div>
-        </Card>
-      </Link>
+        )}
+      </div>
     </section>
+  );
+}
+
+function MainCard({ post }: { post: Post }) {
+  const featuredImage = typeof post.featuredImage === 'object' && post.featuredImage ? post.featuredImage : null;
+  const category = typeof post.category === 'object' && post.category ? post.category : null;
+
+  return (
+    <Link href={`/noticia/${post.id}`} className="block group h-full">
+      <Card className="overflow-hidden p-0 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+        {featuredImage?.url && (
+          <div className="relative aspect-[16/10] w-full overflow-hidden">
+            <ImageWithSkeleton
+              src={featuredImage.url}
+              alt={featuredImage.alt || post.title}
+              fill
+              className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority
+            />
+          </div>
+        )}
+
+        <CardContent className="p-5 md:p-6 space-y-2.5 flex-1 flex flex-col">
+          <div className="flex items-center gap-3">
+            {category && (
+              <Badge variant="secondary" className="bg-primary/10 text-primary text-sm font-medium">
+                {category.name}
+              </Badge>
+            )}
+            <time className="text-sm text-muted-foreground">{formatDate(post.createdAt)}</time>
+          </div>
+
+          <h3 className="text-xl md:text-2xl font-bold leading-tight line-clamp-3">{post.title}</h3>
+
+          {post.description && (
+            <p className="text-muted-foreground text-base leading-relaxed line-clamp-3">{post.description}</p>
+          )}
+
+          <span className="inline-flex items-center gap-1.5 text-sm text-primary font-semibold group-hover:gap-2.5 transition-all duration-300 mt-auto pt-1">
+            Leer más
+            <ArrowRightIcon className="h-4 w-4" />
+          </span>
+        </CardContent>
+      </Card>
+    </Link>
+  );
+}
+
+function SecondaryCard({ post }: { post: Post }) {
+  const featuredImage = typeof post.featuredImage === 'object' && post.featuredImage ? post.featuredImage : null;
+  const category = typeof post.category === 'object' && post.category ? post.category : null;
+
+  return (
+    <Link href={`/noticia/${post.id}`} className="block group flex-1">
+      <Card className="overflow-hidden p-0 hover:shadow-lg transition-shadow duration-300 h-full flex flex-row">
+        {featuredImage?.url && (
+          <div className="relative w-36 sm:w-44 shrink-0 overflow-hidden">
+            <ImageWithSkeleton
+              src={featuredImage.url}
+              alt={featuredImage.alt || post.title}
+              fill
+              className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
+              sizes="180px"
+            />
+          </div>
+        )}
+
+        <CardContent className="p-4 flex flex-col gap-2 flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            {category && (
+              <Badge variant="secondary" className="bg-primary/10 text-primary text-xs font-medium">
+                {category.name}
+              </Badge>
+            )}
+            <time className="text-xs text-muted-foreground">{formatDate(post.createdAt)}</time>
+          </div>
+
+          <h3 className="text-base font-semibold leading-snug line-clamp-2">{post.title}</h3>
+
+          {post.description && (
+            <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 hidden sm:block">
+              {post.description}
+            </p>
+          )}
+
+          <span className="inline-flex items-center gap-1.5 text-sm text-primary font-semibold group-hover:gap-2.5 transition-all duration-300 mt-auto">
+            Leer más
+            <ArrowRightIcon className="h-3.5 w-3.5" />
+          </span>
+        </CardContent>
+      </Card>
+    </Link>
   );
 }

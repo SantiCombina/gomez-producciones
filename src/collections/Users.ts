@@ -1,10 +1,18 @@
 import type { CollectionConfig } from 'payload';
 
+import { isAdmin, isAdminOrSelf } from './access';
+
 export const Users: CollectionConfig = {
   slug: 'users',
   labels: {
     singular: 'Usuario',
     plural: 'Usuarios',
+  },
+  access: {
+    read: isAdmin,
+    create: isAdmin,
+    update: isAdminOrSelf,
+    delete: isAdmin,
   },
   admin: {
     useAsTitle: 'email',

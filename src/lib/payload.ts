@@ -1,11 +1,8 @@
-import dotenv from 'dotenv';
 import type { Payload } from 'payload';
 import { getPayload } from 'payload';
 import { cache } from 'react';
 
 import config from '../payload.config';
-
-dotenv.config();
 
 declare global {
   var payload: Payload | null;

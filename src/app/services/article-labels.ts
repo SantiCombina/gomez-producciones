@@ -1,5 +1,3 @@
-'use server';
-
 import { getPayloadClient } from '@/lib/payload';
 import type { ArticleLabel } from '@/payload-types';
 

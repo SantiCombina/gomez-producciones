@@ -1,30 +1,27 @@
+import { getActiveAdvertisements } from '@/app/services/advertisements';
 import { getArticleLabels } from '@/app/services/article-labels';
+import { getPosts } from '@/app/services/post';
 import { getCurrentUser } from '@/app/services/users';
-import { getAdvertisementsAction, getPostsAction } from '@/components/home/actions';
-import { AdBanner } from '@/components/home/ad-banner';
+import { AdCarousel } from '@/components/home/ad-carousel';
 import { CreatePostTrigger } from '@/components/home/create-post/create-post-trigger';
-import { FeaturedNews } from '@/components/home/featured-news';
-import { LatestNews } from '@/components/home/latest-news';
+import { NewsFeed } from '@/components/home/news-feed';
 import { PwaInstallButton } from '@/components/pwa/pwa-install-button';
-import { Separator } from '@/components/ui/separator';
 
 export default async function HomePage() {
-  const [postsResult, adsResult, user, categories] = await Promise.all([
-    getPostsAction({ limit: 10 }),
-    getAdvertisementsAction({}),
+  const [postsResult, ads, user, categories] = await Promise.all([
+    getPosts({ limit: 20 }),
+    getActiveAdvertisements(),
     getCurrentUser(),
     getArticleLabels(),
   ]);
 
-  const posts = postsResult?.data?.docs ?? [];
-  const ads = adsResult?.data ?? [];
-  const [featuredPost, ...latestPosts] = posts;
+  const posts = postsResult.data?.docs ?? [];
 
   return (
     <div className="min-h-dvh bg-background">
-      {ads[0] && (
+      {ads.length > 0 && (
         <div className="container pt-4">
-          <AdBanner ad={ads[0]} />
+          <AdCarousel ads={ads} />
         </div>
       )}
 
@@ -33,44 +30,20 @@ export default async function HomePage() {
           <div className="lg:col-span-3 space-y-8">
             {user && <CreatePostTrigger user={user} initialCategories={categories} />}
 
-            {posts.length === 0 ? (
-              <p className="text-center text-muted-foreground py-12">No hay noticias disponibles</p>
-            ) : (
-              <>
-                {featuredPost && <FeaturedNews post={featuredPost} />}
-
-                {ads[1] && (
-                  <>
-                    <Separator className="my-8" />
-                    <div className="w-full">
-                      <AdBanner ad={ads[1]} />
-                    </div>
-                  </>
-                )}
-
-                <Separator className="my-8" />
-
-                {latestPosts.length > 0 && <LatestNews posts={latestPosts} />}
-              </>
-            )}
+            <NewsFeed posts={posts} categories={categories} ads={ads} />
           </div>
 
           <aside className="hidden lg:block">
             <div className="sticky top-24 space-y-6">
               <PwaInstallButton />
-              <div className="p-6 border border-border rounded-lg min-h-[300px] bg-muted/60">
-                <h3 className="font-semibold mb-4">Espacio disponible</h3>
-                <p className="text-sm text-muted-foreground">
-                  Aquí se puede agregar contenido adicional como noticias relacionadas, widgets sociales, o publicidad.
-                </p>
-              </div>
+              {ads.length > 0 && <AdCarousel ads={ads} direction="down" />}
             </div>
           </aside>
         </div>
 
-        {ads[2] && (
+        {ads.length > 0 && (
           <div className="lg:hidden mt-8">
-            <AdBanner ad={ads[2]} />
+            <AdCarousel ads={ads} />
           </div>
         )}
       </main>

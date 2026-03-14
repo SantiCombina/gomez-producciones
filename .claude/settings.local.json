@@ -2,7 +2,13 @@
   "permissions": {
     "allow": [
       "Bash(npx skills:*)",
-      "Bash(pnpm dlx shadcn@latest add:*)"
+      "Bash(pnpm dlx shadcn@latest add:*)",
+      "Bash(pnpm generate:types 2>&1)",
+      "Bash(pnpm generate:importmap 2>&1)",
+      "Bash(pnpm build:*)",
+      "Bash(npx tsc:*)",
+      "Bash(ls:*)",
+      "Bash(pnpm:*)"
     ]
   }
 }

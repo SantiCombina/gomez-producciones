@@ -4,6 +4,8 @@ import { AboutHeader } from '@/components/nosotros/about-header';
 import { CompanyHistory } from '@/components/nosotros/company-history';
 import { OwnerProfile } from '@/components/nosotros/owner-profile';
 
+export const dynamic = 'force-static';
+
 export const metadata: Metadata = {
   title: 'Nosotros | Gomez Producciones',
   description: 'Conocé la historia y el equipo detrás de Gomez Producciones, el portal de noticias de tu comunidad.',

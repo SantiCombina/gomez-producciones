@@ -2,50 +2,37 @@ import { DEFAULT_SERVER_ERROR_MESSAGE, createSafeActionClient } from 'next-safe-
 
 import { getCurrentUser } from '@/app/services/users';
 
-function wait(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+export class ActionError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'ActionError';
+  }
 }
-
-const MIN_ACTION_DURATION = process.env.NODE_ENV === 'development' ? 1500 : 0;
 
 export const actionClient = createSafeActionClient({
   handleServerError(e) {
-    if (e.message) return e.message;
+    if (e instanceof ActionError) {
+      return e.message;
+    }
+    console.error('Server action error:', e);
     return DEFAULT_SERVER_ERROR_MESSAGE;
   },
-}).use(async ({ next, clientInput }) => {
-  const startTime = performance.now();
-  const actionId = Math.random().toString(36).substring(2, 9);
-
-  console.warn(`[${actionId}] Action started`);
-  console.warn(`[${actionId}] Input:`, clientInput);
-
-  try {
-    const result = await next();
-    const endTime = performance.now();
-    const duration = Math.round(endTime - startTime);
-
-    console.warn(`[${actionId}] Completed in ${duration}ms`);
-    console.warn(`[${actionId}] Output:`, result);
-
-    if (duration < MIN_ACTION_DURATION) {
-      console.warn(`[${actionId}] Waiting additional ${MIN_ACTION_DURATION - duration}ms to meet minimum duration`);
-      await wait(MIN_ACTION_DURATION - duration);
-    }
-
-    return result;
-  } catch (error) {
-    console.error(`[${actionId}] Action failed:`, error);
-    throw error;
-  }
 });
 
 export const authActionClient = actionClient.use(async ({ next }) => {
   const user = await getCurrentUser();
 
   if (!user) {
-    throw new Error('No autorizado');
+    throw new ActionError('No autorizado');
   }
 
   return next({ ctx: { user } });
+});
+
+export const adminActionClient = authActionClient.use(async ({ next, ctx }) => {
+  if (ctx.user.role !== 'admin') {
+    throw new ActionError('No tenés permisos para realizar esta acción');
+  }
+
+  return next({ ctx });
 });

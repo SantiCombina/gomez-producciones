@@ -37,15 +37,15 @@ export function Footer() {
 
   const contactInfo = [
     {
-      icon: <MapPin className="h-4 w-4" />,
+      icon: <MapPin className="h-5 w-5" />,
       text: 'Porteña, Córdoba',
     },
     {
-      icon: <Phone className="h-4 w-4" />,
+      icon: <Phone className="h-5 w-5" />,
       text: '+54 9 3564 56-3394',
     },
     {
-      icon: <Mail className="h-4 w-4" />,
+      icon: <Mail className="h-5 w-5" />,
       text: 'oagomez64@yahoo.com.ar',
     },
   ];
@@ -88,7 +88,7 @@ export function Footer() {
                 {contactInfo.map((info, index) => (
                   <div key={index} className="flex items-center space-x-2 text-blue-100">
                     {info.icon}
-                    <span className="text-sm">{info.text}</span>
+                    <span className="text-base">{info.text}</span>
                   </div>
                 ))}
               </div>

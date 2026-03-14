@@ -2,9 +2,10 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2Icon } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
@@ -20,13 +21,18 @@ import { CategorySelect } from './category-select';
 import { createPostSchema, type CreatePostValues } from './create-post-schema';
 import { ImageUploader } from './image-uploader';
 
+const RichTextEditor = dynamic(() => import('./rich-text-editor').then((m) => m.RichTextEditor), {
+  ssr: false,
+  loading: () => <div className="h-[200px] rounded-md border bg-muted/30 animate-pulse" />,
+});
+
 interface Props {
   onSuccess: () => void;
   initialCategories: ArticleLabel[];
 }
 
 export function PostDialog({ onSuccess, initialCategories }: Props) {
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [isCompressing, setIsCompressing] = useState(false);
   const dragCounterRef = useRef(0);
@@ -34,15 +40,24 @@ export function PostDialog({ onSuccess, initialCategories }: Props) {
 
   const form = useForm<CreatePostValues>({
     resolver: zodResolver(createPostSchema),
-    defaultValues: { title: '', description: '', categoryId: undefined },
+    defaultValues: { title: '', description: '', body: undefined, categoryId: undefined, images: [] },
   });
 
   const { executeAsync, isPending } = useAction(createPostAction);
 
-  function handleImageChange(file: File) {
-    form.setValue('image', file);
-    if (imagePreview) URL.revokeObjectURL(imagePreview);
-    setImagePreview(URL.createObjectURL(file));
+  function addImages(files: File[]) {
+    const current = form.getValues('images') ?? [];
+    form.setValue('images', [...current, ...files]);
+    const newPreviews = files.map((f) => URL.createObjectURL(f));
+    setImagePreviews((prev) => [...prev, ...newPreviews]);
+  }
+
+  function handleImageRemove(index: number) {
+    const current = form.getValues('images') ?? [];
+    const updated = current.filter((_, i) => i !== index);
+    form.setValue('images', updated);
+    URL.revokeObjectURL(imagePreviews[index]);
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
   }
 
   function handleDragOver(e: React.DragEvent) {
@@ -65,32 +80,32 @@ export function PostDialog({ onSuccess, initialCategories }: Props) {
     e.preventDefault();
     dragCounterRef.current = 0;
     setIsDragging(false);
-    const file = e.dataTransfer.files[0];
-    if (!file?.type.startsWith('image/')) return;
+    const files = Array.from(e.dataTransfer.files).filter((f) => f.type.startsWith('image/'));
+    if (files.length === 0) return;
     setIsCompressing(true);
     try {
-      const compressed = await compressImage(file);
-      handleImageChange(compressed);
+      const compressed = await Promise.all(files.map((f) => compressImage(f)));
+      addImages(compressed);
     } finally {
       setIsCompressing(false);
     }
   }
 
-  function handleImageRemove() {
-    form.setValue('image', undefined);
-    if (imagePreview) {
-      URL.revokeObjectURL(imagePreview);
-      setImagePreview(null);
-    }
-  }
+  const handleBodyChange = useCallback(
+    (json: string) => {
+      form.setValue('body', json);
+    },
+    [form],
+  );
 
   async function onSubmit(values: CreatePostValues) {
     const result = await executeAsync(values);
     if (result?.data) {
       form.reset();
-      setImagePreview(null);
-      onSuccess();
+      imagePreviews.forEach((url) => URL.revokeObjectURL(url));
+      setImagePreviews([]);
       router.refresh();
+      onSuccess();
     }
   }
 
@@ -129,8 +144,8 @@ export function PostDialog({ onSuccess, initialCategories }: Props) {
                 <FormItem>
                   <FormControl>
                     <Textarea
-                      placeholder="¿Qué querés publicar?"
-                      className="resize-none bg-white min-h-[80px] max-h-[200px] overflow-y-auto"
+                      placeholder="Extracto o resumen corto..."
+                      className="resize-none bg-white min-h-[60px] max-h-[120px] overflow-y-auto"
                       style={{ fieldSizing: 'content' } as React.CSSProperties}
                       {...field}
                     />
@@ -139,6 +154,8 @@ export function PostDialog({ onSuccess, initialCategories }: Props) {
                 </FormItem>
               )}
             />
+
+            <RichTextEditor onChange={handleBodyChange} />
 
             <FormField
               control={form.control}
@@ -158,8 +175,8 @@ export function PostDialog({ onSuccess, initialCategories }: Props) {
             />
 
             <ImageUploader
-              preview={imagePreview}
-              onChange={handleImageChange}
+              previews={imagePreviews}
+              onChange={addImages}
               onRemove={handleImageRemove}
               isDragging={isDragging}
               isCompressing={isCompressing}

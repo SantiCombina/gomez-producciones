@@ -15,7 +15,7 @@ export function AdBanner({ ad, className = '' }: Props) {
 
   const content = (
     <Card className={`w-full overflow-hidden p-0 ${className}`}>
-      <div className="relative h-32">
+      <div className="relative h-36 sm:h-40">
         <ImageWithSkeleton
           src={image.url}
           alt={image.alt || ad.title}
@@ -23,8 +23,11 @@ export function AdBanner({ ad, className = '' }: Props) {
           className="object-cover"
           sizes="(max-width: 1024px) 100vw, 320px"
         />
-        <div className="absolute top-2 right-2">
-          <Badge variant="secondary" className="text-xs bg-black/70 text-white hover:bg-black/70">
+        <div className="absolute top-2.5 right-2.5">
+          <Badge
+            variant="secondary"
+            className="text-[11px] bg-black/60 text-white/90 hover:bg-black/60 backdrop-blur-sm"
+          >
             Publicidad
           </Badge>
         </div>
