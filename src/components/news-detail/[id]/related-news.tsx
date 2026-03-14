@@ -1,55 +1,44 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-
+import { getPosts, getPostsByCategory } from '@/app/services/post';
 import { NewsCard } from '@/components/home/news-card';
 import type { Post } from '@/payload-types';
 
 interface RelatedNewsProps {
-  currentPostId: string;
+  currentPost: Post;
 }
 
-export function RelatedNews({ currentPostId }: RelatedNewsProps) {
-  const [relatedPosts, setRelatedPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
+export async function RelatedNews({ currentPost }: RelatedNewsProps) {
+  const categoryId =
+    typeof currentPost.category === 'object' && currentPost.category
+      ? currentPost.category.id.toString()
+      : typeof currentPost.category === 'number'
+        ? currentPost.category.toString()
+        : null;
 
-  useEffect(() => {
-    setLoading(false);
-    setRelatedPosts([]);
-  }, [currentPostId]);
+  const [categoryPosts, recentResult] = await Promise.all([
+    categoryId ? getPostsByCategory(categoryId, 5) : Promise.resolve([]),
+    getPosts({ limit: 5 }),
+  ]);
 
-  if (loading) {
-    return (
-      <section>
-        <h2 className="text-2xl font-bold mb-6">Noticias Relacionadas</h2>
-        <div className="grid gap-8 sm:grid-cols-2">
-          {[1, 2].map((i) => (
-            <div key={i} className="animate-pulse">
-              <div className="aspect-[5/4] bg-muted rounded-lg mb-4" />
-              <div className="space-y-2">
-                <div className="h-4 bg-muted rounded w-3/4" />
-                <div className="h-4 bg-muted rounded w-1/2" />
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-    );
+  const filtered = categoryPosts.filter((p) => p.id !== currentPost.id);
+  const recentDocs = recentResult.data?.docs ?? [];
+
+  let relatedPosts: Post[];
+
+  if (filtered.length >= 2) {
+    relatedPosts = filtered.slice(0, 4);
+  } else {
+    const fallback = recentDocs.filter((p) => p.id !== currentPost.id && !filtered.some((r) => r.id === p.id));
+    relatedPosts = [...filtered, ...fallback].slice(0, 4);
   }
 
   if (relatedPosts.length === 0) {
-    return (
-      <section>
-        <h2 className="text-2xl font-bold mb-6">Noticias Relacionadas</h2>
-        <p className="text-muted-foreground">No hay noticias relacionadas disponibles.</p>
-      </section>
-    );
+    return null;
   }
 
   return (
     <section>
       <h2 className="text-2xl font-bold mb-6">Noticias Relacionadas</h2>
-      <div className="grid gap-8 sm:grid-cols-2">
+      <div className="grid gap-6 sm:grid-cols-2">
         {relatedPosts.map((post) => (
           <NewsCard key={post.id} post={post} />
         ))}

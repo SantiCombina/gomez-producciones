@@ -1,12 +1,15 @@
 'use client';
 
-import { Download, Home, Info, Menu, Phone } from 'lucide-react';
+import { Download, Home, Info, LogOut, Menu, Phone, Settings } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useAction } from 'next-safe-action/hooks';
 import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+
+import { logoutAction } from './actions';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -19,9 +22,16 @@ const navItems = [
   { href: '/contacto', label: 'Contacto', icon: Phone },
 ];
 
-export function MobileMenu() {
+interface MobileMenuProps {
+  isLoggedIn: boolean;
+  isAdmin: boolean;
+}
+
+export function MobileMenu({ isLoggedIn, isAdmin }: MobileMenuProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+  const { executeAsync, isPending } = useAction(logoutAction);
   const [installEvent, setInstallEvent] = useState<BeforeInstallPromptEvent | null>(null);
   const [isStandalone, setIsStandalone] = useState(true);
 
@@ -65,56 +75,75 @@ export function MobileMenu() {
         <SheetTitle className="sr-only">Menú de navegación</SheetTitle>
 
         <div className="px-5 pt-8 pb-3">
-          <p className="text-[11px] font-semibold tracking-widest uppercase text-muted-foreground/60">
-            Secciones
-          </p>
+          <p className="text-[11px] font-semibold tracking-widest uppercase text-muted-foreground/60">Secciones</p>
         </div>
 
         <nav className="flex-1 px-4 flex flex-col gap-1">
-          {navItems.map(({ href, label, icon: Icon }) => {
-            const active = isActive(href);
-            return (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setOpen(false)}
-                className={`flex items-center gap-4 px-4 py-5 rounded-2xl transition-all duration-200 ${
-                  active
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-foreground hover:bg-muted active:bg-muted/80'
-                }`}
-              >
-                <div
-                  className={`p-2.5 rounded-xl shrink-0 ${
-                    active ? 'bg-white/20' : 'bg-muted'
+          {[...navItems, ...(isAdmin ? [{ href: '/admin', label: 'Admin', icon: Settings }] : [])].map(
+            ({ href, label, icon: Icon }) => {
+              const active = isActive(href);
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setOpen(false)}
+                  className={`flex items-center gap-4 px-4 py-5 rounded-2xl transition-all duration-200 ${
+                    active ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted active:bg-muted/80'
                   }`}
                 >
-                  <Icon className="h-5 w-5" />
-                </div>
-                <span className="text-[17px] font-medium">{label}</span>
-              </Link>
-            );
-          })}
+                  <div className={`p-2.5 rounded-xl shrink-0 ${active ? 'bg-white/20' : 'bg-muted'}`}>
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <span className="text-[17px] font-medium">{label}</span>
+                </Link>
+              );
+            },
+          )}
         </nav>
 
-        {!isStandalone && installEvent && (
-          <div className="px-4 pb-8 pt-4 shrink-0">
+        {(isLoggedIn || (!isStandalone && installEvent)) && (
+          <div className="px-4 pb-8 pt-4 shrink-0 space-y-2">
             <div className="h-px bg-border mb-4" />
-            <Button
-              onClick={handleInstall}
-              variant="ghost"
-              className="w-full h-auto whitespace-normal !items-center !justify-start rounded-2xl border border-sky-200 bg-sky-50 px-4 py-4 hover:bg-sky-100 hover:border-sky-300 active:bg-sky-200"
-            >
-              <div className="flex items-center gap-3.5">
-                <div className="p-2 rounded-xl bg-sky-500 shrink-0">
-                  <Download className="h-5 w-5 text-white" />
+
+            {isLoggedIn && (
+              <Button
+                variant="ghost"
+                onClick={async () => {
+                  await executeAsync();
+                  setOpen(false);
+                  router.refresh();
+                }}
+                disabled={isPending}
+                className="w-full h-auto whitespace-normal !items-center !justify-start rounded-2xl border border-red-200 bg-red-50 px-4 py-4 hover:bg-red-100 hover:border-red-300 active:bg-red-200"
+              >
+                <div className="flex items-center gap-3.5">
+                  <div className="p-2 rounded-xl bg-red-500 shrink-0">
+                    <LogOut className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <p className="font-semibold text-sm text-red-900 leading-tight">Cerrar sesión</p>
+                  </div>
                 </div>
-                <div className="text-left">
-                  <p className="font-semibold text-sm text-sky-900 leading-tight">Instalá la app</p>
-                  <p className="text-xs text-sky-600 mt-0.5">Acceso rápido a las noticias</p>
+              </Button>
+            )}
+
+            {!isStandalone && installEvent && (
+              <Button
+                onClick={handleInstall}
+                variant="ghost"
+                className="w-full h-auto whitespace-normal !items-center !justify-start rounded-2xl border border-sky-200 bg-sky-50 px-4 py-4 hover:bg-sky-100 hover:border-sky-300 active:bg-sky-200"
+              >
+                <div className="flex items-center gap-3.5">
+                  <div className="p-2 rounded-xl bg-sky-500 shrink-0">
+                    <Download className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <p className="font-semibold text-sm text-sky-900 leading-tight">Instalá la app</p>
+                    <p className="text-xs text-sky-600 mt-0.5">Acceso rápido a las noticias</p>
+                  </div>
                 </div>
-              </div>
-            </Button>
+              </Button>
+            )}
           </div>
         )}
       </SheetContent>

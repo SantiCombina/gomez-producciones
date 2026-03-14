@@ -21,6 +21,14 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://gomezproducciones.vercel.app'),
   title: 'Gomez Producciones - Portal de Noticias',
   manifest: '/manifest.webmanifest',
+  icons: {
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/icon.png', type: 'image/png' },
+    ],
+    apple: '/apple-icon.png',
+    shortcut: '/favicon.ico',
+  },
   appleWebApp: {
     title: 'OG',
   },

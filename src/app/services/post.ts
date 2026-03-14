@@ -1,11 +1,16 @@
+import type { Where } from 'payload';
+import { cache } from 'react';
+
 import { getPayloadClient } from '@/lib/payload';
 import { Post } from '@/payload-types';
 
 export const createPost = async (data: {
   title: string;
   description?: string;
+  body?: Post['body'];
   category?: number;
   featuredImage?: number;
+  images?: { image: number }[];
 }) => {
   try {
     const payload = await getPayloadClient();
@@ -29,7 +34,7 @@ export const createPost = async (data: {
   }
 };
 
-export const getPostById = async (id: string): Promise<Post | null> => {
+export const getPostById = cache(async (id: string): Promise<Post | null> => {
   try {
     const payload = await getPayloadClient();
 
@@ -40,16 +45,19 @@ export const getPostById = async (id: string): Promise<Post | null> => {
 
     return post as Post;
   } catch (error) {
-    console.error('Error obteniendo post por ID:', error);
+    const isNotFound = error instanceof Error && 'status' in error && (error as { status: number }).status === 404;
+    if (!isNotFound) {
+      console.error('Error obteniendo post por ID:', error);
+    }
     return null;
   }
-};
+});
 
 export const getPosts = async (options?: { limit?: number; page?: number; category?: string }) => {
   try {
     const payload = await getPayloadClient();
 
-    const where: any = {};
+    const where: Where = {};
     if (options?.category) {
       where.category = { equals: options.category };
     }
@@ -95,8 +103,10 @@ export const updatePost = async (
   data: {
     title?: string;
     description?: string;
+    body?: Post['body'];
     category?: number;
     featuredImage?: number;
+    images?: { image: number }[];
   },
 ) => {
   try {

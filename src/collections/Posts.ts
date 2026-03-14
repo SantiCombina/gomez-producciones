@@ -1,10 +1,18 @@
 import type { CollectionConfig } from 'payload';
 
+import { anyone, isAdmin, isAuthenticated } from './access';
+
 export const Posts: CollectionConfig = {
   slug: 'posts',
   labels: {
     singular: 'Publicación',
     plural: 'Publicaciones',
+  },
+  access: {
+    read: anyone,
+    create: isAuthenticated,
+    update: isAdmin,
+    delete: isAdmin,
   },
   admin: {
     useAsTitle: 'title',
@@ -13,11 +21,21 @@ export const Posts: CollectionConfig = {
   hooks: {
     afterDelete: [
       async ({ doc, req }) => {
-        const featuredImageId = typeof doc.featuredImage === 'object' ? doc.featuredImage?.id : doc.featuredImage;
+        const mediaIdsToDelete: number[] = [];
 
-        if (featuredImageId) {
+        const featuredImageId = typeof doc.featuredImage === 'object' ? doc.featuredImage?.id : doc.featuredImage;
+        if (featuredImageId) mediaIdsToDelete.push(featuredImageId);
+
+        if (Array.isArray(doc.images)) {
+          for (const item of doc.images) {
+            const imageId = typeof item.image === 'object' ? item.image?.id : item.image;
+            if (imageId) mediaIdsToDelete.push(imageId);
+          }
+        }
+
+        for (const id of mediaIdsToDelete) {
           try {
-            await req.payload.delete({ collection: 'media', id: featuredImageId });
+            await req.payload.delete({ collection: 'media', id });
           } catch (error) {
             console.error('Error eliminando media asociada al post:', error);
           }
@@ -39,6 +57,11 @@ export const Posts: CollectionConfig = {
       required: false,
     },
     {
+      name: 'body',
+      label: 'Contenido',
+      type: 'richText',
+    },
+    {
       name: 'category',
       label: 'Categoría',
       type: 'relationship',
@@ -51,6 +74,20 @@ export const Posts: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
       required: false,
+    },
+    {
+      name: 'images',
+      label: 'Galería de Imágenes',
+      type: 'array',
+      fields: [
+        {
+          name: 'image',
+          label: 'Imagen',
+          type: 'upload',
+          relationTo: 'media',
+          required: true,
+        },
+      ],
     },
   ],
 };

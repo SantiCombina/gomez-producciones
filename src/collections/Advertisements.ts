@@ -1,10 +1,18 @@
 import type { CollectionConfig } from 'payload';
 
+import { anyone, isAdmin } from './access';
+
 export const Advertisements: CollectionConfig = {
   slug: 'advertisements',
   labels: {
     singular: 'Publicidad',
     plural: 'Publicidades',
+  },
+  access: {
+    read: anyone,
+    create: isAdmin,
+    update: isAdmin,
+    delete: isAdmin,
   },
   admin: {
     useAsTitle: 'title',
