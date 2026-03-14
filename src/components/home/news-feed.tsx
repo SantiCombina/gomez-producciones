@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react';
 import { Separator } from '@/components/ui/separator';
 import type { Advertisement, ArticleLabel, Post } from '@/payload-types';
 
-import { AdCarousel } from './ad-carousel';
+import { AdBanner } from './ad-banner';
 import { CategoryFilter } from './category-filter';
 import { FeaturedNews } from './featured-news';
 import { LatestNews } from './latest-news';
@@ -13,10 +13,10 @@ import { LatestNews } from './latest-news';
 interface Props {
   posts: Post[];
   categories: ArticleLabel[];
-  ads: Advertisement[];
+  ad?: Advertisement;
 }
 
-export function NewsFeed({ posts, categories, ads }: Props) {
+export function NewsFeed({ posts, categories, ad }: Props) {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
 
   const filteredPosts = useMemo(() => {
@@ -44,10 +44,10 @@ export function NewsFeed({ posts, categories, ads }: Props) {
         <>
           {featuredPosts.length > 0 && <FeaturedNews posts={featuredPosts} />}
 
-          {ads.length > 0 && (
+          {ad && (
             <>
               <Separator className="my-8" />
-              <AdCarousel ads={ads} />
+              <AdBanner ad={ad} />
             </>
           )}
 

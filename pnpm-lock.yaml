@@ -11,6 +11,15 @@ importers:
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.63.0(react@19.1.0))
+      '@lexical/list':
+        specifier: ^0.28.0
+        version: 0.28.0
+      '@lexical/react':
+        specifier: ^0.28.0
+        version: 0.28.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(yjs@13.6.27)
+      '@lexical/rich-text':
+        specifier: ^0.28.0
+        version: 0.28.0
       '@payloadcms/db-postgres':
         specifier: 3.54.0
         version: 3.54.0(payload@3.54.0(graphql@16.11.0)(typescript@5.7.3))
@@ -56,6 +65,9 @@ importers:
       graphql:
         specifier: ^16.8.1
         version: 16.11.0
+      lexical:
+        specifier: ^0.28.0
+        version: 0.28.0
       lucide-react:
         specifier: ^0.542.0
         version: 0.542.0(react@19.1.0)

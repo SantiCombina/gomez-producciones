@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 
 import { getActiveAdvertisements } from '@/app/services/advertisements';
 import { getPostById } from '@/app/services/post';
-import { AdCarousel } from '@/components/home/ad-carousel';
+import { AdBanner } from '@/components/home/ad-banner';
 import { ArticleContent } from '@/components/news-detail/[id]/article-content';
 import { RelatedNews } from '@/components/news-detail/[id]/related-news';
 import { Separator } from '@/components/ui/separator';
@@ -91,6 +91,9 @@ export default async function NewsDetailPage({ params }: Props) {
     },
   };
 
+  const shuffled = [...ads].sort(() => Math.random() - 0.5);
+  const pick = (i: number) => (shuffled.length > 0 ? shuffled[i % shuffled.length] : undefined);
+
   return (
     <div className="min-h-dvh">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
@@ -100,10 +103,10 @@ export default async function NewsDetailPage({ params }: Props) {
           <div className="lg:col-span-3 space-y-8">
             <ArticleContent post={post} />
 
-            {ads.length > 0 && (
+            {pick(0) && (
               <>
                 <Separator className="my-8" />
-                <AdCarousel ads={ads} />
+                <AdBanner ad={pick(0)!} />
               </>
             )}
 
@@ -115,13 +118,13 @@ export default async function NewsDetailPage({ params }: Props) {
           </div>
 
           <aside className="hidden lg:block">
-            <div className="sticky top-24 space-y-6">{ads.length > 0 && <AdCarousel ads={ads} direction="down" />}</div>
+            <div className="sticky top-24 space-y-6">{pick(1) && <AdBanner ad={pick(1)!} />}</div>
           </aside>
         </div>
 
-        {ads.length > 0 && (
+        {pick(1) && (
           <div className="lg:hidden mt-8">
-            <AdCarousel ads={ads} />
+            <AdBanner ad={pick(1)!} />
           </div>
         )}
       </main>
