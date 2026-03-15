@@ -1,5 +1,6 @@
-import { ImageWithSkeleton } from '@/components/ui/image-with-skeleton';
-import type { Post } from '@/payload-types';
+import type { Media, Post } from '@/payload-types';
+
+import { ArticleImageGallery } from './article-image-gallery';
 
 interface ArticleHeaderProps {
   post: Post;
@@ -8,24 +9,16 @@ interface ArticleHeaderProps {
 export function ArticleHeader({ post }: ArticleHeaderProps) {
   const featuredImage = typeof post.featuredImage === 'object' && post.featuredImage ? post.featuredImage : null;
 
+  const extraImages = (post.images ?? [])
+    .map((item) => (typeof item.image === 'object' ? item.image : null))
+    .filter((img): img is Media => img !== null && !!img.url);
+
+  const allImages: Media[] = [...(featuredImage?.url ? [featuredImage as Media] : []), ...extraImages];
+
   return (
     <div className="space-y-6">
-      <div className="space-y-4">
-        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mt-6">{post.title}</h1>
-      </div>
-
-      {featuredImage?.url && (
-        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg">
-          <ImageWithSkeleton
-            src={featuredImage.url}
-            alt={featuredImage.alt || post.title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 900px"
-            priority
-          />
-        </div>
-      )}
+      <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mt-6">{post.title}</h1>
+      <ArticleImageGallery images={allImages} />
     </div>
   );
 }

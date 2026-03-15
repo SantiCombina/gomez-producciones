@@ -3,32 +3,30 @@ import Link from 'next/link';
 
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { ImageWithSkeleton } from '@/components/ui/image-with-skeleton';
 import { formatDate } from '@/lib/date-utils';
-import type { Post } from '@/payload-types';
+import type { Media, Post } from '@/payload-types';
+
+import { PostImagePreview } from './post-image-preview';
 
 interface Props {
   post: Post;
 }
 
 export function NewsCard({ post }: Props) {
-  const featuredImage = typeof post.featuredImage === 'object' && post.featuredImage ? post.featuredImage : null;
   const category = typeof post.category === 'object' && post.category ? post.category : null;
+
+  const featuredImage = typeof post.featuredImage === 'object' && post.featuredImage ? post.featuredImage : null;
+  const extraImages = (post.images ?? [])
+    .map((item) => (typeof item.image === 'object' ? item.image : null))
+    .filter((img): img is Media => img !== null && !!img.url);
+  const allImages: Media[] = [...(featuredImage?.url ? [featuredImage as Media] : []), ...extraImages];
 
   return (
     <Link href={`/noticia/${post.id}`} className="block h-full group">
       <Card className="overflow-hidden p-0 flex flex-col gap-0 hover:shadow-lg transition-shadow duration-300 h-full">
-        {featuredImage?.url && (
-          <div className="relative aspect-[16/9] flex-shrink-0 overflow-hidden">
-            <ImageWithSkeleton
-              src={featuredImage.url}
-              alt={featuredImage.alt || post.title}
-              fill
-              className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            />
-          </div>
-        )}
+        <div className="flex-shrink-0 overflow-hidden">
+          <PostImagePreview images={allImages} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+        </div>
         <CardContent className="p-4 md:p-5 flex flex-col gap-2.5 flex-1">
           <div className="flex items-center gap-2.5">
             {category && (

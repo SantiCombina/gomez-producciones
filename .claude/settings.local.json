@@ -8,7 +8,8 @@
       "Bash(pnpm build:*)",
       "Bash(npx tsc:*)",
       "Bash(ls:*)",
-      "Bash(pnpm:*)"
+      "Bash(pnpm:*)",
+      "Bash(grep:*)"
     ]
   }
 }

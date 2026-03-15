@@ -23,6 +23,10 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      providers: ['@/components/admin/admin-provider#AdminProvider'],
+      afterLogin: ['@/components/admin/login-redirect#LoginRedirect'],
+    },
   },
   collections: [Users, Media, Posts, ArticleLabels, Advertisements],
   i18n: {

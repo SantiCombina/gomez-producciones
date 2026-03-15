@@ -3,8 +3,9 @@ import { getArticleLabels } from '@/app/services/article-labels';
 import { getPosts } from '@/app/services/post';
 import { getCurrentUser } from '@/app/services/users';
 import { AdCarousel } from '@/components/home/ad-carousel';
-import { CreatePostTrigger } from '@/components/home/create-post/create-post-trigger';
+import { FloatingActions } from '@/components/home/floating-actions';
 import { NewsFeed } from '@/components/home/news-feed';
+import { YoutubeLiveEmbed } from '@/components/home/youtube-live/youtube-live-embed';
 import { PwaInstallButton } from '@/components/pwa/pwa-install-button';
 
 export default async function HomePage() {
@@ -28,7 +29,7 @@ export default async function HomePage() {
       <main className="container py-6">
         <div className="lg:grid lg:grid-cols-4 lg:gap-8">
           <div className="lg:col-span-3 space-y-8">
-            {user && <CreatePostTrigger user={user} initialCategories={categories} />}
+            <YoutubeLiveEmbed />
 
             <NewsFeed posts={posts} categories={categories} ads={ads} />
           </div>
@@ -47,6 +48,8 @@ export default async function HomePage() {
           </div>
         )}
       </main>
+
+      {user && <FloatingActions user={user} initialCategories={categories} />}
     </div>
   );
 }

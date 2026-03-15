@@ -10,7 +10,6 @@ import { TopBar } from './top-bar';
 
 export async function Header() {
   const user = await getCurrentUser();
-  const isAdmin = user?.role === 'admin';
 
   return (
     <header className="border-b bg-white">
@@ -30,9 +29,9 @@ export async function Header() {
             </Link>
           </div>
           <div className="flex items-center gap-2 pr-2">
-            <Navigation isAdmin={isAdmin} />
+            <Navigation />
             {user && <LogoutButton />}
-            <MobileMenu isLoggedIn={!!user} isAdmin={isAdmin} />
+            <MobileMenu isLoggedIn={!!user} />
           </div>
         </div>
       </div>

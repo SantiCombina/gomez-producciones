@@ -9,11 +9,7 @@ const navItems = [
   { href: '/contacto', label: 'Contacto' },
 ];
 
-interface NavigationProps {
-  isAdmin: boolean;
-}
-
-export function Navigation({ isAdmin }: NavigationProps) {
+export function Navigation() {
   const pathname = usePathname();
 
   const isActive = (path: string) => {
@@ -21,7 +17,7 @@ export function Navigation({ isAdmin }: NavigationProps) {
     return pathname.startsWith(path);
   };
 
-  const items = isAdmin ? [...navItems, { href: '/admin', label: 'Admin' }] : navItems;
+  const items = navItems;
 
   return (
     <nav className="hidden md:flex items-center gap-8">

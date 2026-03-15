@@ -1,6 +1,6 @@
 'use client';
 
-import { Download, Home, Info, LogOut, Menu, Phone, Settings } from 'lucide-react';
+import { Download, Home, Info, LogOut, Menu, Phone } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
@@ -24,10 +24,9 @@ const navItems = [
 
 interface MobileMenuProps {
   isLoggedIn: boolean;
-  isAdmin: boolean;
 }
 
-export function MobileMenu({ isLoggedIn, isAdmin }: MobileMenuProps) {
+export function MobileMenu({ isLoggedIn }: MobileMenuProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -79,26 +78,24 @@ export function MobileMenu({ isLoggedIn, isAdmin }: MobileMenuProps) {
         </div>
 
         <nav className="flex-1 px-4 flex flex-col gap-1">
-          {[...navItems, ...(isAdmin ? [{ href: '/admin', label: 'Admin', icon: Settings }] : [])].map(
-            ({ href, label, icon: Icon }) => {
-              const active = isActive(href);
-              return (
-                <Link
-                  key={href}
-                  href={href}
-                  onClick={() => setOpen(false)}
-                  className={`flex items-center gap-4 px-4 py-5 rounded-2xl transition-all duration-200 ${
-                    active ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted active:bg-muted/80'
-                  }`}
-                >
-                  <div className={`p-2.5 rounded-xl shrink-0 ${active ? 'bg-white/20' : 'bg-muted'}`}>
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <span className="text-[17px] font-medium">{label}</span>
-                </Link>
-              );
-            },
-          )}
+          {navItems.map(({ href, label, icon: Icon }) => {
+            const active = isActive(href);
+            return (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setOpen(false)}
+                className={`flex items-center gap-4 px-4 py-5 rounded-2xl transition-all duration-200 ${
+                  active ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted active:bg-muted/80'
+                }`}
+              >
+                <div className={`p-2.5 rounded-xl shrink-0 ${active ? 'bg-white/20' : 'bg-muted'}`}>
+                  <Icon className="h-5 w-5" />
+                </div>
+                <span className="text-[17px] font-medium">{label}</span>
+              </Link>
+            );
+          })}
         </nav>
 
         {(isLoggedIn || (!isStandalone && installEvent)) && (
