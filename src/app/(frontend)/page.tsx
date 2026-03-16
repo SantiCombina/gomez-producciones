@@ -1,17 +1,18 @@
 import { getActiveAdvertisements } from '@/app/services/advertisements';
 import { getArticleLabels } from '@/app/services/article-labels';
 import { getPosts } from '@/app/services/post';
+import { AdCarousel } from '@/components/home/ad-carousel';
 import { getCurrentUser } from '@/app/services/users';
 import { AdBanner } from '@/components/home/ad-banner';
 import { CreatePostTrigger } from '@/components/home/create-post/create-post-trigger';
 import { NewsFeed } from '@/components/home/news-feed';
+import { YoutubeLiveEmbed } from '@/components/home/youtube-live/youtube-live-embed';
 import { PwaInstallButton } from '@/components/pwa/pwa-install-button';
 
 export default async function HomePage() {
-  const [postsResult, ads, user, categories] = await Promise.all([
+  const [postsResult, ads, categories] = await Promise.all([
     getPosts({ limit: 20 }),
     getActiveAdvertisements(),
-    getCurrentUser(),
     getArticleLabels(),
   ]);
 
@@ -30,7 +31,7 @@ export default async function HomePage() {
       <main className="container py-6">
         <div className="lg:grid lg:grid-cols-4 lg:gap-8">
           <div className="lg:col-span-3 space-y-8">
-            {user && <CreatePostTrigger user={user} initialCategories={categories} />}
+            <YoutubeLiveEmbed />
 
             <NewsFeed posts={posts} categories={categories} ad={pick(2)} />
           </div>

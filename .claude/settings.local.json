@@ -9,8 +9,9 @@
       "Bash(npx tsc:*)",
       "Bash(ls:*)",
       "Bash(pnpm:*)",
-      "Bash(grep -r '\"\"date-fns\"\"' node_modules/payload/package.json)",
-      "Bash(node -e \"console.log\\(require\\(''./node_modules/date-fns/package.json''\\).version\\)\")"
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(cat:*)"
     ]
   }
 }
