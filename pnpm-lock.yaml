@@ -43,10 +43,10 @@ importers:
         version: 3.54.0(@types/react@19.1.8)(monaco-editor@0.55.1)(next@15.4.10(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.54.0(graphql@16.13.1)(typescript@5.7.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.3)
       '@tailwindcss/postcss':
         specifier: ^4.1.12
-        version: 4.1.12
+        version: 4.2.1
       '@tailwindcss/typography':
         specifier: ^0.5.19
-        version: 0.5.19(tailwindcss@4.1.12)
+        version: 0.5.19(tailwindcss@4.2.1)
       '@vercel/analytics':
         specifier: ^1.5.0
         version: 1.6.1(next@15.4.10(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0)
@@ -8242,10 +8242,10 @@ snapshots:
       postcss: 8.5.8
       tailwindcss: 4.2.1
 
-  '@tailwindcss/typography@0.5.19(tailwindcss@4.1.12)':
+  '@tailwindcss/typography@0.5.19(tailwindcss@4.2.1)':
     dependencies:
       postcss-selector-parser: 6.0.10
-      tailwindcss: 4.1.12
+      tailwindcss: 4.2.1
 
   '@tokenizer/token@0.3.0': {}
 

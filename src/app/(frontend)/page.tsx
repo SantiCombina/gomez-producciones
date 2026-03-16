@@ -1,10 +1,7 @@
 import { getActiveAdvertisements } from '@/app/services/advertisements';
 import { getArticleLabels } from '@/app/services/article-labels';
 import { getPosts } from '@/app/services/post';
-import { AdCarousel } from '@/components/home/ad-carousel';
-import { getCurrentUser } from '@/app/services/users';
 import { AdBanner } from '@/components/home/ad-banner';
-import { CreatePostTrigger } from '@/components/home/create-post/create-post-trigger';
 import { NewsFeed } from '@/components/home/news-feed';
 import { YoutubeLiveEmbed } from '@/components/home/youtube-live/youtube-live-embed';
 import { PwaInstallButton } from '@/components/pwa/pwa-install-button';

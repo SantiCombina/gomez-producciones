@@ -26,6 +26,9 @@ export default buildConfig({
     components: {
       providers: ['@/components/admin/admin-provider#AdminProvider'],
       afterLogin: ['@/components/admin/login-redirect#LoginRedirect'],
+      graphics: {
+        Logo: '@/components/admin/admin-logo#AdminLogo',
+      },
     },
   },
   collections: [Users, Media, Posts, ArticleLabels, Advertisements],

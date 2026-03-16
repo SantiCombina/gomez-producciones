@@ -88,20 +88,20 @@ export function FloatingActions({ user }: Props) {
           </div>
         )}
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col items-end gap-2 sm:flex-row sm:items-center">
           <Button
             size="icon"
             variant="outline"
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Más opciones"
-            className="size-10 rounded-full shadow-md"
+            className="size-8 sm:size-10 rounded-full shadow-md"
           >
-            {menuOpen ? <XIcon size={16} /> : <MoreHorizontalIcon size={16} />}
+            {menuOpen ? <XIcon size={14} /> : <MoreHorizontalIcon size={14} />}
           </Button>
 
-          <Button onClick={handlePublish} className="rounded-full px-5 shadow-lg">
-            <PlusIcon size={16} />
-            Publicar
+          <Button onClick={handlePublish} className="rounded-full shadow-lg size-12 sm:size-auto sm:px-5">
+            <PlusIcon size={18} />
+            <span className="hidden sm:inline">Publicar</span>
           </Button>
         </div>
       </div>

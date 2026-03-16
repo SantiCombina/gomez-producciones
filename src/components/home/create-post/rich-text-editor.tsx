@@ -120,17 +120,19 @@ export function RichTextEditor({ onChange }: Props) {
     <LexicalComposer initialConfig={initialConfig}>
       <div className="rounded-lg border bg-white overflow-hidden">
         <Toolbar />
-        <RichTextPlugin
-          contentEditable={
-            <ContentEditable className="min-h-[120px] max-h-[300px] overflow-y-auto px-3 py-2 text-sm outline-none" />
-          }
-          placeholder={
-            <div className="pointer-events-none absolute top-[calc(theme(spacing.11)+theme(spacing.1)+theme(spacing.2))] left-3 text-sm text-muted-foreground">
-              Escribí el contenido de la noticia...
-            </div>
-          }
-          ErrorBoundary={LexicalErrorBoundary}
-        />
+        <div className="relative">
+          <RichTextPlugin
+            contentEditable={
+              <ContentEditable className="min-h-30 max-h-75 overflow-y-auto px-3 py-2 text-sm outline-none" />
+            }
+            placeholder={
+              <div className="pointer-events-none absolute top-2 left-3 text-sm text-muted-foreground">
+                Escribí el contenido de la noticia...
+              </div>
+            }
+            ErrorBoundary={LexicalErrorBoundary}
+          />
+        </div>
         <HistoryPlugin />
         <ListPlugin />
         <OnChangePlugin onChange={handleChange} />
