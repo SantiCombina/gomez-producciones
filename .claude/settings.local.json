@@ -9,7 +9,9 @@
       "Bash(npx tsc:*)",
       "Bash(ls:*)",
       "Bash(pnpm:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(cat:*)"
     ]
   }
 }

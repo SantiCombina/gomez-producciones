@@ -1,18 +1,15 @@
 import { getActiveAdvertisements } from '@/app/services/advertisements';
 import { getArticleLabels } from '@/app/services/article-labels';
 import { getPosts } from '@/app/services/post';
-import { getCurrentUser } from '@/app/services/users';
 import { AdCarousel } from '@/components/home/ad-carousel';
-import { FloatingActions } from '@/components/home/floating-actions';
 import { NewsFeed } from '@/components/home/news-feed';
 import { YoutubeLiveEmbed } from '@/components/home/youtube-live/youtube-live-embed';
 import { PwaInstallButton } from '@/components/pwa/pwa-install-button';
 
 export default async function HomePage() {
-  const [postsResult, ads, user, categories] = await Promise.all([
+  const [postsResult, ads, categories] = await Promise.all([
     getPosts({ limit: 20 }),
     getActiveAdvertisements(),
-    getCurrentUser(),
     getArticleLabels(),
   ]);
 
@@ -48,8 +45,6 @@ export default async function HomePage() {
           </div>
         )}
       </main>
-
-      {user && <FloatingActions user={user} initialCategories={categories} />}
     </div>
   );
 }
