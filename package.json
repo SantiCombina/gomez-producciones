@@ -17,12 +17,15 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@lexical/list": "^0.28.0",
+    "@lexical/react": "^0.28.0",
+    "@lexical/rich-text": "^0.28.0",
     "@payloadcms/db-postgres": "3.54.0",
     "@payloadcms/next": "3.54.0",
     "@payloadcms/payload-cloud": "3.54.0",
     "@payloadcms/richtext-lexical": "3.54.0",
     "@payloadcms/storage-uploadthing": "3.54.0",
-    "@payloadcms/translations": "^3.54.0",
+    "@payloadcms/translations": "3.54.0",
     "@payloadcms/ui": "3.54.0",
     "@tailwindcss/postcss": "^4.1.12",
     "@tailwindcss/typography": "^0.5.19",
@@ -33,6 +36,7 @@
     "dotenv": "16.4.7",
     "geist": "^1.5.1",
     "graphql": "^16.8.1",
+    "lexical": "^0.28.0",
     "lucide-react": "^0.542.0",
     "next": "15.4.10",
     "next-safe-action": "^8.0.11",
@@ -69,7 +73,7 @@
     "typescript": "5.7.3"
   },
   "engines": {
-    "node": "^18.20.2 || >=20.9.0",
+    "node": "^18.20.2 || ^20.9.0 || ^22.0.0 || ^23.0.0",
     "pnpm": "^9 || ^10"
   },
   "pnpm": {
