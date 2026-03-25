@@ -7,36 +7,34 @@ export function TopBar() {
     {
       name: 'YouTube',
       url: 'https://www.youtube.com/@oscargomezproducciones4552',
-      icon: <Youtube className="size-5" />,
-      color: 'bg-red-500 text-white hover:bg-red-600 hover:text-white',
+      icon: <Youtube className="size-4" />,
     },
     {
       name: 'Facebook',
       url: 'https://www.facebook.com/profile.php?id=100063067038840',
-      icon: <Facebook className="size-5" />,
-      color: 'bg-blue-600 text-white hover:bg-blue-700 hover:text-white',
+      icon: <Facebook className="size-4" />,
     },
     {
       name: 'Instagram',
       url: 'https://www.instagram.com/oscar.gomez64/',
-      icon: <Instagram className="size-5" />,
-      color:
-        'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 hover:text-white',
+      icon: <Instagram className="size-4" />,
     },
   ];
 
   return (
-    <div className="bg-muted/30 border-b">
+    <div className="bg-foreground text-background/70">
       <div className="container">
-        <div className="flex items-center justify-between h-12">
-          <div className="text-sm text-muted-foreground">Tu portal de noticias</div>
+        <div className="flex items-center justify-between h-9">
+          <span className="text-[10px] uppercase tracking-widest text-background/60">
+            Tu portal de noticias
+          </span>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1">
             {socialLinks.map((social) => (
               <Button
                 key={social.name}
                 size="icon"
-                className={`h-8 w-8 rounded-full transition-all duration-200 border-0 shadow-none ${social.color}`}
+                className="h-7 w-7 rounded-full bg-transparent text-background/60 hover:bg-primary hover:text-primary-foreground transition-all duration-200 border-0 shadow-none"
                 asChild
               >
                 <a

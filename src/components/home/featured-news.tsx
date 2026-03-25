@@ -1,4 +1,4 @@
-import { ArrowRightIcon, ImageIcon } from 'lucide-react';
+import { ImageIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import { Badge } from '@/components/ui/badge';
@@ -30,7 +30,7 @@ export function FeaturedNews({ posts }: Props) {
 
   return (
     <section>
-      <h2 className="text-2xl font-bold mb-6">Destacadas</h2>
+      <h2 className="text-2xl font-bold mb-6 pl-3 border-l-[3px] border-primary">Destacadas</h2>
 
       <div className="grid gap-5 lg:grid-cols-2">
         <MainCard post={main} />
@@ -54,8 +54,8 @@ function MainCard({ post }: { post: Post }) {
 
   return (
     <Link href={`/news/${slug}`} className="block group h-full">
-      <Card className="overflow-hidden p-0 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-        <div className="shrink-0 overflow-hidden">
+      <Card className="overflow-hidden p-0 hover:shadow-md transition-all duration-300 h-full flex flex-col border-border/60 hover:border-primary/30">
+        <div className="shrink-0 overflow-hidden relative">
           <PostImagePreview
             images={images}
             aspectClass="aspect-[16/10]"
@@ -63,15 +63,15 @@ function MainCard({ post }: { post: Post }) {
             altFallback={post.title}
             priority
           />
+          {category && (
+            <Badge className="absolute top-3 left-0 rounded-l-none bg-primary text-primary-foreground text-sm font-medium shadow-sm">
+              {category.name}
+            </Badge>
+          )}
         </div>
 
         <CardContent className="p-5 md:p-6 space-y-2.5 flex-1 flex flex-col">
           <div className="flex items-center gap-3">
-            {category && (
-              <Badge variant="secondary" className="bg-primary/10 text-primary text-sm font-medium">
-                {category.name}
-              </Badge>
-            )}
             <time className="text-sm text-muted-foreground">{formatDate(post.createdAt)}</time>
           </div>
 
@@ -80,11 +80,6 @@ function MainCard({ post }: { post: Post }) {
           {post.description && (
             <p className="text-muted-foreground text-base leading-relaxed line-clamp-3">{post.description}</p>
           )}
-
-          <span className="inline-flex items-center gap-1.5 text-sm text-primary font-semibold group-hover:gap-2.5 transition-all duration-300 mt-auto pt-1">
-            Leer más
-            <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
-          </span>
         </CardContent>
       </Card>
     </Link>
@@ -99,8 +94,13 @@ function SecondaryCard({ post }: { post: Post }) {
 
   return (
     <Link href={`/news/${slug}`} className="block group flex-1">
-      <Card className="overflow-hidden p-0 hover:shadow-lg transition-shadow duration-300 h-full flex flex-row">
+      <Card className="overflow-hidden p-0 hover:shadow-md transition-all duration-300 h-full flex flex-row border-border/60 hover:border-primary/30">
         <div className="relative w-36 sm:w-44 shrink-0 overflow-hidden">
+          {category && (
+            <Badge className="absolute top-2 left-0 z-10 rounded-l-none bg-primary text-primary-foreground text-[10px] font-medium shadow-sm px-1.5 py-0.5">
+              {category.name}
+            </Badge>
+          )}
           {mainImage ? (
             <>
               <ImageWithSkeleton
@@ -126,11 +126,6 @@ function SecondaryCard({ post }: { post: Post }) {
 
         <CardContent className="p-4 flex flex-col gap-2 flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            {category && (
-              <Badge variant="secondary" className="bg-primary/10 text-primary text-xs font-medium">
-                {category.name}
-              </Badge>
-            )}
             <time className="text-xs text-muted-foreground">{formatDate(post.createdAt)}</time>
           </div>
 
@@ -141,11 +136,6 @@ function SecondaryCard({ post }: { post: Post }) {
               {post.description}
             </p>
           )}
-
-          <span className="inline-flex items-center gap-1.5 text-sm text-primary font-semibold group-hover:gap-2.5 transition-all duration-300 mt-auto">
-            Leer más
-            <ArrowRightIcon className="h-3.5 w-3.5" aria-hidden="true" />
-          </span>
         </CardContent>
       </Card>
     </Link>

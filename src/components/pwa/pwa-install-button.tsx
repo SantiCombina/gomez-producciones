@@ -45,15 +45,15 @@ export function PwaInstallButton() {
     <Button
       onClick={handleInstall}
       variant="ghost"
-      className="w-full h-auto !items-center !justify-start whitespace-normal rounded-xl border border-sky-200 bg-sky-50 p-4 hover:bg-sky-100 hover:border-sky-300 active:bg-sky-200"
+      className="w-full h-auto !items-center !justify-start whitespace-normal rounded-xl border border-primary/20 bg-primary/5 p-4 hover:bg-primary/10 hover:border-primary/30 active:bg-primary/15"
     >
       <div className="flex items-center gap-3 w-full">
-        <div className="p-2 rounded-lg bg-sky-500 shrink-0">
-          <Download className="h-4 w-4 text-white" />
+        <div className="p-2 rounded-lg bg-primary shrink-0">
+          <Download className="h-4 w-4 text-primary-foreground" />
         </div>
         <div className="text-left">
-          <p className="font-semibold text-sm text-sky-900">Instalá la app</p>
-          <p className="text-xs text-sky-600">Gratis · Acceso rápido</p>
+          <p className="font-semibold text-sm">Instalá la app</p>
+          <p className="text-xs text-muted-foreground">Gratis · Acceso rápido</p>
         </div>
       </div>
     </Button>

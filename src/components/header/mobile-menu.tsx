@@ -128,15 +128,15 @@ export function MobileMenu({ isLoggedIn }: MobileMenuProps) {
               <Button
                 onClick={handleInstall}
                 variant="ghost"
-                className="w-full h-auto whitespace-normal !items-center !justify-start rounded-2xl border border-sky-200 bg-sky-50 px-4 py-4 hover:bg-sky-100 hover:border-sky-300 active:bg-sky-200"
+                className="w-full h-auto whitespace-normal !items-center !justify-start rounded-2xl border border-primary/20 bg-primary/5 px-4 py-4 hover:bg-primary/10 hover:border-primary/30 active:bg-primary/15"
               >
                 <div className="flex items-center gap-3.5">
-                  <div className="p-2 rounded-xl bg-sky-500 shrink-0">
-                    <Download className="h-5 w-5 text-white" />
+                  <div className="p-2 rounded-xl bg-primary shrink-0">
+                    <Download className="h-5 w-5 text-primary-foreground" />
                   </div>
                   <div className="text-left">
-                    <p className="font-semibold text-sm text-sky-900 leading-tight">Instalá la app</p>
-                    <p className="text-xs text-sky-600 mt-0.5">Acceso rápido a las noticias</p>
+                    <p className="font-semibold text-sm leading-tight">Instalá la app</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">Acceso rápido a las noticias</p>
                   </div>
                 </div>
               </Button>

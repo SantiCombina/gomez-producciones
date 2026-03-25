@@ -1,20 +1,22 @@
 import { Analytics } from '@vercel/analytics/next';
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Plus_Jakarta_Sans, Rubik } from 'next/font/google';
 import '@/styles/globals.css';
 
 import { Footer } from '@/components/footer/footer';
 import { Header } from '@/components/header/header';
 import { PwaSetup } from '@/components/pwa/pwa-setup';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: '--font-headline',
   subsets: ['latin'],
+  weight: ['500', '600', '700', '800'],
 });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const rubik = Rubik({
+  variable: '--font-rubik',
   subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
 });
 
 export const metadata: Metadata = {
@@ -89,7 +91,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props;
 
   return (
-    <html lang="es" className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="es-AR" className={`${rubik.variable} ${plusJakartaSans.variable} antialiased`}>
       <body className="font-sans">
         <script
           type="application/ld+json"

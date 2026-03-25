@@ -21,7 +21,12 @@
       "Bash(ls -la \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)/\")",
       "Bash(find \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)\" -type d -maxdepth 1)",
       "Bash(rm \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)/noticia/[id]/page.tsx\" \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)/nosotros/page.tsx\" \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)/contacto/page.tsx\")",
-      "Bash(rmdir \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)/noticia/[id]\" \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)/noticia\" \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)/nosotros\" \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)/contacto\")"
+      "Bash(rmdir \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)/noticia/[id]\" \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)/noticia\" \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)/nosotros\" \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)/contacto\")",
+      "mcp__stitch__list_projects",
+      "mcp__stitch__create_project",
+      "mcp__stitch__create_design_system",
+      "mcp__stitch__generate_screen_from_text",
+      "mcp__stitch__get_project"
     ]
   }
 }

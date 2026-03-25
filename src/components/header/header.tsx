@@ -13,10 +13,10 @@ export async function Header() {
 
   return (
     <>
-      <header className="border-b bg-white">
+      <header className="bg-card border-b">
         <TopBar />
         <div className="container">
-          <div className="flex items-center justify-between h-36">
+          <div className="flex items-center justify-between h-24 md:h-28 lg:h-32">
             <div className="flex items-center">
               <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
                 <Image

@@ -1,4 +1,3 @@
-import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { ImageWithSkeleton } from '@/components/ui/image-with-skeleton';
 import type { Advertisement, Media } from '@/payload-types';
@@ -23,14 +22,6 @@ export function AdBanner({ ad, className = '' }: Props) {
           className="object-cover"
           sizes="(max-width: 1024px) 100vw, 320px"
         />
-        <div className="absolute top-2.5 right-2.5">
-          <Badge
-            variant="secondary"
-            className="text-[11px] bg-black/60 text-white/90 hover:bg-black/60 backdrop-blur-sm"
-          >
-            Publicidad
-          </Badge>
-        </div>
       </div>
     </Card>
   );

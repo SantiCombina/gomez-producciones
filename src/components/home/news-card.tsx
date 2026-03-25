@@ -1,4 +1,3 @@
-import { ArrowRightIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import { Badge } from '@/components/ui/badge';
@@ -26,31 +25,27 @@ export function NewsCard({ post }: Props) {
 
   return (
     <Link href={`/news/${slug}`} className="block h-full group">
-      <Card className="overflow-hidden p-0 flex flex-col gap-0 hover:shadow-lg transition-shadow duration-300 h-full">
-        <div className="shrink-0 overflow-hidden">
+      <Card className="overflow-hidden p-0 flex flex-col gap-0 hover:shadow-md transition-all duration-300 h-full border-border/60 hover:border-primary/30">
+        <div className="shrink-0 overflow-hidden relative">
           <PostImagePreview
             images={allImages}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             altFallback={post.title}
           />
+          {category && (
+            <Badge className="absolute top-3 left-0 rounded-l-none bg-primary text-primary-foreground text-xs font-medium shadow-sm">
+              {category.name}
+            </Badge>
+          )}
         </div>
         <CardContent className="p-4 md:p-5 flex flex-col gap-2.5 flex-1">
           <div className="flex items-center gap-2.5">
-            {category && (
-              <Badge variant="secondary" className="bg-primary/10 text-primary text-sm font-medium">
-                {category.name}
-              </Badge>
-            )}
             <time className="text-sm text-muted-foreground">{formatDate(post.createdAt)}</time>
           </div>
           <h3 className="text-lg font-semibold leading-snug line-clamp-2">{post.title}</h3>
           {post.description && (
             <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">{post.description}</p>
           )}
-          <span className="inline-flex items-center gap-1.5 text-sm text-primary font-semibold mt-auto group-hover:gap-2.5 transition-all duration-300">
-            Leer más
-            <ArrowRightIcon className="h-3.5 w-3.5" aria-hidden="true" />
-          </span>
         </CardContent>
       </Card>
     </Link>

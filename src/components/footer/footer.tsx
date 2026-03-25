@@ -19,61 +19,61 @@ export function Footer() {
       name: 'YouTube',
       url: 'https://www.youtube.com/@oscargomezproducciones4552',
       icon: <Youtube className="size-5" />,
-      color: 'bg-white/20 hover:bg-white/30',
     },
     {
       name: 'Facebook',
       url: 'https://www.facebook.com/profile.php?id=100063067038840',
       icon: <Facebook className="size-5" />,
-      color: 'bg-white/20 hover:bg-white/30',
     },
     {
       name: 'Instagram',
       url: 'https://www.instagram.com/oscar.gomez64/',
       icon: <Instagram className="size-5" />,
-      color: 'bg-white/20 hover:bg-white/30',
     },
   ];
 
   const contactInfo = [
     {
-      icon: <MapPin className="h-5 w-5" aria-hidden="true" />,
+      icon: <MapPin className="h-4 w-4 shrink-0" aria-hidden="true" />,
       text: 'Porteña, Córdoba',
     },
     {
-      icon: <Phone className="h-5 w-5" aria-hidden="true" />,
+      icon: <Phone className="h-4 w-4 shrink-0" aria-hidden="true" />,
       text: '+54 9 3564 56-3394',
     },
     {
-      icon: <Mail className="h-5 w-5" aria-hidden="true" />,
+      icon: <Mail className="h-4 w-4 shrink-0" aria-hidden="true" />,
       text: 'oagomez64@yahoo.com.ar',
     },
   ];
 
   return (
-    <footer className="bg-blue-600 text-white mt-12 border-t">
-      <div className="container py-8 lg:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
+    <footer className="bg-foreground text-background mt-12">
+      <div className="container py-6 lg:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-5 lg:gap-8">
           <div className="lg:col-span-2">
             <Image
               src="/og-logo-white.png"
               alt="Oscar Gómez Producciones"
-              width={280}
-              height={80}
+              width={220}
+              height={60}
               className="object-contain mb-1 h-20 sm:h-24 w-auto"
             />
-            <p className="hidden sm:block text-blue-100 mb-6 max-w-md">
+            <p className="hidden sm:block text-background/60 mb-6 max-w-md text-sm leading-relaxed">
               Minuto a minuto con información al instante de los hechos, desde un enfoque plenamente periodístico
             </p>
           </div>
 
           <div className="grid grid-cols-2 lg:contents">
             <div>
-              <h3 className="font-semibold text-lg mb-4">Navegación</h3>
+              <h3 className="font-medium text-sm uppercase tracking-widest mb-3 text-background/40">Navegación</h3>
               <ul className="space-y-2">
                 {footerLinks.map((link) => (
                   <li key={link.label}>
-                    <Link href={link.href} className="text-blue-100 hover:text-white transition-colors duration-200">
+                    <Link
+                      href={link.href}
+                      className="text-background/65 hover:text-background transition-colors duration-200 text-sm"
+                    >
                       {link.label}
                     </Link>
                   </li>
@@ -82,21 +82,21 @@ export function Footer() {
             </div>
 
             <div>
-              <h3 className="font-semibold text-lg mb-4">Contacto</h3>
-              <div className="space-y-3 mb-6">
+              <h3 className="font-medium text-sm uppercase tracking-widest mb-3 text-background/40">Contacto</h3>
+              <div className="space-y-2 mb-4">
                 {contactInfo.map((info, index) => (
-                  <div key={index} className="flex items-center space-x-2 text-blue-100">
+                  <div key={index} className="flex items-center space-x-2 text-background/65">
                     {info.icon}
-                    <span className="text-base">{info.text}</span>
+                    <span className="text-sm">{info.text}</span>
                   </div>
                 ))}
               </div>
-              <div className="flex space-x-3">
+              <div className="flex space-x-1.5">
                 {socialLinks.map((social) => (
                   <Button
                     key={social.name}
                     size="icon"
-                    className={`h-10 w-10 rounded-full text-white transition-all duration-200 border-0 shadow-none ${social.color}`}
+                    className="h-10 w-10 rounded-full bg-background/10 text-background hover:bg-primary hover:text-primary-foreground transition-all duration-200 border-0 shadow-none"
                     asChild
                   >
                     <a
@@ -114,9 +114,9 @@ export function Footer() {
           </div>
         </div>
 
-        <Separator className="bg-blue-500 my-6" />
+        <Separator className="bg-background/10 my-4" />
 
-        <p className="text-blue-100 text-sm">© {currentYear} Gómez Producciones | Todos los derechos reservados</p>
+        <p className="text-background/30 text-xs">© {currentYear} Gómez Producciones | Todos los derechos reservados</p>
       </div>
     </footer>
   );
