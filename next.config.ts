@@ -2,6 +2,13 @@ import { withPayload } from '@payloadcms/next/withPayload';
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      { source: '/noticia/:slug*', destination: '/news/:slug*', permanent: true },
+      { source: '/nosotros', destination: '/about', permanent: true },
+      { source: '/contacto', destination: '/contact', permanent: true },
+    ];
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [

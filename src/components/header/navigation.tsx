@@ -1,41 +1,16 @@
-'use client';
-
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { NavActiveLink } from './nav-active-link';
 
 const navItems = [
   { href: '/', label: 'Inicio' },
-  { href: '/nosotros', label: 'Nosotros' },
-  { href: '/contacto', label: 'Contacto' },
+  { href: '/about', label: 'Nosotros' },
+  { href: '/contact', label: 'Contacto' },
 ];
 
 export function Navigation() {
-  const pathname = usePathname();
-
-  const isActive = (path: string) => {
-    if (path === '/') return pathname === '/';
-    return pathname.startsWith(path);
-  };
-
-  const items = navItems;
-
   return (
-    <nav className="hidden md:flex items-center gap-8">
-      {items.map(({ href, label }) => (
-        <Link
-          key={href}
-          href={href}
-          className={`relative text-base font-medium py-2 transition-colors duration-200 ${
-            isActive(href) ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
-          }`}
-        >
-          {label}
-          <span
-            className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${
-              isActive(href) ? 'w-full' : 'w-0'
-            }`}
-          />
-        </Link>
+    <nav aria-label="Principal" className="hidden md:flex items-center gap-8">
+      {navItems.map(({ href, label }) => (
+        <NavActiveLink key={href} href={href} label={label} />
       ))}
     </nav>
   );

@@ -8,12 +8,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const postsResult = await getPosts({ limit: 1000 });
   const posts = postsResult.data?.docs ?? [];
 
-  const postUrls: MetadataRoute.Sitemap = posts.map((post) => ({
-    url: `${BASE_URL}/noticia/${post.id}`,
-    lastModified: new Date(post.updatedAt),
-    changeFrequency: 'daily',
-    priority: 0.8,
-  }));
+  const now = new Date();
+  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+  const postUrls: MetadataRoute.Sitemap = posts.map((post) => {
+    const postWithSlug = post as typeof post & { slug?: string };
+    const lastMod = new Date(post.updatedAt);
+    return {
+      url: `${BASE_URL}/news/${postWithSlug.slug ?? post.id}`,
+      lastModified: lastMod,
+      changeFrequency: lastMod > sevenDaysAgo ? 'daily' : 'monthly',
+      priority: 0.8,
+    };
+  });
 
   return [
     {
@@ -23,13 +30,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     {
-      url: `${BASE_URL}/nosotros`,
+      url: `${BASE_URL}/about`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
-      url: `${BASE_URL}/contacto`,
+      url: `${BASE_URL}/contact`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.5,

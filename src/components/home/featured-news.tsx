@@ -9,6 +9,8 @@ import type { Media, Post } from '@/payload-types';
 
 import { PostImagePreview } from './post-image-preview';
 
+type PostWithSlug = Post & { slug?: string | null };
+
 interface Props {
   posts: Post[];
 }
@@ -48,15 +50,17 @@ export function FeaturedNews({ posts }: Props) {
 function MainCard({ post }: { post: Post }) {
   const category = typeof post.category === 'object' && post.category ? post.category : null;
   const images = getImages(post);
+  const slug = (post as PostWithSlug).slug ?? String(post.id);
 
   return (
-    <Link href={`/noticia/${post.id}`} className="block group h-full">
+    <Link href={`/news/${slug}`} className="block group h-full">
       <Card className="overflow-hidden p-0 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-        <div className="flex-shrink-0 overflow-hidden">
+        <div className="shrink-0 overflow-hidden">
           <PostImagePreview
             images={images}
             aspectClass="aspect-[16/10]"
             sizes="(max-width: 768px) 100vw, 50vw"
+            altFallback={post.title}
             priority
           />
         </div>
@@ -79,7 +83,7 @@ function MainCard({ post }: { post: Post }) {
 
           <span className="inline-flex items-center gap-1.5 text-sm text-primary font-semibold group-hover:gap-2.5 transition-all duration-300 mt-auto pt-1">
             Leer más
-            <ArrowRightIcon className="h-4 w-4" />
+            <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
           </span>
         </CardContent>
       </Card>
@@ -91,9 +95,10 @@ function SecondaryCard({ post }: { post: Post }) {
   const category = typeof post.category === 'object' && post.category ? post.category : null;
   const images = getImages(post);
   const mainImage = images[0] ?? null;
+  const slug = (post as PostWithSlug).slug ?? String(post.id);
 
   return (
-    <Link href={`/noticia/${post.id}`} className="block group flex-1">
+    <Link href={`/news/${slug}`} className="block group flex-1">
       <Card className="overflow-hidden p-0 hover:shadow-lg transition-shadow duration-300 h-full flex flex-row">
         <div className="relative w-36 sm:w-44 shrink-0 overflow-hidden">
           {mainImage ? (
@@ -102,7 +107,7 @@ function SecondaryCard({ post }: { post: Post }) {
                 src={mainImage.url!}
                 alt={mainImage.alt || post.title}
                 fill
-                className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
+                className="object-cover group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:transform-none transition-transform duration-500"
                 sizes="180px"
               />
               {images.length > 1 && (
@@ -139,7 +144,7 @@ function SecondaryCard({ post }: { post: Post }) {
 
           <span className="inline-flex items-center gap-1.5 text-sm text-primary font-semibold group-hover:gap-2.5 transition-all duration-300 mt-auto">
             Leer más
-            <ArrowRightIcon className="h-3.5 w-3.5" />
+            <ArrowRightIcon className="h-3.5 w-3.5" aria-hidden="true" />
           </span>
         </CardContent>
       </Card>

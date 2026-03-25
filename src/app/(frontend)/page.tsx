@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import { getActiveAdvertisements } from '@/app/services/advertisements';
 import { getArticleLabels } from '@/app/services/article-labels';
 import { getPosts } from '@/app/services/post';
@@ -19,34 +21,36 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-dvh bg-background">
-      {pick(0) && (
+      {pick(0) ? (
         <div className="container pt-4">
           <AdBanner ad={pick(0)!} />
         </div>
-      )}
+      ) : null}
 
-      <main className="container py-6">
+      <div className="container py-6">
         <div className="lg:grid lg:grid-cols-4 lg:gap-8">
           <div className="lg:col-span-3 space-y-8">
             <YoutubeLiveEmbed />
 
-            <NewsFeed posts={posts} categories={categories} ad={pick(2)} />
+            <Suspense fallback={<div className="h-32 animate-pulse rounded-lg bg-muted" />}>
+              <NewsFeed posts={posts} categories={categories} ad={pick(2)} />
+            </Suspense>
           </div>
 
           <aside className="hidden lg:block">
             <div className="sticky top-24 space-y-6">
               <PwaInstallButton />
-              {pick(1) && <AdBanner ad={pick(1)!} />}
+              {pick(1) ? <AdBanner ad={pick(1)!} /> : null}
             </div>
           </aside>
         </div>
 
-        {pick(1) && (
+        {pick(1) ? (
           <div className="lg:hidden mt-8">
             <AdBanner ad={pick(1)!} />
           </div>
-        )}
-      </main>
+        ) : null}
+      </div>
     </div>
   );
 }

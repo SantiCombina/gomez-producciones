@@ -171,6 +171,10 @@ export interface Media {
  */
 export interface Post {
   id: number;
+  /**
+   * Identificador URL. Se genera automáticamente del título.
+   */
+  slug?: string | null;
   title: string;
   description?: string | null;
   body?: {
@@ -348,6 +352,7 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
+  slug?: T;
   title?: T;
   description?: T;
   body?: T;

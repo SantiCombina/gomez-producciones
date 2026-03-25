@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useMemo } from 'react';
 
 import { Separator } from '@/components/ui/separator';
 import type { Advertisement, ArticleLabel, Post } from '@/payload-types';
@@ -17,7 +18,20 @@ interface Props {
 }
 
 export function NewsFeed({ posts, categories, ad }: Props) {
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const rawCategory = searchParams.get('categoria');
+  const selectedCategory = rawCategory ? Number(rawCategory) : null;
+
+  const handleCategoryChange = (id: number | null) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (id === null) {
+      params.delete('categoria');
+    } else {
+      params.set('categoria', id.toString());
+    }
+    router.push(params.size > 0 ? `?${params.toString()}` : '/', { scroll: false });
+  };
 
   const filteredPosts = useMemo(() => {
     if (selectedCategory === null) return posts;
@@ -35,7 +49,7 @@ export function NewsFeed({ posts, categories, ad }: Props) {
       <CategoryFilter
         categories={categories.map((c) => ({ id: c.id, name: c.name }))}
         selected={selectedCategory}
-        onChange={setSelectedCategory}
+        onChange={handleCategoryChange}
       />
 
       {filteredPosts.length === 0 ? (
@@ -44,19 +58,19 @@ export function NewsFeed({ posts, categories, ad }: Props) {
         <>
           {featuredPosts.length > 0 && <FeaturedNews posts={featuredPosts} />}
 
-          {ad && (
+          {ad ? (
             <>
               <Separator className="my-8" />
               <AdBanner ad={ad} />
             </>
-          )}
+          ) : null}
 
-          {latestPosts.length > 0 && (
+          {latestPosts.length > 0 ? (
             <>
               <Separator className="my-8" />
               <LatestNews posts={latestPosts} />
             </>
-          )}
+          ) : null}
         </>
       )}
     </>

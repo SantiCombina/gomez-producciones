@@ -18,8 +18,8 @@ interface BeforeInstallPromptEvent extends Event {
 
 const navItems = [
   { href: '/', label: 'Inicio', icon: Home },
-  { href: '/nosotros', label: 'Nosotros', icon: Info },
-  { href: '/contacto', label: 'Contacto', icon: Phone },
+  { href: '/about', label: 'Nosotros', icon: Info },
+  { href: '/contact', label: 'Contacto', icon: Phone },
 ];
 
 interface MobileMenuProps {

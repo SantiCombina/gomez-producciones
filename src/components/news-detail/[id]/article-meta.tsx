@@ -14,7 +14,7 @@ export function ArticleMeta({ post }: ArticleMetaProps) {
   return (
     <div className="flex items-center gap-4 py-4 border-b border-border/60">
       <div className="flex items-center gap-2 text-base text-muted-foreground">
-        <CalendarIcon className="h-5 w-5" />
+        <CalendarIcon className="h-5 w-5" aria-hidden="true" />
         <time dateTime={post.createdAt}>{formatDate(post.createdAt)}</time>
       </div>
       {category && (

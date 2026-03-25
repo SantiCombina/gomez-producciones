@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://gomezproducciones.vercel.app'),
-  title: 'Gomez Producciones - Portal de Noticias',
+  title: 'Gomez Producciones - Noticias de Porteña y la Región',
   manifest: '/manifest.webmanifest',
   icons: {
     icon: [
@@ -30,17 +30,32 @@ export const metadata: Metadata = {
     shortcut: '/favicon.ico',
   },
   appleWebApp: {
-    title: 'OG',
+    title: 'Gomez Producciones',
   },
-  description: 'Minuto a minuto con información al instante de los hechos, desde un enfoque plenamente periodístico.',
-  keywords: ['noticias', 'periodismo', 'gomez producciones', 'radio', 'televisión', 'medios'],
+  description:
+    'Seguí las noticias de Porteña, San Francisco y la región en tiempo real. Información local al instante con un enfoque plenamente periodístico. Tu portal de confianza.',
+  keywords: [
+    'noticias',
+    'periodismo',
+    'gomez producciones',
+    'radio',
+    'televisión',
+    'medios',
+    'Porteña',
+    'Córdoba',
+    'noticias Porteña',
+    'San Francisco Córdoba',
+    'noroeste de Córdoba',
+    'noticias locales',
+  ],
   openGraph: {
     type: 'website',
     locale: 'es_AR',
     url: 'https://gomezproducciones.vercel.app',
     siteName: 'Gomez Producciones',
-    title: 'Gomez Producciones - Portal de Noticias',
-    description: 'Minuto a minuto con información al instante de los hechos, desde un enfoque plenamente periodístico.',
+    title: 'Gomez Producciones - Noticias de Porteña y la Región',
+    description:
+      'Seguí las noticias de Porteña, San Francisco y la región en tiempo real. Información local al instante con un enfoque plenamente periodístico.',
     images: [
       {
         url: '/og-image.webp',
@@ -52,8 +67,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Gomez Producciones - Portal de Noticias',
-    description: 'Minuto a minuto con información al instante de los hechos, desde un enfoque plenamente periodístico.',
+    title: 'Gomez Producciones - Noticias de Porteña y la Región',
+    description:
+      'Seguí las noticias de Porteña, San Francisco y la región en tiempo real. Información local al instante con un enfoque plenamente periodístico.',
     images: ['/og-image.webp'],
   },
   robots: {
@@ -80,17 +96,38 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
-              '@type': 'Organization',
+              '@type': 'NewsMediaOrganization',
               name: 'Gomez Producciones',
               url: 'https://gomezproducciones.vercel.app',
               logo: 'https://gomezproducciones.vercel.app/og-logo-black.png',
-              sameAs: [],
+              address: {
+                '@type': 'PostalAddress',
+                addressLocality: 'Porteña',
+                addressRegion: 'Córdoba',
+                addressCountry: 'AR',
+              },
+              contactPoint: {
+                '@type': 'ContactPoint',
+                telephone: '+54-9-3564-56-3394',
+                contactType: 'customer service',
+              },
+              sameAs: [
+                'https://www.youtube.com/@oscargomezproducciones4552',
+                'https://www.facebook.com/profile.php?id=100063067038840',
+                'https://www.instagram.com/oscar.gomez64/',
+              ],
             }),
           }}
         />
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded"
+        >
+          Ir al contenido principal
+        </a>
         <PwaSetup />
         <Header />
-        <main>{children}</main>
+        <main id="main-content">{children}</main>
         <Footer />
         <Analytics />
       </body>

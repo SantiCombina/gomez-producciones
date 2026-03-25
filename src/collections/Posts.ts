@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload';
 
+import { generateSlug } from '@/lib/slug-utils';
+
 import { anyone, isAdmin, isAuthenticated } from './access';
 
 export const Posts: CollectionConfig = {
@@ -19,6 +21,14 @@ export const Posts: CollectionConfig = {
     defaultColumns: ['title', 'category', 'createdAt'],
   },
   hooks: {
+    beforeChange: [
+      ({ data, operation }) => {
+        if (operation === 'create' && data.title && !data.slug) {
+          data.slug = generateSlug(data.title as string);
+        }
+        return data;
+      },
+    ],
     afterDelete: [
       async ({ doc, req }) => {
         const mediaIdsToDelete: number[] = [];
@@ -44,6 +54,18 @@ export const Posts: CollectionConfig = {
     ],
   },
   fields: [
+    {
+      name: 'slug',
+      label: 'Slug (URL)',
+      type: 'text',
+      required: false,
+      unique: true,
+      index: true,
+      admin: {
+        description: 'Identificador URL. Se genera automáticamente del título.',
+        readOnly: false,
+      },
+    },
     {
       name: 'title',
       label: 'Título',

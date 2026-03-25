@@ -12,7 +12,16 @@
       "Bash(grep:*)",
       "Bash(find:*)",
       "Bash(cat:*)",
-      "Bash(2)"
+      "Bash(2)",
+      "Bash(for skill:*)",
+      "Bash(do)",
+      "Read(//c/Users/santi/Documents/Workspace/gomez-producciones/.agents/skills/$skill/**)",
+      "Bash(done)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(ls -la \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)/\")",
+      "Bash(find \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)\" -type d -maxdepth 1)",
+      "Bash(rm \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)/noticia/[id]/page.tsx\" \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)/nosotros/page.tsx\" \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)/contacto/page.tsx\")",
+      "Bash(rmdir \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)/noticia/[id]\" \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)/noticia\" \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)/nosotros\" \"c:/Users/santi/Documents/Workspace/gomez-producciones/src/app/\\(frontend\\)/contacto\")"
     ]
   }
 }

@@ -1,3 +1,4 @@
+import { unstable_cache } from 'next/cache';
 import type { Where } from 'payload';
 import { cache } from 'react';
 
@@ -34,6 +35,20 @@ export const createPost = async (data: {
   }
 };
 
+export const getPostBySlug = cache(async (slug: string): Promise<Post | null> => {
+  try {
+    const payload = await getPayloadClient();
+    const result = await payload.find({
+      collection: 'posts',
+      where: { slug: { equals: slug } },
+      limit: 1,
+    });
+    return (result.docs[0] as Post) ?? null;
+  } catch {
+    return null;
+  }
+});
+
 export const getPostById = cache(async (id: string): Promise<Post | null> => {
   try {
     const payload = await getPayloadClient();
@@ -53,7 +68,7 @@ export const getPostById = cache(async (id: string): Promise<Post | null> => {
   }
 });
 
-export const getPosts = async (options?: { limit?: number; page?: number; category?: string }) => {
+const fetchPosts = async (options?: { limit?: number; page?: number; category?: string }) => {
   try {
     const payload = await getPayloadClient();
 
@@ -97,6 +112,8 @@ export const getPosts = async (options?: { limit?: number; page?: number; catego
     };
   }
 };
+
+export const getPosts = unstable_cache(fetchPosts, ['posts'], { revalidate: 60, tags: ['posts'] });
 
 export const updatePost = async (
   id: string,

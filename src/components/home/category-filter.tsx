@@ -25,6 +25,7 @@ export function CategoryFilter({ categories, selected, onChange }: Props) {
       <button
         type="button"
         onClick={() => onChange(null)}
+        aria-pressed={selected === null}
         className={cn(
           'shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200',
           selected === null
@@ -39,6 +40,7 @@ export function CategoryFilter({ categories, selected, onChange }: Props) {
           key={cat.id}
           type="button"
           onClick={() => onChange(cat.id)}
+          aria-pressed={selected === cat.id}
           className={cn(
             'shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200',
             selected === cat.id

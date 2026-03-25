@@ -8,12 +8,15 @@ import type { Media, Post } from '@/payload-types';
 
 import { PostImagePreview } from './post-image-preview';
 
+type PostWithSlug = Post & { slug?: string | null };
+
 interface Props {
   post: Post;
 }
 
 export function NewsCard({ post }: Props) {
   const category = typeof post.category === 'object' && post.category ? post.category : null;
+  const slug = (post as PostWithSlug).slug ?? String(post.id);
 
   const featuredImage = typeof post.featuredImage === 'object' && post.featuredImage ? post.featuredImage : null;
   const extraImages = (post.images ?? [])
@@ -22,10 +25,14 @@ export function NewsCard({ post }: Props) {
   const allImages: Media[] = [...(featuredImage?.url ? [featuredImage as Media] : []), ...extraImages];
 
   return (
-    <Link href={`/noticia/${post.id}`} className="block h-full group">
+    <Link href={`/news/${slug}`} className="block h-full group">
       <Card className="overflow-hidden p-0 flex flex-col gap-0 hover:shadow-lg transition-shadow duration-300 h-full">
-        <div className="flex-shrink-0 overflow-hidden">
-          <PostImagePreview images={allImages} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+        <div className="shrink-0 overflow-hidden">
+          <PostImagePreview
+            images={allImages}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            altFallback={post.title}
+          />
         </div>
         <CardContent className="p-4 md:p-5 flex flex-col gap-2.5 flex-1">
           <div className="flex items-center gap-2.5">
@@ -42,7 +49,7 @@ export function NewsCard({ post }: Props) {
           )}
           <span className="inline-flex items-center gap-1.5 text-sm text-primary font-semibold mt-auto group-hover:gap-2.5 transition-all duration-300">
             Leer más
-            <ArrowRightIcon className="h-3.5 w-3.5" />
+            <ArrowRightIcon className="h-3.5 w-3.5" aria-hidden="true" />
           </span>
         </CardContent>
       </Card>

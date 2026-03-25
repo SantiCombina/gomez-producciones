@@ -8,15 +8,16 @@ interface Props {
   priority?: boolean;
   sizes?: string;
   aspectClass?: string;
+  altFallback?: string;
 }
 
-export function PostImagePreview({ images, priority, sizes, aspectClass = 'aspect-[16/9]' }: Props) {
+export function PostImagePreview({ images, priority, sizes, aspectClass = 'aspect-[16/9]', altFallback = '' }: Props) {
   if (images.length === 0) {
     return (
       <div
         className={`${aspectClass} w-full bg-muted flex flex-col items-center justify-center gap-1.5 text-muted-foreground`}
       >
-        <ImageIcon className="h-7 w-7 opacity-35" />
+        <ImageIcon className="h-7 w-7 opacity-35" aria-hidden="true" />
         <span className="text-xs font-medium">Sin imagen</span>
       </div>
     );
@@ -27,9 +28,9 @@ export function PostImagePreview({ images, priority, sizes, aspectClass = 'aspec
       <div className={`relative ${aspectClass} w-full overflow-hidden`}>
         <ImageWithSkeleton
           src={images[0].url!}
-          alt={images[0].alt || ''}
+          alt={images[0].alt || altFallback}
           fill
-          className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
+          className="object-cover group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:transform-none transition-transform duration-500"
           sizes={sizes}
           priority={priority}
         />
@@ -45,9 +46,9 @@ export function PostImagePreview({ images, priority, sizes, aspectClass = 'aspec
       <div className="relative h-full overflow-hidden">
         <ImageWithSkeleton
           src={main.url!}
-          alt={main.alt || ''}
+          alt={main.alt || altFallback}
           fill
-          className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
+          className="object-cover group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:transform-none transition-transform duration-500"
           sizes={sizes}
           priority={priority}
         />
@@ -58,7 +59,7 @@ export function PostImagePreview({ images, priority, sizes, aspectClass = 'aspec
           <div className="relative flex-1 overflow-hidden">
             <ImageWithSkeleton
               src={second.url!}
-              alt={second.alt || ''}
+              alt={second.alt || altFallback}
               fill
               className="object-cover"
               sizes="(max-width: 640px) 33vw, 15vw"
@@ -69,7 +70,7 @@ export function PostImagePreview({ images, priority, sizes, aspectClass = 'aspec
           <div className="relative flex-1 overflow-hidden">
             <ImageWithSkeleton
               src={third.url!}
-              alt={third.alt || ''}
+              alt={third.alt || altFallback}
               fill
               className="object-cover"
               sizes="(max-width: 640px) 33vw, 15vw"

@@ -10,8 +10,8 @@ export function Footer() {
 
   const footerLinks = [
     { label: 'Inicio', href: '/' },
-    { label: 'Nosotros', href: '/nosotros' },
-    { label: 'Contacto', href: '/contacto' },
+    { label: 'Nosotros', href: '/about' },
+    { label: 'Contacto', href: '/contact' },
   ];
 
   const socialLinks = [
@@ -37,15 +37,15 @@ export function Footer() {
 
   const contactInfo = [
     {
-      icon: <MapPin className="h-5 w-5" />,
+      icon: <MapPin className="h-5 w-5" aria-hidden="true" />,
       text: 'Porteña, Córdoba',
     },
     {
-      icon: <Phone className="h-5 w-5" />,
+      icon: <Phone className="h-5 w-5" aria-hidden="true" />,
       text: '+54 9 3564 56-3394',
     },
     {
-      icon: <Mail className="h-5 w-5" />,
+      icon: <Mail className="h-5 w-5" aria-hidden="true" />,
       text: 'oagomez64@yahoo.com.ar',
     },
   ];
@@ -61,7 +61,6 @@ export function Footer() {
               width={280}
               height={80}
               className="object-contain mb-1 h-20 sm:h-24 w-auto"
-              priority
             />
             <p className="hidden sm:block text-blue-100 mb-6 max-w-md">
               Minuto a minuto con información al instante de los hechos, desde un enfoque plenamente periodístico
