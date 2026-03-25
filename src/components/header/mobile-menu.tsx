@@ -70,7 +70,7 @@ export function MobileMenu({ isLoggedIn }: MobileMenuProps) {
       <SheetTrigger asChild>
         <Menu size={28} className="md:hidden cursor-pointer" />
       </SheetTrigger>
-      <SheetContent side="right" className="w-[82vw] max-w-[300px] flex flex-col p-0 gap-0">
+      <SheetContent side="right" className="w-[82vw] max-w-75 flex flex-col p-0 gap-0">
         <SheetTitle className="sr-only">Menú de navegación</SheetTitle>
 
         <div className="px-5 pt-8 pb-3">
@@ -111,7 +111,7 @@ export function MobileMenu({ isLoggedIn }: MobileMenuProps) {
                   router.refresh();
                 }}
                 disabled={isPending}
-                className="w-full h-auto whitespace-normal !items-center !justify-start rounded-2xl border border-red-200 bg-red-50 px-4 py-4 hover:bg-red-100 hover:border-red-300 active:bg-red-200"
+                className="w-full h-auto whitespace-normal items-center! justify-start! rounded-2xl border border-red-200 bg-red-50 px-4 py-4 hover:bg-red-100 hover:border-red-300 active:bg-red-200"
               >
                 <div className="flex items-center gap-3.5">
                   <div className="p-2 rounded-xl bg-red-500 shrink-0">
@@ -128,7 +128,7 @@ export function MobileMenu({ isLoggedIn }: MobileMenuProps) {
               <Button
                 onClick={handleInstall}
                 variant="ghost"
-                className="w-full h-auto whitespace-normal !items-center !justify-start rounded-2xl border border-primary/20 bg-primary/5 px-4 py-4 hover:bg-primary/10 hover:border-primary/30 active:bg-primary/15"
+                className="w-full h-auto whitespace-normal items-center! justify-start! rounded-2xl border border-primary/20 bg-primary/5 px-4 py-4 hover:bg-primary/10 hover:border-primary/30 active:bg-primary/15"
               >
                 <div className="flex items-center gap-3.5">
                   <div className="p-2 rounded-xl bg-primary shrink-0">

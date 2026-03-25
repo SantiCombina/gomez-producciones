@@ -45,7 +45,7 @@ export function PwaInstallButton() {
     <Button
       onClick={handleInstall}
       variant="ghost"
-      className="w-full h-auto !items-center !justify-start whitespace-normal rounded-xl border border-primary/20 bg-primary/5 p-4 hover:bg-primary/10 hover:border-primary/30 active:bg-primary/15"
+      className="w-full h-auto items-center! justify-start! whitespace-normal rounded-xl border border-primary/20 bg-primary/5 p-4 hover:bg-primary/10 hover:border-primary/30 active:bg-primary/15"
     >
       <div className="flex items-center gap-3 w-full">
         <div className="p-2 rounded-lg bg-primary shrink-0">
