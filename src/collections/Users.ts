@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload';
 
-import { isAdmin, isAdminOrSelf } from './access';
+import { isAdmin, isAdminOrEditor, isAdminOrSelf } from './access';
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -9,13 +9,14 @@ export const Users: CollectionConfig = {
     plural: 'Usuarios',
   },
   access: {
-    read: isAdmin,
+    read: isAdminOrEditor,
     create: isAdmin,
     update: isAdminOrSelf,
     delete: isAdmin,
   },
   admin: {
     useAsTitle: 'email',
+    hidden: ({ user }) => user?.role !== 'admin',
   },
   auth: {
     tokenExpiration: 2592000, // 30 días en segundos
@@ -31,11 +32,11 @@ export const Users: CollectionConfig = {
           value: 'admin',
         },
         {
-          label: 'Usuario',
-          value: 'user',
+          label: 'Editor',
+          value: 'editor',
         },
       ],
-      defaultValue: 'user',
+      defaultValue: 'editor',
       required: true,
     },
   ],

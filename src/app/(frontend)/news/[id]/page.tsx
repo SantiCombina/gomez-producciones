@@ -112,35 +112,21 @@ export default async function NewsDetailPage({ params }: Props) {
     <div className="min-h-dvh">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <main className="container py-6">
-        <div className="lg:grid lg:grid-cols-4 lg:gap-8">
-          <div className="lg:col-span-3 space-y-8">
-            <ArticleContent post={post} />
+      <main className="container py-6 max-w-3xl mx-auto space-y-8">
+        <ArticleContent post={post} />
 
-            {pick(0) ? (
-              <>
-                <Separator className="my-8" />
-                <AdBanner ad={pick(0)!} />
-              </>
-            ) : null}
-
-            <Separator className="my-8" />
-
-            <Suspense fallback={<div className="h-48 animate-pulse rounded-lg bg-muted" />}>
-              <RelatedNews currentPost={post} />
-            </Suspense>
-          </div>
-
-          <aside className="hidden lg:block">
-            <div className="sticky top-24 space-y-6">{pick(1) ? <AdBanner ad={pick(1)!} /> : null}</div>
-          </aside>
-        </div>
-
-        {pick(1) ? (
-          <div className="lg:hidden mt-8">
-            <AdBanner ad={pick(1)!} />
-          </div>
+        {pick(0) ? (
+          <>
+            <Separator />
+            <AdBanner ad={pick(0)!} />
+          </>
         ) : null}
+
+        <Separator />
+
+        <Suspense fallback={<div className="h-48 animate-pulse rounded-lg bg-muted" />}>
+          <RelatedNews currentPost={post} />
+        </Suspense>
       </main>
     </div>
   );

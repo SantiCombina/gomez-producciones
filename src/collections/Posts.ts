@@ -2,7 +2,7 @@ import type { CollectionConfig } from 'payload';
 
 import { generateSlug } from '@/lib/slug-utils';
 
-import { anyone, isAdmin, isAuthenticated } from './access';
+import { anyone, isAdminOrEditor } from './access';
 
 export const Posts: CollectionConfig = {
   slug: 'posts',
@@ -12,9 +12,9 @@ export const Posts: CollectionConfig = {
   },
   access: {
     read: anyone,
-    create: isAuthenticated,
-    update: isAdmin,
-    delete: isAdmin,
+    create: isAdminOrEditor,
+    update: isAdminOrEditor,
+    delete: isAdminOrEditor,
   },
   admin: {
     useAsTitle: 'title',

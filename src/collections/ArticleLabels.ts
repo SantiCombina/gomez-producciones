@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload';
 
-import { anyone, isAuthenticated } from './access';
+import { anyone, isAdminOrEditor } from './access';
 
 export const ArticleLabels: CollectionConfig = {
   slug: 'article-labels',
@@ -10,9 +10,9 @@ export const ArticleLabels: CollectionConfig = {
   },
   access: {
     read: anyone,
-    create: isAuthenticated,
-    update: isAuthenticated,
-    delete: isAuthenticated,
+    create: isAdminOrEditor,
+    update: isAdminOrEditor,
+    delete: isAdminOrEditor,
   },
   admin: {
     useAsTitle: 'name',

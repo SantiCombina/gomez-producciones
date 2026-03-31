@@ -8,7 +8,6 @@ import type { ServerFunctionClient } from 'payload';
 import React from 'react';
 
 import { importMap } from './admin/importMap';
-import '@/styles/payload-styles.css';
 
 type Args = {
   children: React.ReactNode;

@@ -8,22 +8,34 @@ import { NewsFeed } from '@/components/home/news-feed';
 import { YoutubeLiveEmbed } from '@/components/home/youtube-live/youtube-live-embed';
 import { PwaInstallButton } from '@/components/pwa/pwa-install-button';
 
-export default async function HomePage() {
+interface Props {
+  searchParams: Promise<{ categoria?: string }>;
+}
+
+export default async function HomePage({ searchParams }: Props) {
+  const { categoria } = await searchParams;
+  const selectedCategory = categoria ? Number(categoria) : null;
+
   const [postsResult, ads, categories] = await Promise.all([
-    getPosts({ limit: 20 }),
+    getPosts({
+      limit: 8,
+      page: 1,
+      category: selectedCategory !== null ? String(selectedCategory) : undefined,
+    }),
     getActiveAdvertisements(),
     getArticleLabels(),
   ]);
 
-  const posts = postsResult.data?.docs ?? [];
-  const shuffled = [...ads].sort(() => Math.random() - 0.5);
-  const pick = (i: number) => (shuffled.length > 0 ? shuffled[i % shuffled.length] : undefined);
+  const initialPosts = postsResult.data?.docs ?? [];
+  const initialHasNextPage = postsResult.data?.hasNextPage ?? false;
+
+  const topAd = ads[0];
 
   return (
     <div className="min-h-dvh bg-background">
-      {pick(0) ? (
+      {topAd ? (
         <div className="container pt-4">
-          <AdBanner ad={pick(0)!} />
+          <AdBanner ad={topAd} />
         </div>
       ) : null}
 
@@ -33,23 +45,22 @@ export default async function HomePage() {
             <YoutubeLiveEmbed />
 
             <Suspense fallback={<div className="h-32 animate-pulse rounded-lg bg-muted" />}>
-              <NewsFeed posts={posts} categories={categories} ad={pick(2)} />
+              <NewsFeed
+                initialPosts={initialPosts}
+                initialHasNextPage={initialHasNextPage}
+                categories={categories}
+                ads={ads}
+                selectedCategory={selectedCategory}
+              />
             </Suspense>
           </div>
 
           <aside className="hidden lg:block">
             <div className="sticky top-24 space-y-6">
               <PwaInstallButton />
-              {pick(1) ? <AdBanner ad={pick(1)!} /> : null}
             </div>
           </aside>
         </div>
-
-        {pick(1) ? (
-          <div className="lg:hidden mt-8">
-            <AdBanner ad={pick(1)!} />
-          </div>
-        ) : null}
       </div>
     </div>
   );

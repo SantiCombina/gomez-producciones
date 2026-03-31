@@ -25,9 +25,7 @@ export function TopBar() {
     <div className="bg-foreground text-background/70">
       <div className="container">
         <div className="flex items-center justify-between h-9">
-          <span className="text-[10px] uppercase tracking-widest text-background/60">
-            Tu portal de noticias
-          </span>
+          <span className="text-[10px] uppercase tracking-widest text-background/60">Tu portal de noticias</span>
 
           <div className="flex items-center space-x-1">
             {socialLinks.map((social) => (

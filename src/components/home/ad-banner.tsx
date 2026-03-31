@@ -14,14 +14,8 @@ export function AdBanner({ ad, className = '' }: Props) {
 
   const content = (
     <Card className={`w-full overflow-hidden p-0 ${className}`}>
-      <div className="relative h-36 sm:h-40">
-        <ImageWithSkeleton
-          src={image.url}
-          alt={image.alt || ad.title}
-          fill
-          className="object-cover"
-          sizes="(max-width: 1024px) 100vw, 320px"
-        />
+      <div className="relative w-full aspect-1500/173">
+        <ImageWithSkeleton src={image.url} alt={image.alt || ad.title} fill className="object-contain" sizes="100vw" />
       </div>
     </Card>
   );

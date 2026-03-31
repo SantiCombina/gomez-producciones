@@ -26,7 +26,11 @@
       "mcp__stitch__create_project",
       "mcp__stitch__create_design_system",
       "mcp__stitch__generate_screen_from_text",
-      "mcp__stitch__get_project"
+      "mcp__stitch__get_project",
+      "Bash(find c:UserssantiDocumentsWorkspacegomez-produccionessrcapp -path *\\\\\\(frontend\\\\\\)/actions* -type f)",
+      "Bash(ls -la \"c:\\\\Users\\\\santi\\\\Documents\\\\Workspace\\\\gomez-producciones\\\\src\\\\app\\\\\\(frontend\\)\")",
+      "Bash(find \"c:\\\\Users\\\\santi\\\\Documents\\\\Workspace\\\\gomez-producciones\\\\src\\\\app\\\\\\(frontend\\)\" -type f -name \"*.ts\" -o -name \"*.tsx\")",
+      "Bash(ls \"c:\\\\Users\\\\santi\\\\Documents\\\\Workspace\\\\gomez-producciones\\\\src\\\\app\\\\\\(frontend\\)\")"
     ]
   }
 }

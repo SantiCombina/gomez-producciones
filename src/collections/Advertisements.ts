@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload';
 
-import { anyone, isAdmin } from './access';
+import { anyone, isAdminOrEditor } from './access';
 
 export const Advertisements: CollectionConfig = {
   slug: 'advertisements',
@@ -10,46 +10,50 @@ export const Advertisements: CollectionConfig = {
   },
   access: {
     read: anyone,
-    create: isAdmin,
-    update: isAdmin,
-    delete: isAdmin,
+    create: isAdminOrEditor,
+    update: isAdminOrEditor,
+    delete: isAdminOrEditor,
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'isActive', 'createdAt'],
+    defaultColumns: ['title', 'image', 'isActive', 'createdAt'],
   },
   fields: [
     {
       name: 'title',
-      label: 'Título',
+      label: 'Nombre del sponsor',
       type: 'text',
       required: true,
       admin: {
-        description: 'Nombre descriptivo para identificar esta publicidad',
+        description: 'Nombre descriptivo para identificar esta publicidad (ej: "Sponsor Marzo — Ferretería López")',
       },
     },
     {
       name: 'image',
-      label: 'Imagen Publicitaria',
+      label: 'Imagen del banner',
       type: 'upload',
       relationTo: 'media',
       required: true,
+      admin: {
+        description: 'Tamaño recomendado: 1500 × 173 px. Formatos aceptados: JPG, PNG o WebP.',
+      },
     },
     {
       name: 'link',
-      label: 'Enlace (opcional)',
+      label: 'Enlace al hacer click (opcional)',
       type: 'text',
       admin: {
-        description: 'URL a la que redirigirá al hacer click en la publicidad',
+        description: 'URL completa hacia donde va el sponsor (ej: https://ferreteria-lopez.com.ar)',
       },
     },
     {
       name: 'isActive',
-      label: 'Activa',
+      label: 'Publicidad activa',
       type: 'checkbox',
       defaultValue: true,
       admin: {
-        description: 'Solo las publicidades activas aparecerán en el sitio web',
+        description:
+          'Desactivá esta casilla para que el banner deje de aparecer en el sitio sin necesidad de borrarlo.',
       },
     },
   ],

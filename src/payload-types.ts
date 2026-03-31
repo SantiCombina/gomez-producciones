@@ -125,7 +125,7 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
-  role: 'admin' | 'user';
+  role: 'admin' | 'editor';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -220,16 +220,19 @@ export interface ArticleLabel {
 export interface Advertisement {
   id: number;
   /**
-   * Nombre descriptivo para identificar esta publicidad
+   * Nombre descriptivo para identificar esta publicidad (ej: "Sponsor Marzo — Ferretería López")
    */
   title: string;
+  /**
+   * Tamaño recomendado: 1500 × 173 px. Formatos aceptados: JPG, PNG o WebP.
+   */
   image: number | Media;
   /**
-   * URL a la que redirigirá al hacer click en la publicidad
+   * URL completa hacia donde va el sponsor (ej: https://ferreteria-lopez.com.ar)
    */
   link?: string | null;
   /**
-   * Solo las publicidades activas aparecerán en el sitio web
+   * Desactivá esta casilla para que el banner deje de aparecer en el sitio sin necesidad de borrarlo.
    */
   isActive?: boolean | null;
   updatedAt: string;
