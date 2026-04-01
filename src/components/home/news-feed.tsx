@@ -111,7 +111,7 @@ export function NewsFeed({ initialPosts, initialHasNextPage, categories, ads, se
             <>
               <Separator />
               <section>
-                <h2 className="text-2xl font-bold mb-6 pl-3 border-l-[3px] border-primary">Últimas Noticias</h2>
+                <h2 className="text-2xl font-bold mb-6 pl-3 border-l-[3px] border-primary">Últimas noticias</h2>
                 <div className="space-y-8">
                   {postChunks.map((chunk, chunkIndex) => (
                     <Fragment key={chunkIndex}>

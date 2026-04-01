@@ -138,7 +138,7 @@ export function ArticleImageGallery({ images }: Props) {
             variant="ghost"
             size="icon"
             onClick={close}
-            className="absolute top-4 right-4 text-white hover:bg-white/10 z-10 h-12 w-12"
+            className="absolute top-4 right-4 text-white hover:text-white hover:bg-white/10 z-10 h-12 w-12"
           >
             <XIcon className="h-7 w-7" />
           </Button>
@@ -152,7 +152,7 @@ export function ArticleImageGallery({ images }: Props) {
                   e.stopPropagation();
                   goPrev();
                 }}
-                className="absolute left-2 text-white hover:bg-white/10 z-10 h-12 w-12"
+                className="absolute left-2 text-white hover:text-white hover:bg-white/10 z-10 h-12 w-12"
               >
                 <ChevronLeftIcon className="h-6 w-6" />
               </Button>
@@ -163,7 +163,7 @@ export function ArticleImageGallery({ images }: Props) {
                   e.stopPropagation();
                   goNext();
                 }}
-                className="absolute right-2 text-white hover:bg-white/10 z-10 h-12 w-12"
+                className="absolute right-2 text-white hover:text-white hover:bg-white/10 z-10 h-12 w-12"
               >
                 <ChevronRightIcon className="h-6 w-6" />
               </Button>

@@ -1,6 +1,7 @@
 import { getPosts, getPostsByCategory } from '@/app/services/post';
-import { NewsCard } from '@/components/home/news-card';
 import type { Post } from '@/payload-types';
+
+import { RelatedNewsCarousel } from './related-news-carousel';
 
 interface RelatedNewsProps {
   currentPost: Post;
@@ -15,7 +16,7 @@ export async function RelatedNews({ currentPost }: RelatedNewsProps) {
         : null;
 
   const [categoryPosts, recentResult] = await Promise.all([
-    categoryId ? getPostsByCategory(categoryId, 5) : Promise.resolve([]),
+    categoryId ? getPostsByCategory(categoryId, 7) : Promise.resolve([]),
     getPosts({ limit: 5 }),
   ]);
 
@@ -25,10 +26,10 @@ export async function RelatedNews({ currentPost }: RelatedNewsProps) {
   let relatedPosts: Post[];
 
   if (filtered.length >= 2) {
-    relatedPosts = filtered.slice(0, 4);
+    relatedPosts = filtered.slice(0, 6);
   } else {
     const fallback = recentDocs.filter((p) => p.id !== currentPost.id && !filtered.some((r) => r.id === p.id));
-    relatedPosts = [...filtered, ...fallback].slice(0, 4);
+    relatedPosts = [...filtered, ...fallback].slice(0, 6);
   }
 
   if (relatedPosts.length === 0) {
@@ -37,12 +38,8 @@ export async function RelatedNews({ currentPost }: RelatedNewsProps) {
 
   return (
     <section>
-      <h2 className="text-2xl font-bold mb-6">Noticias Relacionadas</h2>
-      <div className="grid gap-6 sm:grid-cols-2">
-        {relatedPosts.map((post) => (
-          <NewsCard key={post.id} post={post} />
-        ))}
-      </div>
+      <h2 className="text-2xl font-bold mb-6 pl-3 border-l-[3px] border-primary">Noticias relacionadas</h2>
+      <RelatedNewsCarousel posts={relatedPosts} />
     </section>
   );
 }
