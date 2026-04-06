@@ -43,7 +43,7 @@ export function ArticleImageGallery({ images }: Props) {
 
   if (images.length === 0) {
     return (
-      <div className="aspect-[16/9] w-full rounded-lg bg-muted flex flex-col items-center justify-center gap-2 text-muted-foreground">
+      <div className="aspect-video w-full rounded-lg bg-muted flex flex-col items-center justify-center gap-2 text-muted-foreground">
         <ImageIcon className="h-10 w-10 opacity-40" />
         <span className="text-sm font-medium">Noticia sin imagen</span>
       </div>
@@ -59,7 +59,7 @@ export function ArticleImageGallery({ images }: Props) {
         <button
           type="button"
           onClick={() => setSelectedIndex(0)}
-          className="relative aspect-[16/9] w-full overflow-hidden rounded-lg group cursor-zoom-in"
+          className="relative aspect-video w-full overflow-hidden rounded-lg group cursor-zoom-in"
           aria-label="Ver imagen completa"
         >
           <ImageWithSkeleton
@@ -80,7 +80,7 @@ export function ArticleImageGallery({ images }: Props) {
             <button
               type="button"
               onClick={() => setSelectedIndex(0)}
-              className="relative overflow-hidden rounded-lg group cursor-zoom-in aspect-[4/3]"
+              className="relative overflow-hidden rounded-lg group cursor-zoom-in aspect-4/3"
               aria-label="Ver imagen completa"
             >
               <ImageWithSkeleton

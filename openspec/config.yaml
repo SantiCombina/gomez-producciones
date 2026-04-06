@@ -1,0 +1,53 @@
+schema: spec-driven
+
+context: |
+  Tech stack: Next.js 15, React 19, Payload CMS 3, PostgreSQL (Neon), Tailwind CSS 4, shadcn/ui
+  Architecture: Monorepo Next.js app with route groups — (frontend) public pages, (payload) admin/API
+  Data flow: Server Components → next-safe-action → Payload local API → Neon PostgreSQL
+  Storage: Uploadthing for media; CMS collections: Posts, Users, Media, ArticleLabels, Advertisements
+  Style: ESLint (eslint-config-next + prettier), TypeScript strict, pnpm
+
+strict_tdd: false
+
+testing:
+  strict_tdd: false
+  detected: "2026-04-06"
+  test_runner:
+    available: false
+    command: null
+    framework: null
+  layers:
+    unit: { available: false, tool: null }
+    integration: { available: false, tool: null }
+    e2e: { available: false, tool: null }
+  coverage:
+    available: false
+    command: null
+  quality_tools:
+    linter: { available: true, command: "pnpm lint" }
+    type_checker: { available: true, command: "tsc --noEmit" }
+    formatter: { available: true, command: "prettier --write ." }
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+    - Identify affected collections and frontend routes
+  specs:
+    - Use Given/When/Then format for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+  design:
+    - Include sequence diagrams for complex data flows
+    - Document architecture decisions with rationale
+  tasks:
+    - Group tasks by phase (infrastructure, implementation, testing)
+    - Use hierarchical numbering (1.1, 1.2, etc.)
+    - Keep tasks small enough to complete in one session
+  apply:
+    - Follow existing code patterns and conventions
+    - Run pnpm generate:types after modifying Payload collections
+    - Prefer server actions with next-safe-action + Zod validation
+  verify:
+    - Run pnpm lint and pnpm build to validate changes
+    - Compare implementation against every spec scenario
+  archive:
+    - Warn before merging destructive deltas (large removals)
