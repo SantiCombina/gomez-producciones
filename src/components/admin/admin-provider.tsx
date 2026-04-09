@@ -4,12 +4,13 @@ import { HomeIcon, PlusIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
-import { getArticleLabelsAction } from '@/components/home/create-post/actions';
+import { getArticleLabelsAction, getLocationsAction } from '@/components/home/create-post/actions';
+import type { PostDraft } from '@/components/home/create-post/post-dialog';
 import { PostDialog } from '@/components/home/create-post/post-dialog';
 import { Dialog } from '@/components/ui/dialog';
-import type { ArticleLabel } from '@/payload-types';
+import type { ArticleLabel, Location } from '@/payload-types';
 
 const css = `
   .gp-fab-wrap {
@@ -82,14 +83,21 @@ const css = `
 export function AdminProvider({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const [categories, setCategories] = useState<ArticleLabel[]>([]);
+  const [locations, setLocations] = useState<Location[]>([]);
+  const draftRef = useRef<PostDraft>({ title: '', description: '', images: [], imagePreviews: [] });
   const { executeAsync } = useAction(getArticleLabelsAction);
+  const { executeAsync: executeLocations } = useAction(getLocationsAction);
   const pathname = usePathname();
   const isAdmin = pathname?.startsWith('/admin');
 
   async function handlePublish() {
-    if (categories.length === 0) {
-      const result = await executeAsync();
-      if (result?.data) setCategories(result.data as ArticleLabel[]);
+    if (categories.length === 0 || locations.length === 0) {
+      const [catResult, locResult] = await Promise.all([
+        categories.length === 0 ? executeAsync() : Promise.resolve(null),
+        locations.length === 0 ? executeLocations() : Promise.resolve(null),
+      ]);
+      if (catResult?.data) setCategories(catResult.data as ArticleLabel[]);
+      if (locResult?.data) setLocations(locResult.data as Location[]);
     }
     setOpen(true);
   }
@@ -115,7 +123,14 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <PostDialog onSuccess={() => setOpen(false)} initialCategories={categories} />
+        <PostDialog
+          onSuccess={() => setOpen(false)}
+          onClose={() => setOpen(false)}
+          initialCategories={categories}
+          initialLocations={locations}
+          draft={draftRef.current}
+          onUnmount={(d) => { draftRef.current = d; }}
+        />
       </Dialog>
     </>
   );

@@ -64,7 +64,7 @@ export function Footer() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 lg:contents">
+          <div className="grid grid-cols-[2fr_3fr] lg:contents">
             <div>
               <h3 className="font-medium text-sm uppercase tracking-widest mb-3 text-background/40">Navegación</h3>
               <ul className="space-y-2">
@@ -116,7 +116,7 @@ export function Footer() {
 
         <Separator className="bg-background/10 my-4" />
 
-        <div className="flex items-center justify-between flex-wrap gap-3">
+        <div className="flex flex-col items-center gap-2">
           <p className="text-background/30 text-xs">
             © {currentYear} Gómez Producciones | Todos los derechos reservados
           </p>

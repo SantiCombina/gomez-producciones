@@ -1,6 +1,6 @@
 'use client';
 
-import { ImageIcon, XIcon, ZoomInIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { ImageIcon, XIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -66,13 +66,10 @@ export function ArticleImageGallery({ images }: Props) {
             src={main.url!}
             alt={main.alt || ''}
             fill
-            className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+            className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 900px"
             priority
           />
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-300 flex items-center justify-center">
-            <ZoomInIcon className="h-8 w-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg" />
-          </div>
         </button>
       ) : (
         <div className="space-y-2">
@@ -87,13 +84,10 @@ export function ArticleImageGallery({ images }: Props) {
                 src={main.url!}
                 alt={main.alt || ''}
                 fill
-                className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                className="object-cover"
                 sizes="(max-width: 768px) 66vw, 50vw"
                 priority
               />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-300 flex items-center justify-center">
-                <ZoomInIcon className="h-7 w-7 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg" />
-              </div>
             </button>
 
             <div
@@ -114,15 +108,13 @@ export function ArticleImageGallery({ images }: Props) {
                       src={img.url!}
                       alt={img.alt || ''}
                       fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                      className="object-cover"
                       sizes="(max-width: 768px) 33vw, 20vw"
                     />
-                    {isLast ? (
+                    {isLast && (
                       <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
                         <span className="text-white font-bold text-lg">+{extras.length - 3}</span>
                       </div>
-                    ) : (
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-300" />
                     )}
                   </button>
                 );

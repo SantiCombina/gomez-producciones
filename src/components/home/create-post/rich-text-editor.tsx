@@ -17,6 +17,12 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
+const EDITOR_DRAFT_KEY = 'post-editor-draft';
+
+export function clearEditorDraft() {
+  if (typeof window !== 'undefined') sessionStorage.removeItem(EDITOR_DRAFT_KEY);
+}
+
 function ToolbarButton({
   active,
   onClick,
@@ -41,6 +47,20 @@ function ToolbarButton({
       {children}
     </button>
   );
+}
+
+function DraftPlugin() {
+  const [editor] = useLexicalComposerContext();
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem(EDITOR_DRAFT_KEY);
+    if (!saved) return;
+    try {
+      editor.setEditorState(editor.parseEditorState(saved));
+    } catch {}
+  }, []);
+
+  return null;
 }
 
 function Toolbar() {
@@ -111,7 +131,9 @@ export function RichTextEditor({ onChange }: Props) {
 
   const handleChange = useCallback(
     (editorState: EditorState) => {
-      onChange(JSON.stringify(editorState.toJSON()));
+      const json = JSON.stringify(editorState.toJSON());
+      sessionStorage.setItem(EDITOR_DRAFT_KEY, json);
+      onChange(json);
     },
     [onChange],
   );
@@ -136,6 +158,7 @@ export function RichTextEditor({ onChange }: Props) {
         <HistoryPlugin />
         <ListPlugin />
         <OnChangePlugin onChange={handleChange} />
+        <DraftPlugin />
       </div>
     </LexicalComposer>
   );

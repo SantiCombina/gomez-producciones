@@ -24,6 +24,7 @@ export function CreatePostTrigger({ user, initialCategories, initialLocations }:
       </DialogTrigger>
       <PostDialog
         onSuccess={() => setOpen(false)}
+        onClose={() => setOpen(false)}
         initialCategories={initialCategories}
         initialLocations={initialLocations}
       />

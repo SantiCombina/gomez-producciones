@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog } from '@/components/ui/dialog';
 import type { ArticleLabel, Location } from '@/payload-types';
 
+import type { PostDraft } from './create-post/post-dialog';
 import { PostDialog } from './create-post/post-dialog';
 
 export function FloatingActions() {
@@ -20,6 +21,7 @@ export function FloatingActions() {
   const [categories, setCategories] = useState<ArticleLabel[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
   const menuRef = useRef<HTMLDivElement>(null);
+  const draftRef = useRef<PostDraft>({ title: '', description: '', images: [], imagePreviews: [] });
 
   const router = useRouter();
   const { executeAsync: logout, isPending } = useAction(logoutAction);
@@ -68,7 +70,7 @@ export function FloatingActions() {
             <Link
               href="/admin"
               onClick={() => setMenuOpen(false)}
-              className="flex items-center gap-2.5 rounded-full border bg-white px-4 py-2.5 text-sm font-medium text-foreground shadow-md transition-colors hover:bg-muted no-underline"
+              className="flex items-center gap-2.5 rounded-full border bg-white px-4 py-2.5 text-sm font-medium text-foreground shadow-md transition-colors hover:bg-gray-100 no-underline"
             >
               <LayoutDashboardIcon size={16} />
               Ir al panel
@@ -91,7 +93,7 @@ export function FloatingActions() {
             variant="outline"
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Más opciones"
-            className="size-8 rounded-full shadow-md bg-white/90 hover:bg-muted"
+            className="size-8 rounded-full shadow-md bg-white/90 hover:bg-gray-100"
           >
             {menuOpen ? <XIcon size={12} /> : <MoreHorizontalIcon size={12} />}
           </Button>
@@ -106,8 +108,11 @@ export function FloatingActions() {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <PostDialog
           onSuccess={() => setDialogOpen(false)}
+          onClose={() => setDialogOpen(false)}
           initialCategories={categories}
           initialLocations={locations}
+          draft={draftRef.current}
+          onUnmount={(d) => { draftRef.current = d; }}
         />
       </Dialog>
     </>

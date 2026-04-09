@@ -1,11 +1,11 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2Icon } from 'lucide-react';
+import { Loader2Icon, XIcon } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
@@ -19,40 +19,113 @@ import type { ArticleLabel, Location } from '@/payload-types';
 import { createPostAction } from './actions';
 import { CategorySelect } from './category-select';
 import { createPostSchema, type CreatePostValues } from './create-post-schema';
+import { DiscardConfirm } from './discard-confirm';
 import { ImageUploader } from './image-uploader';
 import { LocationSelect } from './location-select';
+import { clearEditorDraft } from './rich-text-editor';
 
 const RichTextEditor = dynamic(() => import('./rich-text-editor').then((m) => m.RichTextEditor), {
   ssr: false,
   loading: () => <div className="h-50 rounded-md border bg-muted/30 animate-pulse" />,
 });
 
-interface Props {
-  onSuccess: () => void;
-  initialCategories: ArticleLabel[];
-  initialLocations: Location[];
+export interface PostDraft {
+  title: string;
+  description: string;
+  body?: string;
+  categoryId?: number;
+  locationId?: number;
+  images: File[];
+  imagePreviews: string[];
 }
 
-export function PostDialog({ onSuccess, initialCategories, initialLocations }: Props) {
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+interface Props {
+  onSuccess: () => void;
+  onClose: () => void;
+  initialCategories: ArticleLabel[];
+  initialLocations: Location[];
+  draft?: PostDraft;
+  onUnmount?: (draft: PostDraft) => void;
+}
+
+export function PostDialog({ onSuccess, onClose, initialCategories, initialLocations, draft, onUnmount }: Props) {
+  const [imagePreviews, setImagePreviews] = useState<string[]>(draft?.imagePreviews ?? []);
   const [isDragging, setIsDragging] = useState(false);
   const [isCompressing, setIsCompressing] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const dragCounterRef = useRef(0);
+  const imagePreviewsRef = useRef(imagePreviews);
+  const submittedRef = useRef(false);
+  const discardedRef = useRef(false);
   const router = useRouter();
 
   const form = useForm<CreatePostValues>({
     resolver: zodResolver(createPostSchema),
     defaultValues: {
-      title: '',
-      description: '',
-      body: undefined,
-      categoryId: undefined,
-      locationId: undefined,
-      images: [],
+      title: draft?.title ?? '',
+      description: draft?.description ?? '',
+      body: draft?.body,
+      categoryId: draft?.categoryId,
+      locationId: draft?.locationId,
+      images: draft?.images ?? [],
     },
   });
 
+  useEffect(() => {
+    imagePreviewsRef.current = imagePreviews;
+  }, [imagePreviews]);
+
+  useEffect(() => {
+    return () => {
+      if (submittedRef.current || !onUnmount) return;
+      if (discardedRef.current) {
+        onUnmount({ title: '', description: '', images: [], imagePreviews: [] });
+        return;
+      }
+      onUnmount({
+        title: form.getValues('title'),
+        description: form.getValues('description'),
+        body: form.getValues('body'),
+        categoryId: form.getValues('categoryId'),
+        locationId: form.getValues('locationId'),
+        images: form.getValues('images') ?? [],
+        imagePreviews: imagePreviewsRef.current,
+      });
+    };
+  }, []);
+
   const { executeAsync, isPending } = useAction(createPostAction);
+
+  function hasContent() {
+    const { title, description, images } = form.getValues();
+    const hasEditorDraft = !!sessionStorage.getItem('post-editor-draft');
+    return !!(title || description || (images && images.length > 0) || hasEditorDraft);
+  }
+
+  function attemptClose() {
+    if (hasContent()) {
+      setShowConfirm(true);
+    } else {
+      onClose();
+    }
+  }
+
+  function handleContinue() {
+    setShowConfirm(false);
+  }
+
+  function handleDiscard() {
+    discardedRef.current = true;
+    clearEditorDraft();
+    imagePreviews.forEach((url) => URL.revokeObjectURL(url));
+    setShowConfirm(false);
+    onClose();
+  }
+
+  function handleSave() {
+    setShowConfirm(false);
+    onClose();
+  }
 
   function addImages(files: File[]) {
     const current = form.getValues('images') ?? [];
@@ -110,6 +183,8 @@ export function PostDialog({ onSuccess, initialCategories, initialLocations }: P
   async function onSubmit(values: CreatePostValues) {
     const result = await executeAsync(values);
     if (result?.data) {
+      submittedRef.current = true;
+      clearEditorDraft();
       form.reset();
       imagePreviews.forEach((url) => URL.revokeObjectURL(url));
       setImagePreviews([]);
@@ -119,65 +194,45 @@ export function PostDialog({ onSuccess, initialCategories, initialLocations }: P
   }
 
   return (
-    <DialogContent
-      className="sm:max-w-lg flex flex-col max-h-[88vh] p-0 gap-0"
-      onDragOver={handleDragOver}
-      onDragEnter={handleDragEnter}
-      onDragLeave={handleDragLeave}
-      onDrop={handleDrop}
-    >
-      <DialogHeader className="shrink-0 px-6 pt-5 pb-4 border-b">
-        <DialogTitle className="text-center text-lg font-semibold">Nueva publicación</DialogTitle>
-      </DialogHeader>
+    <>
+      <DialogContent
+        className="inset-0 translate-x-0 translate-y-0 max-w-none rounded-none h-full max-h-full flex flex-col p-0 gap-0 data-[state=open]:max-sm:slide-in-from-bottom data-[state=closed]:max-sm:slide-out-to-bottom sm:inset-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:max-w-lg sm:h-auto sm:max-h-[88vh] sm:rounded-lg"
+        showCloseButton={false}
+        onInteractOutside={(e) => {
+          e.preventDefault();
+          attemptClose();
+        }}
+        onEscapeKeyDown={(e) => {
+          e.preventDefault();
+          attemptClose();
+        }}
+        onDragOver={handleDragOver}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
+        <DialogHeader className="shrink-0 px-6 pt-5 pb-4 border-b">
+          <DialogTitle className="text-center text-lg font-semibold">Nueva publicación</DialogTitle>
+          <button
+            type="button"
+            onClick={attemptClose}
+            className="absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100"
+            aria-label="Cerrar"
+          >
+            <XIcon className="h-4 w-4" />
+          </button>
+        </DialogHeader>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col flex-1 min-h-0 overflow-hidden">
-          <div className="overflow-y-auto flex-1 min-h-0 px-6 pt-4 pb-1 space-y-3">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input placeholder="Título de la publicación..." className="bg-white" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Extracto o resumen corto..."
-                      className="resize-none bg-white min-h-15 max-h-30 overflow-y-auto"
-                      style={{ fieldSizing: 'content' } as React.CSSProperties}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <RichTextEditor onChange={handleBodyChange} />
-
-            <div className="flex gap-2">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="overflow-y-auto flex-1 min-h-0 px-6 pt-4 pb-1 space-y-3">
               <FormField
                 control={form.control}
-                name="categoryId"
+                name="title"
                 render={({ field }) => (
-                  <FormItem className="flex-1 min-w-0">
+                  <FormItem>
                     <FormControl>
-                      <CategorySelect
-                        initialCategories={initialCategories.map((c) => ({ id: c.id, name: c.name }))}
-                        value={field.value}
-                        onChange={field.onChange}
-                      />
+                      <Input placeholder="Título de la publicación..." className="bg-white" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -186,45 +241,91 @@ export function PostDialog({ onSuccess, initialCategories, initialLocations }: P
 
               <FormField
                 control={form.control}
-                name="locationId"
+                name="description"
                 render={({ field }) => (
-                  <FormItem className="flex-1 min-w-0">
+                  <FormItem>
                     <FormControl>
-                      <LocationSelect
-                        initialLocations={initialLocations.map((l) => ({ id: l.id, name: l.name }))}
-                        value={field.value}
-                        onChange={field.onChange}
+                      <Textarea
+                        placeholder="Extracto o resumen corto..."
+                        className="resize-none bg-white min-h-15 max-h-30 overflow-y-auto"
+                        style={{ fieldSizing: 'content' } as React.CSSProperties}
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
+              />
+
+              <RichTextEditor onChange={handleBodyChange} />
+
+              <div className="flex flex-col sm:flex-row gap-2">
+                <FormField
+                  control={form.control}
+                  name="categoryId"
+                  render={({ field }) => (
+                    <FormItem className="flex-1 min-w-0">
+                      <FormControl>
+                        <CategorySelect
+                          initialCategories={initialCategories.map((c) => ({ id: c.id, name: c.name }))}
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="locationId"
+                  render={({ field }) => (
+                    <FormItem className="flex-1 min-w-0">
+                      <FormControl>
+                        <LocationSelect
+                          initialLocations={initialLocations.map((l) => ({ id: l.id, name: l.name }))}
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <ImageUploader
+                previews={imagePreviews}
+                onChange={addImages}
+                onRemove={handleImageRemove}
+                isDragging={isDragging}
+                isCompressing={isCompressing}
               />
             </div>
 
-            <ImageUploader
-              previews={imagePreviews}
-              onChange={addImages}
-              onRemove={handleImageRemove}
-              isDragging={isDragging}
-              isCompressing={isCompressing}
-            />
-          </div>
+            <div className="shrink-0 px-6 pb-4">
+              <Button type="submit" className="w-full" disabled={isPending || !form.watch('title')}>
+                {isPending ? (
+                  <>
+                    <Loader2Icon className="h-4 w-4 animate-spin" />
+                    Publicando...
+                  </>
+                ) : (
+                  'Publicar'
+                )}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
 
-          <div className="shrink-0 px-6 pb-4">
-            <Button type="submit" className="w-full" disabled={isPending || !form.watch('title')}>
-              {isPending ? (
-                <>
-                  <Loader2Icon className="h-4 w-4 animate-spin" />
-                  Publicando...
-                </>
-              ) : (
-                'Publicar'
-              )}
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </DialogContent>
+      <DiscardConfirm
+        open={showConfirm}
+        onContinue={handleContinue}
+        onDiscard={handleDiscard}
+        onSave={handleSave}
+      />
+    </>
   );
 }

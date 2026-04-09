@@ -43,7 +43,10 @@ export function NewsFeed({ initialPosts, initialHasNextPage, categories, ads, se
   const { execute, isExecuting } = useAction(loadMorePostsAction, {
     onSuccess: ({ data }) => {
       if (!data) return;
-      setPosts((prev) => [...prev, ...data.docs]);
+      setPosts((prev) => {
+        const existingIds = new Set(prev.map((p) => p.id));
+        return [...prev, ...data.docs.filter((p) => !existingIds.has(p.id))];
+      });
       setPage((prev) => prev + 1);
       setHasMore(data.hasNextPage);
     },
