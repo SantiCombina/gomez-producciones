@@ -84,7 +84,7 @@ export function PostDialog({ onSuccess, onClose, initialCategories, initialLocat
       }
       onUnmount({
         title: form.getValues('title'),
-        description: form.getValues('description'),
+        description: form.getValues('description') ?? '',
         body: form.getValues('body'),
         categoryId: form.getValues('categoryId'),
         locationId: form.getValues('locationId'),
