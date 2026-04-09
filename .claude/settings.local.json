@@ -32,7 +32,8 @@
       "Bash(find \"c:\\\\Users\\\\santi\\\\Documents\\\\Workspace\\\\gomez-producciones\\\\src\\\\app\\\\\\(frontend\\)\" -type f -name \"*.ts\" -o -name \"*.tsx\")",
       "Bash(ls \"c:\\\\Users\\\\santi\\\\Documents\\\\Workspace\\\\gomez-producciones\\\\src\\\\app\\\\\\(frontend\\)\")",
       "Bash(npx shadcn@latest add skeleton --yes)",
-      "Bash(npx shadcn@latest:*)"
+      "Bash(npx shadcn@latest:*)",
+      "mcp__ide__getDiagnostics"
     ]
   }
 }

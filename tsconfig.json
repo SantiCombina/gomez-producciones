@@ -1,8 +1,6 @@
 {
   "compilerOptions": {
-    "ignoreDeprecations": "6.0",
-    "baseUrl": ".",
-    "lib": [
+"lib": [
       "DOM",
       "DOM.Iterable",
       "ES2022"
@@ -31,7 +29,7 @@
         "./src/payload.config.ts"
       ]
     },
-    "target": "ES2022",
+    "target": "ES2022"
   },
   "include": [
     "next-env.d.ts",
