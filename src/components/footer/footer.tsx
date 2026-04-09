@@ -116,7 +116,15 @@ export function Footer() {
 
         <Separator className="bg-background/10 my-4" />
 
-        <p className="text-background/30 text-xs">© {currentYear} Gómez Producciones | Todos los derechos reservados</p>
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <p className="text-background/30 text-xs">
+            © {currentYear} Gómez Producciones | Todos los derechos reservados
+          </p>
+          <a href="https://forge.ar" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
+            <span className="text-background/30 text-xs">Un desarrollo de</span>
+            <Image src="/Forge.png" alt="Forge" width={56} height={16} className="h-6 w-auto" />
+          </a>
+        </div>
       </div>
     </footer>
   );

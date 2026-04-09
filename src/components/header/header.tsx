@@ -36,7 +36,7 @@ export async function Header() {
           </div>
         </div>
       </header>
-      {user && <FloatingActions user={user} />}
+      {user && <FloatingActions />}
     </>
   );
 }

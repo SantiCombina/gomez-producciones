@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckIcon, ChevronDownIcon, Loader2Icon, PlusIcon, TagIcon, XIcon } from 'lucide-react';
+import { CheckIcon, ChevronDownIcon, Loader2Icon, MapPinIcon, PlusIcon, XIcon } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
 import { useRef, useState } from 'react';
 
@@ -8,38 +8,38 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
-import { createArticleLabelAction } from './actions';
+import { createLocationAction } from './actions';
 
-interface Category {
+interface LocationOption {
   id: number;
   name: string;
 }
 
 interface Props {
-  initialCategories: Category[];
+  initialLocations: LocationOption[];
   value: number | undefined;
   onChange: (value: number | undefined) => void;
 }
 
-export function CategorySelect({ initialCategories, value, onChange }: Props) {
+export function LocationSelect({ initialLocations, value, onChange }: Props) {
   const [open, setOpen] = useState(false);
-  const [categories, setCategories] = useState(() =>
-    [...initialCategories].sort((a, b) => a.name.localeCompare(b.name, 'es')),
+  const [locations, setLocations] = useState(() =>
+    [...initialLocations].sort((a, b) => a.name.localeCompare(b.name, 'es')),
   );
   const [creating, setCreating] = useState(false);
   const [newName, setNewName] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { executeAsync, isPending } = useAction(createArticleLabelAction);
+  const { executeAsync, isPending } = useAction(createLocationAction);
 
-  const selected = categories.find((c) => c.id === value);
+  const selected = locations.find((l) => l.id === value);
 
   async function handleCreate() {
     if (!newName.trim()) return;
     const result = await executeAsync({ name: newName.trim() });
     if (result?.data) {
       const created = { id: result.data.id, name: result.data.name };
-      setCategories((prev) => [...prev, created].sort((a, b) => a.name.localeCompare(b.name, 'es')));
+      setLocations((prev) => [...prev, created].sort((a, b) => a.name.localeCompare(b.name, 'es')));
       onChange(created.id);
       setNewName('');
       setCreating(false);
@@ -72,9 +72,9 @@ export function CategorySelect({ initialCategories, value, onChange }: Props) {
             variant="outline"
             className="flex-1 justify-start gap-2 font-normal bg-white hover:bg-zinc-100 min-w-0"
           >
-            <TagIcon className="h-4 w-4 text-muted-foreground shrink-0" />
+            <MapPinIcon className="h-4 w-4 text-muted-foreground shrink-0" />
             <span className={`truncate ${selected ? 'text-foreground' : 'text-muted-foreground'}`}>
-              {selected ? selected.name : 'Categoría (opcional)'}
+              {selected ? selected.name : 'Ubicación (opcional)'}
             </span>
             <ChevronDownIcon className="h-4 w-4 text-muted-foreground shrink-0 ml-auto" />
           </Button>
@@ -91,7 +91,7 @@ export function CategorySelect({ initialCategories, value, onChange }: Props) {
               className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-muted transition-colors text-left text-muted-foreground"
             >
               <PlusIcon className="h-3.5 w-3.5 shrink-0" />
-              Crear categoría
+              Crear ubicación
             </button>
           ) : (
             <div className="flex gap-1.5 p-1 min-w-0">
@@ -126,20 +126,20 @@ export function CategorySelect({ initialCategories, value, onChange }: Props) {
             </div>
           )}
 
-          {categories.length > 0 && <div className="h-px bg-border my-1" />}
+          {locations.length > 0 && <div className="h-px bg-border my-1" />}
 
-          {categories.map((cat) => (
+          {locations.map((loc) => (
             <button
-              key={cat.id}
+              key={loc.id}
               type="button"
               onClick={() => {
-                onChange(cat.id);
+                onChange(loc.id);
                 setOpen(false);
               }}
               className="w-full flex items-center justify-between gap-2 px-3 py-2 text-sm rounded-md hover:bg-muted transition-colors text-left"
             >
-              {cat.name}
-              <CheckIcon className={`h-3.5 w-3.5 shrink-0 ${value === cat.id ? 'opacity-100' : 'opacity-0'}`} />
+              {loc.name}
+              <CheckIcon className={`h-3.5 w-3.5 shrink-0 ${value === loc.id ? 'opacity-100' : 'opacity-0'}`} />
             </button>
           ))}
         </PopoverContent>

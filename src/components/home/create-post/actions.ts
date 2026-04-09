@@ -3,6 +3,7 @@
 import { z } from 'zod';
 
 import { createArticleLabel, getArticleLabels } from '@/app/services/article-labels';
+import { createLocation, getLocations } from '@/app/services/locations';
 import { createMedia } from '@/app/services/media';
 import { createPost } from '@/app/services/post';
 import { ActionError, authActionClient } from '@/lib/safe-action-client';
@@ -32,6 +33,7 @@ export const createPostAction = authActionClient.schema(createPostSchema).action
     description: parsedInput.description,
     body,
     category: parsedInput.categoryId,
+    location: parsedInput.locationId,
     featuredImage: featuredImageId,
     images: galleryImageIds.length > 0 ? galleryImageIds : undefined,
   });
@@ -51,4 +53,14 @@ export const createArticleLabelAction = authActionClient
   .schema(z.object({ name: z.string().min(1) }))
   .action(async ({ parsedInput }) => {
     return await createArticleLabel(parsedInput.name);
+  });
+
+export const getLocationsAction = authActionClient.action(async () => {
+  return await getLocations();
+});
+
+export const createLocationAction = authActionClient
+  .schema(z.object({ name: z.string().min(1) }))
+  .action(async ({ parsedInput }) => {
+    return await createLocation(parsedInput.name);
   });

@@ -10,6 +10,7 @@ export const createPost = async (data: {
   description?: string;
   body?: Post['body'];
   category?: number;
+  location?: number;
   featuredImage?: number;
   images?: { image: number }[];
 }) => {

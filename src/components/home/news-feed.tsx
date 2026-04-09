@@ -1,12 +1,13 @@
 'use client';
 
-import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { loadMorePostsAction } from '@/app/(frontend)/actions/posts';
+import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
 import type { Advertisement, ArticleLabel, Post } from '@/payload-types';
 
 import { AdBanner } from './ad-banner';
@@ -137,8 +138,22 @@ export function NewsFeed({ initialPosts, initialHasNextPage, categories, ads, se
       <div ref={sentinelRef} className="h-1" />
 
       {isExecuting && (
-        <div className="flex justify-center py-8">
-          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        <div className="grid gap-5 sm:gap-8 sm:grid-cols-2 mt-8">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Card key={i} className="overflow-hidden p-0 py-0 flex flex-col gap-0 border-border/60">
+              <Skeleton className="w-full aspect-video" />
+              <CardContent className="p-4 md:p-5 flex flex-col gap-2.5">
+                <div className="flex items-center justify-between gap-2">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-5 w-20 rounded-full" />
+                </div>
+                <Skeleton className="h-5 w-full" />
+                <Skeleton className="h-5 w-3/4" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-5/6" />
+              </CardContent>
+            </Card>
+          ))}
         </div>
       )}
     </>

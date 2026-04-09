@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     posts: Post;
     'article-labels': ArticleLabel;
+    locations: Location;
     advertisements: Advertisement;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,6 +83,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     'article-labels': ArticleLabelsSelect<false> | ArticleLabelsSelect<true>;
+    locations: LocationsSelect<false> | LocationsSelect<true>;
     advertisements: AdvertisementsSelect<false> | AdvertisementsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -193,6 +195,7 @@ export interface Post {
     [k: string]: unknown;
   } | null;
   category?: (number | null) | ArticleLabel;
+  location?: (number | null) | Location;
   featuredImage?: (number | null) | Media;
   images?:
     | {
@@ -200,6 +203,14 @@ export interface Post {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Publica automáticamente en la página de Facebook al guardar.
+   */
+  postToFacebook?: boolean | null;
+  /**
+   * Publica en Instagram al guardar. Requiere imagen principal.
+   */
+  postToInstagram?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -208,6 +219,16 @@ export interface Post {
  * via the `definition` "article-labels".
  */
 export interface ArticleLabel {
+  id: number;
+  name: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "locations".
+ */
+export interface Location {
   id: number;
   name: string;
   updatedAt: string;
@@ -260,6 +281,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'article-labels';
         value: number | ArticleLabel;
+      } | null)
+    | ({
+        relationTo: 'locations';
+        value: number | Location;
       } | null)
     | ({
         relationTo: 'advertisements';
@@ -360,6 +385,7 @@ export interface PostsSelect<T extends boolean = true> {
   description?: T;
   body?: T;
   category?: T;
+  location?: T;
   featuredImage?: T;
   images?:
     | T
@@ -367,6 +393,8 @@ export interface PostsSelect<T extends boolean = true> {
         image?: T;
         id?: T;
       };
+  postToFacebook?: T;
+  postToInstagram?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -375,6 +403,15 @@ export interface PostsSelect<T extends boolean = true> {
  * via the `definition` "article-labels_select".
  */
 export interface ArticleLabelsSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "locations_select".
+ */
+export interface LocationsSelect<T extends boolean = true> {
   name?: T;
   updatedAt?: T;
   createdAt?: T;

@@ -1,4 +1,4 @@
-import { ImageIcon } from 'lucide-react';
+import { ImageIcon, MapPinIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import { Badge } from '@/components/ui/badge';
@@ -36,9 +36,11 @@ export function FeaturedNews({ posts }: Props) {
         <MainCard post={main} />
 
         {secondary.length > 0 && (
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-5 h-full">
             {secondary.map((post) => (
-              <SecondaryCard key={post.id} post={post} />
+              <div key={post.id} className="flex-1 min-h-0">
+                <SecondaryCard post={post} />
+              </div>
             ))}
           </div>
         )}
@@ -49,6 +51,7 @@ export function FeaturedNews({ posts }: Props) {
 
 function MainCard({ post }: { post: Post }) {
   const category = typeof post.category === 'object' && post.category ? post.category : null;
+  const location = typeof post.location === 'object' && post.location ? post.location : null;
   const images = getImages(post);
   const slug = (post as PostWithSlug).slug ?? String(post.id);
 
@@ -70,12 +73,20 @@ function MainCard({ post }: { post: Post }) {
           )}
         </div>
 
-        <CardContent className="p-5 md:p-6 space-y-2.5 flex-1 flex flex-col">
-          <div className="flex items-center gap-3">
-            <time className="text-sm text-muted-foreground">{formatDate(post.createdAt)}</time>
+        <CardContent className="px-5 pt-3 pb-5 md:px-6 md:pt-4 md:pb-6 space-y-2.5 flex-1 flex flex-col">
+          <div className="flex items-center justify-between gap-2">
+            {location ? (
+              <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                <MapPinIcon className="h-3 w-3 shrink-0 -translate-y-0.5" />
+                {location.name}
+              </span>
+            ) : (
+              <span />
+            )}
+            <time className="text-xs text-muted-foreground">{formatDate(post.createdAt)}</time>
           </div>
 
-          <h3 className="text-xl md:text-2xl font-bold leading-tight line-clamp-3">{post.title}</h3>
+          <h3 className="text-xl md:text-2xl font-bold leading-tight line-clamp-3 shrink-0">{post.title}</h3>
 
           {post.description && (
             <p className="text-muted-foreground text-base leading-relaxed line-clamp-3">{post.description}</p>
@@ -88,12 +99,13 @@ function MainCard({ post }: { post: Post }) {
 
 function SecondaryCard({ post }: { post: Post }) {
   const category = typeof post.category === 'object' && post.category ? post.category : null;
+  const location = typeof post.location === 'object' && post.location ? post.location : null;
   const images = getImages(post);
   const mainImage = images[0] ?? null;
   const slug = (post as PostWithSlug).slug ?? String(post.id);
 
   return (
-    <Link href={`/news/${slug}`} className="block group flex-1">
+    <Link href={`/news/${slug}`} className="block group h-full">
       <Card className="overflow-hidden p-0 hover:shadow-md transition-all duration-300 h-full flex flex-row border-border/60 hover:border-primary/30">
         <div className="relative w-36 sm:w-44 shrink-0 overflow-hidden">
           {category && (
@@ -124,15 +136,23 @@ function SecondaryCard({ post }: { post: Post }) {
           )}
         </div>
 
-        <CardContent className="p-4 flex flex-col gap-2 flex-1 min-w-0">
-          <div className="flex items-center gap-2">
+        <CardContent className="px-4 pt-3 pb-4 flex flex-col gap-2 flex-1 min-w-0 overflow-hidden">
+          <div className="flex items-center justify-between gap-2 shrink-0">
+            {location ? (
+              <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                <MapPinIcon className="h-3 w-3 shrink-0 -translate-y-0.5" />
+                {location.name}
+              </span>
+            ) : (
+              <span />
+            )}
             <time className="text-xs text-muted-foreground">{formatDate(post.createdAt)}</time>
           </div>
 
-          <h3 className="text-base font-semibold leading-snug line-clamp-2">{post.title}</h3>
+          <h3 className="text-base font-semibold leading-snug line-clamp-2 shrink-0">{post.title}</h3>
 
           {post.description && (
-            <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 hidden sm:block">
+            <p className="text-sm text-muted-foreground leading-relaxed overflow-hidden flex-1 hidden sm:block [mask-image:linear-gradient(to_bottom,black_60%,transparent_100%)]">
               {post.description}
             </p>
           )}

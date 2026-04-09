@@ -7,27 +7,24 @@ import { useAction } from 'next-safe-action/hooks';
 import { useEffect, useRef, useState } from 'react';
 
 import { logoutAction } from '@/components/header/actions';
-import { getArticleLabelsAction } from '@/components/home/create-post/actions';
+import { getArticleLabelsAction, getLocationsAction } from '@/components/home/create-post/actions';
 import { Button } from '@/components/ui/button';
 import { Dialog } from '@/components/ui/dialog';
-import type { ArticleLabel, User } from '@/payload-types';
+import type { ArticleLabel, Location } from '@/payload-types';
 
 import { PostDialog } from './create-post/post-dialog';
 
-interface Props {
-  user: User;
-}
-
-export function FloatingActions({ user }: Props) {
+export function FloatingActions() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [categories, setCategories] = useState<ArticleLabel[]>([]);
-  const isAdmin = user.role === 'admin';
+  const [locations, setLocations] = useState<Location[]>([]);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
   const { executeAsync: logout, isPending } = useAction(logoutAction);
   const { executeAsync: fetchCategories } = useAction(getArticleLabelsAction);
+  const { executeAsync: fetchLocations } = useAction(getLocationsAction);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -45,10 +42,12 @@ export function FloatingActions({ user }: Props) {
   }, [menuOpen]);
 
   async function handlePublish() {
-    if (categories.length === 0) {
-      const result = await fetchCategories();
-      if (result?.data) setCategories(result.data as ArticleLabel[]);
-    }
+    const [catResult, locResult] = await Promise.all([
+      categories.length === 0 ? fetchCategories() : Promise.resolve(null),
+      locations.length === 0 ? fetchLocations() : Promise.resolve(null),
+    ]);
+    if (catResult?.data) setCategories(catResult.data as ArticleLabel[]);
+    if (locResult?.data) setLocations(locResult.data as Location[]);
     setDialogOpen(true);
   }
 
@@ -66,16 +65,14 @@ export function FloatingActions({ user }: Props) {
       >
         {menuOpen && (
           <div className="flex flex-col items-end gap-2 animate-in fade-in slide-in-from-bottom-2 duration-200">
-            {isAdmin && (
-              <Link
-                href="/admin"
-                onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-2.5 rounded-full border bg-white px-4 py-2.5 text-sm font-medium text-foreground shadow-md transition-colors hover:bg-muted no-underline"
-              >
-                <LayoutDashboardIcon size={16} />
-                Ir al panel
-              </Link>
-            )}
+            <Link
+              href="/admin"
+              onClick={() => setMenuOpen(false)}
+              className="flex items-center gap-2.5 rounded-full border bg-white px-4 py-2.5 text-sm font-medium text-foreground shadow-md transition-colors hover:bg-muted no-underline"
+            >
+              <LayoutDashboardIcon size={16} />
+              Ir al panel
+            </Link>
             <button
               type="button"
               onClick={handleLogout}
@@ -88,26 +85,30 @@ export function FloatingActions({ user }: Props) {
           </div>
         )}
 
-        <div className="flex flex-col items-end gap-2 sm:flex-row sm:items-center">
+        <div className="flex flex-col items-end gap-2">
           <Button
             size="icon"
             variant="outline"
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Más opciones"
-            className="size-8 sm:size-10 rounded-full shadow-md"
+            className="size-8 rounded-full shadow-md bg-white/90 hover:bg-muted"
           >
-            {menuOpen ? <XIcon size={14} /> : <MoreHorizontalIcon size={14} />}
+            {menuOpen ? <XIcon size={12} /> : <MoreHorizontalIcon size={12} />}
           </Button>
 
-          <Button onClick={handlePublish} className="rounded-full shadow-lg size-12 sm:size-auto sm:px-5">
+          <Button onClick={handlePublish} className="rounded-full shadow-lg px-5">
             <PlusIcon size={18} />
-            <span className="hidden sm:inline">Publicar</span>
+            Publicar
           </Button>
         </div>
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <PostDialog onSuccess={() => setDialogOpen(false)} initialCategories={categories} />
+        <PostDialog
+          onSuccess={() => setDialogOpen(false)}
+          initialCategories={categories}
+          initialLocations={locations}
+        />
       </Dialog>
     </>
   );

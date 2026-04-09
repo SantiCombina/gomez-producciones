@@ -10,6 +10,7 @@ import sharp from 'sharp';
 
 import { Advertisements } from './collections/Advertisements';
 import { ArticleLabels } from './collections/ArticleLabels';
+import { Locations } from './collections/Locations';
 import { Media } from './collections/Media';
 import { Posts } from './collections/Posts';
 import { Users } from './collections/Users';
@@ -31,7 +32,7 @@ export default buildConfig({
       },
     },
   },
-  collections: [Users, Media, Posts, ArticleLabels, Advertisements],
+  collections: [Users, Media, Posts, ArticleLabels, Locations, Advertisements],
   i18n: {
     fallbackLanguage: 'es',
     supportedLanguages: { es },

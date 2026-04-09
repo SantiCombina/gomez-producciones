@@ -30,7 +30,8 @@
       "Bash(find c:UserssantiDocumentsWorkspacegomez-produccionessrcapp -path *\\\\\\(frontend\\\\\\)/actions* -type f)",
       "Bash(ls -la \"c:\\\\Users\\\\santi\\\\Documents\\\\Workspace\\\\gomez-producciones\\\\src\\\\app\\\\\\(frontend\\)\")",
       "Bash(find \"c:\\\\Users\\\\santi\\\\Documents\\\\Workspace\\\\gomez-producciones\\\\src\\\\app\\\\\\(frontend\\)\" -type f -name \"*.ts\" -o -name \"*.tsx\")",
-      "Bash(ls \"c:\\\\Users\\\\santi\\\\Documents\\\\Workspace\\\\gomez-producciones\\\\src\\\\app\\\\\\(frontend\\)\")"
+      "Bash(ls \"c:\\\\Users\\\\santi\\\\Documents\\\\Workspace\\\\gomez-producciones\\\\src\\\\app\\\\\\(frontend\\)\")",
+      "Bash(npx shadcn@latest add skeleton --yes)"
     ]
   }
 }

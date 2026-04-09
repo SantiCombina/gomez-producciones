@@ -14,24 +14,26 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { compressImage } from '@/lib/image-utils';
-import type { ArticleLabel } from '@/payload-types';
+import type { ArticleLabel, Location } from '@/payload-types';
 
 import { createPostAction } from './actions';
 import { CategorySelect } from './category-select';
 import { createPostSchema, type CreatePostValues } from './create-post-schema';
 import { ImageUploader } from './image-uploader';
+import { LocationSelect } from './location-select';
 
 const RichTextEditor = dynamic(() => import('./rich-text-editor').then((m) => m.RichTextEditor), {
   ssr: false,
-  loading: () => <div className="h-[200px] rounded-md border bg-muted/30 animate-pulse" />,
+  loading: () => <div className="h-50 rounded-md border bg-muted/30 animate-pulse" />,
 });
 
 interface Props {
   onSuccess: () => void;
   initialCategories: ArticleLabel[];
+  initialLocations: Location[];
 }
 
-export function PostDialog({ onSuccess, initialCategories }: Props) {
+export function PostDialog({ onSuccess, initialCategories, initialLocations }: Props) {
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [isCompressing, setIsCompressing] = useState(false);
@@ -40,7 +42,14 @@ export function PostDialog({ onSuccess, initialCategories }: Props) {
 
   const form = useForm<CreatePostValues>({
     resolver: zodResolver(createPostSchema),
-    defaultValues: { title: '', description: '', body: undefined, categoryId: undefined, images: [] },
+    defaultValues: {
+      title: '',
+      description: '',
+      body: undefined,
+      categoryId: undefined,
+      locationId: undefined,
+      images: [],
+    },
   });
 
   const { executeAsync, isPending } = useAction(createPostAction);
@@ -145,7 +154,7 @@ export function PostDialog({ onSuccess, initialCategories }: Props) {
                   <FormControl>
                     <Textarea
                       placeholder="Extracto o resumen corto..."
-                      className="resize-none bg-white min-h-[60px] max-h-[120px] overflow-y-auto"
+                      className="resize-none bg-white min-h-15 max-h-30 overflow-y-auto"
                       style={{ fieldSizing: 'content' } as React.CSSProperties}
                       {...field}
                     />
@@ -157,22 +166,41 @@ export function PostDialog({ onSuccess, initialCategories }: Props) {
 
             <RichTextEditor onChange={handleBodyChange} />
 
-            <FormField
-              control={form.control}
-              name="categoryId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <CategorySelect
-                      initialCategories={initialCategories.map((c) => ({ id: c.id, name: c.name }))}
-                      value={field.value}
-                      onChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex gap-2">
+              <FormField
+                control={form.control}
+                name="categoryId"
+                render={({ field }) => (
+                  <FormItem className="flex-1 min-w-0">
+                    <FormControl>
+                      <CategorySelect
+                        initialCategories={initialCategories.map((c) => ({ id: c.id, name: c.name }))}
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="locationId"
+                render={({ field }) => (
+                  <FormItem className="flex-1 min-w-0">
+                    <FormControl>
+                      <LocationSelect
+                        initialLocations={initialLocations.map((l) => ({ id: l.id, name: l.name }))}
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <ImageUploader
               previews={imagePreviews}
@@ -184,11 +212,7 @@ export function PostDialog({ onSuccess, initialCategories }: Props) {
           </div>
 
           <div className="shrink-0 px-6 pb-4">
-            <Button
-              type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-              disabled={isPending || !form.watch('title')}
-            >
+            <Button type="submit" className="w-full" disabled={isPending || !form.watch('title')}>
               {isPending ? (
                 <>
                   <Loader2Icon className="h-4 w-4 animate-spin" />

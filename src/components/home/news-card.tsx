@@ -1,3 +1,4 @@
+import { MapPinIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import { Badge } from '@/components/ui/badge';
@@ -15,6 +16,7 @@ interface Props {
 
 export function NewsCard({ post }: Props) {
   const category = typeof post.category === 'object' && post.category ? post.category : null;
+  const location = typeof post.location === 'object' && post.location ? post.location : null;
   const slug = (post as PostWithSlug).slug ?? String(post.id);
 
   const featuredImage = typeof post.featuredImage === 'object' && post.featuredImage ? post.featuredImage : null;
@@ -25,7 +27,7 @@ export function NewsCard({ post }: Props) {
 
   return (
     <Link href={`/news/${slug}`} className="block h-full group">
-      <Card className="overflow-hidden p-0 flex flex-col gap-0 hover:shadow-md transition-all duration-300 h-full border-border/60 hover:border-primary/30">
+      <Card className="overflow-hidden p-0 py-0 flex flex-col gap-0 hover:shadow-md transition-all duration-300 h-full border-border/60 hover:border-primary/30">
         <div className="shrink-0 overflow-hidden relative">
           <PostImagePreview
             images={allImages}
@@ -38,11 +40,19 @@ export function NewsCard({ post }: Props) {
             </Badge>
           )}
         </div>
-        <CardContent className="p-4 md:p-5 flex flex-col gap-2.5 flex-1">
-          <div className="flex items-center gap-2.5">
-            <time className="text-sm text-muted-foreground">{formatDate(post.createdAt)}</time>
+        <CardContent className="px-4 pt-2 pb-4 md:px-5 md:pt-3 md:pb-5 flex flex-col gap-2.5 flex-1">
+          <div className="flex items-center justify-between gap-2">
+            {location ? (
+              <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                <MapPinIcon className="h-3 w-3 shrink-0 -translate-y-0.5" />
+                {location.name}
+              </span>
+            ) : (
+              <span />
+            )}
+            <time className="text-xs text-muted-foreground">{formatDate(post.createdAt)}</time>
           </div>
-          <h3 className="text-lg font-semibold leading-snug line-clamp-2">{post.title}</h3>
+          <h3 className="text-lg font-semibold leading-snug line-clamp-2 shrink-0">{post.title}</h3>
           {post.description && (
             <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">{post.description}</p>
           )}

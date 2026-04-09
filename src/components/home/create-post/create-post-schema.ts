@@ -14,6 +14,7 @@ export const createPostSchema = z.object({
   description: z.string({ error: 'La descripción debe ser una cadena de texto.' }).optional(),
   body: z.string().optional(),
   categoryId: z.number().optional(),
+  locationId: z.number().optional(),
   images: z.array(imageFile).max(MAX_IMAGES, `Máximo ${MAX_IMAGES} imágenes.`).optional(),
 });
 
