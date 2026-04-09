@@ -112,7 +112,9 @@ export function FloatingActions() {
           initialCategories={categories}
           initialLocations={locations}
           draft={draftRef.current}
-          onUnmount={(d) => { draftRef.current = d; }}
+          onUnmount={(d) => {
+            draftRef.current = d;
+          }}
         />
       </Dialog>
     </>

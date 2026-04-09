@@ -320,12 +320,7 @@ export function PostDialog({ onSuccess, onClose, initialCategories, initialLocat
         </Form>
       </DialogContent>
 
-      <DiscardConfirm
-        open={showConfirm}
-        onContinue={handleContinue}
-        onDiscard={handleDiscard}
-        onSave={handleSave}
-      />
+      <DiscardConfirm open={showConfirm} onContinue={handleContinue} onDiscard={handleDiscard} onSave={handleSave} />
     </>
   );
 }

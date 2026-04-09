@@ -129,7 +129,9 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
           initialCategories={categories}
           initialLocations={locations}
           draft={draftRef.current}
-          onUnmount={(d) => { draftRef.current = d; }}
+          onUnmount={(d) => {
+            draftRef.current = d;
+          }}
         />
       </Dialog>
     </>
