@@ -116,7 +116,7 @@ export function Footer() {
 
         <Separator className="bg-background/10 my-4" />
 
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-col items-center gap-2 lg:flex-row lg:justify-between">
           <p className="text-background/30 text-xs">
             © {currentYear} Gómez Producciones | Todos los derechos reservados
           </p>
